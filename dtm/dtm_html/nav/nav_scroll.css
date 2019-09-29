@@ -1,0 +1,30 @@
+.navbar-fixed-top.scrolled {
+  background-color: #222 !important;
+  transition: background-color 200ms linear;
+}
+
+.navbar-fixed-top.scrolled .logo-hcmfront a{
+    background-image: url('isotipoblanco_256.png');
+
+}
+
+/* Clase asociada al logo-icono hcmfront en formato png */
+.logo-hcmfront a {
+  display: block;
+  /* estos parametros definen el ancho y alto del bloque donde estará el logo */
+  width: 40px;
+  height: 40px;
+  /* este parametro recibe la url donde esta ubicada nuestra imagen */
+  background-image: url('isotipo_256.png');
+  /* este parametro define el tamaño del icono */
+  background-size: 30px 30px;
+  /* este parametro define la posicion en la que se ubicará la imagen dentro del bloque */
+  background-position: 5px 10px;
+  /* se pone no-repeat para que la imagen aparezca una sola vez y no la cantidad de veces necesaria para llenar el espacio del bloque. */
+  background-repeat: no-repeat;
+}
+
+/* efecto al poner el mouse sobre un objeto */
+.navbar-fixed-top.scrolled .logo-hcmfront a:hover {
+  background-image: url('isotipo_256.png');
+}

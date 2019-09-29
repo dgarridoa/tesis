@@ -1,0 +1,10 @@
+*.model
+/bib
+/data
+*.xlsx
+*.pkl
+*.mm
+*.dict
+*.index
+*.exe
+dtm.js

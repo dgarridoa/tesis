@@ -1,0 +1,49 @@
+
+.ignore-css {
+  all:unset;
+}
+.container {
+
+  max-width: 100%;
+
+  margin: 0 auto
+
+}
+
+html, body {
+      max-width: 100%;
+      overflow-x: hidden;
+  }
+tr{
+  margin: 10%;
+  width:100%;
+}
+td{
+    width: 100%;
+}
+
+#entropy {
+    width: 100%;
+  }
+#container {
+    width: 100%;
+  }
+
+#ldavis_el604422654636080886007232696-lambdaInput text{
+  font-size:10px;
+}
+#ldavis_el604422654636080886007232696{
+    transform: translate(-5%, 0%) scale(0.8);
+}
+#ldavis_el604422654636080886007232696-leftpanel{
+    transform: translate(10%, 10%) scale(0.8);
+  }
+
+  #ldavis_el604422654636080886007232696-bar-freqs{
+      transform: translate(55%, 5%) scale(0.8);
+    }
+.domain{
+    background-color: white;
+    fill:white;
+    size:10px;
+  }

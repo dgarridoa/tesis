@@ -1,0 +1,265 @@
+% Template:     Template Tesis LaTeX
+% Documento:    Definición de entornos
+% Versión:      1.1.7 (02/10/2019)
+% Codificación: UTF-8
+%
+% Autor: Pablo Pizarro R.
+%        Facultad de Ciencias Físicas y Matemáticas
+%        Universidad de Chile
+%        pablo@ppizarror.com
+%
+% Sitio web:    [https://latex.ppizarror.com/tesis]
+% Licencia MIT: [https://opensource.org/licenses/MIT]
+
+\newenvironment{references}{
+\ifthenelse{\equal{\stylecitereferences}{bibtex}}{
+	}{
+		\throwerror{\references}{Solo se puede usar entorno references con estilo citas \noexpand\stylecitereferences=bibtex}
+	}
+	\phantomsection
+	\addcontentsline{toc}{chapter}{\namereferences}
+\begin{thebibliography}{}
+	}
+	{
+	\end{thebibliography}
+}
+\newenvironment{anexo}{
+\begingroup
+	\clearpage
+	\phantomsection
+\changeheadertitle{\nomltappendixsection}
+\def\GLOBALsectionalph{true}
+	\bookmarksetup{
+		numbered={true},
+		openlevel={\thetemplateBookmarksLevelPrev}
+	}
+	\appendixtitleon
+	\appendixtitletocon
+	\bookmarksetupnext{level=part}
+\begin{appendices}
+		\ifthenelse{\equal{\showappendixsecindex}{true}}{}{
+\pdfbookmark{\nameappendixsection}{contents}
+		}
+		\ifthenelse{\equal{\appendixindepobjnum}{true}}{
+\counterwithin{equation}{chapter}
+\counterwithin{figure}{chapter}
+\counterwithin{lstlisting}{chapter}
+\counterwithin{table}{chapter}
+		}
+	}{
+	\end{appendices}
+\def\GLOBALsectionalph{false}
+\bookmarksetupnext{level={\thetemplateBookmarksLevelPrev}}
+	\bookmarksetup{
+		numbered={\cfgpdfsecnumbookmarks},
+		openlevel={\cfgbookmarksopenlevel}
+	}
+	\endgroup
+}
+\newcommand{\coreinitsourcecodep}[4]{
+	\emptyvarerr{sourcecodep}{#2}{Estilo no definido}
+	\checkvalidsourcecodestyle{#2}
+	\ifthenelse{\equal{\showlinenumbers}{true}}{
+		\rightlinenumbers}{
+	}
+	\lstset{
+		backgroundcolor=\color{\sourcecodebgcolor}
+	}
+	\ifthenelse{\equal{\codecaptiontop}{true}}{
+		\ifx\hfuzz#4\hfuzz
+			\ifx\hfuzz#3\hfuzz
+				\lstset{
+					style=#2
+				}
+			\else
+				\lstset{
+					style=#2,
+					#3
+				}
+			\fi
+		\else
+			\ifx\hfuzz#3\hfuzz
+				\lstset{
+					caption={#4 #1},
+					captionpos=t,
+					style=#2
+				}
+			\else
+				\lstset{
+					caption={#4 #1},
+					captionpos=t,
+					style=#2,
+					#3
+				}
+			\fi
+		\fi
+	}{
+		\ifx\hfuzz#4\hfuzz
+			\ifx\hfuzz#3\hfuzz
+				\lstset{
+					style=#2
+				}
+			\else
+				\lstset{
+					style=#2,
+					#3
+				}
+			\fi
+		\else
+			\ifx\hfuzz#3\hfuzz
+				\lstset{
+					caption={#4 #1},
+					captionpos=b,
+					style=#2
+				}
+			\else
+				\lstset{
+					caption={#4 #1},
+					captionpos=b,
+					style=#2,
+					#3
+				}
+			\fi
+		\fi	
+	}
+}
+\lstnewenvironment{sourcecodep}[4][]{
+	\coreinitsourcecodep{#1}{#2}{#3}{#4}
+}{
+	\ifthenelse{\equal{\showlinenumbers}{true}}{
+		\leftlinenumbers}{
+	}
+}
+\newcommand{\importsourcecodep}[5][]{
+	\coreinitsourcecodep{#1}{#2}{#3}{#5}
+	\inputlisting{#4}
+	\ifthenelse{\equal{\showlinenumbers}{true}}{
+		\leftlinenumbers}{
+	}
+}
+\newcommand{\coreinitsourcecode}[3]{
+	\emptyvarerr{\equationresize}{#2}{Estilo no definido}
+	\checkvalidsourcecodestyle{#2}
+	\ifthenelse{\equal{\showlinenumbers}{true}}{
+		\rightlinenumbers}{
+	}
+	\lstset{
+		backgroundcolor=\color{\sourcecodebgcolor}
+	}
+	\ifthenelse{\equal{\codecaptiontop}{true}}{
+		\ifx\hfuzz#3\hfuzz
+			\lstset{
+				style=#2
+			}
+		\else
+			\lstset{
+				style=#2,
+				caption={#3 #1},
+				captionpos=t
+			}
+		\fi
+	}{
+		\ifx\hfuzz#3\hfuzz
+			\lstset{
+				style=#2
+			}
+		\else
+			\lstset{
+				style=#2,
+				caption={#3 #1},
+				captionpos=b
+			}
+		\fi
+	}
+}
+\lstnewenvironment{sourcecode}[3][]{
+	\coreinitsourcecode{#1}{#2}{#3}
+}{
+	\ifthenelse{\equal{\showlinenumbers}{true}}{
+		\leftlinenumbers}{
+	}
+}
+\newcommand{\importsourcecode}[4][]{
+	\coreinitsourcecode{#1}{#2}{#4}
+	\lstinputlisting{#3}
+	\ifthenelse{\equal{\showlinenumbers}{true}}{
+		\leftlinenumbers}{
+	}
+}
+\newenvironment{itemizebf}[1][]{
+	\begin{itemize}[font=\bfseries,#1]
+	}{
+	\end{itemize}
+}
+\newenvironment{enumeratebf}[1][]{
+	\begin{enumerate}[font=\bfseries,#1]
+	}{
+	\end{enumerate}
+}
+\newenvironment{resumen}{
+	\ifthenelse{\equal{\addabstracttobookmarks}{true}}{
+		\pdfbookmark{\nameabstract}{contents}}{
+	}
+	\begin{flushright}
+		\small
+		\tablaresumen
+	\end{flushright}
+	\vspace{0.25\baselineskip}
+	\begin{center}
+		\textcolor{\titlecolor}{\MakeUppercase{\textbf{\titulotesis}}}
+	\end{center} \newp
+	\vspace{-\baselineskip}
+	}{\vfill\null
+	\ifthenelse{\equal{\addemptypagespredoc}{true}}{
+		\vfill
+		\checkoddpage
+		\ifoddpage
+		\else
+			\insertblankpage
+		\fi}{
+	}
+}
+\newenvironment{dedicatoria}{
+	\cleardoublepage\null
+	\vspace{\stretch{1}}
+	\begin{flushright}
+		\itshape}{
+	\end{flushright}
+	\vspace{\stretch{2}}
+	\null
+	\ifthenelse{\equal{\addemptypagespredoc}{true}}{
+		\insertblankpage}{
+	}
+}
+\newenvironment{agradecimientos}{
+	\chapter*{\nameagradec}
+	\ifthenelse{\equal{\addagradectobookmarks}{true}}{
+		\belowpdfbookmark{\nameagradec}{contents}}{
+	}
+	}{
+	\newpage
+	\ifthenelse{\equal{\addemptypagespredoc}{true}}{
+		\insertblankpage}{
+	}
+}
+\newenvironment{images}[2][]{
+	\def\envimageslabelvar {#1}
+	\def\envimagescaptionvar {#2}
+	\def\GLOBALenvimageinitialized {true}
+	\def\GLOBALenvimageadded {false}
+	\vspace{\marginimagetop cm}
+	\captionsetup{margin=\captionmarginmultimg cm}
+	\begin{figure}[H] \centering
+		\vspace{\marginimagemulttop cm}
+		}{
+		\setcaptionmargincm{\captionlrmargin}
+\ifthenelse{\equal{\envimagescaptionvar}{}}{
+			\vspace{\captionlessmarginimage cm}
+		}{
+			\caption{\envimagescaptionvar\envimageslabelvar}
+		}
+	\end{figure}
+	\setcaptionmargincm{\captionlrmargin}
+	\vspace{\marginimagebottom cm}
+	\def\GLOBALenvimageinitialized {false}
+}

@@ -30,9 +30,8 @@
     - similarity measure, percentile, overlap, etc
 - [ ] qualitative analysis
 
-
-
+## Latex
 - Template: https://latex.ppizarror.com/tesis
-- Distribución de LaTex: Tex Live. https://www.tug.org/texlive/
+- LaTex Distribution: Tex Live. https://www.tug.org/texlive/
   - Testing in command line: `tex --version`
-- Compilador: PDFLatTex
+- Compiler: PDFLatTex

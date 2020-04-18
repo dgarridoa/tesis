@@ -1,8 +1,4 @@
 # To do list
-- [ ] theorical framework
-- [ ] implementation
-- [ ] data processing
-- [ ] results analysis
 
 ## 1. Theorical framework
 - [x] vehicle robbery
@@ -33,7 +29,10 @@
   - [ ] choice de best hiperparameters based on some metric
     - similarity measure, percentile, overlap, etc
 - [ ] qualitative analysis
-## 5. Lectures
-- [ ] MCMC
-- [ ] Chinese Restaurant Process
-- [ ] Infinite LDA
+
+
+
+- Template: https://latex.ppizarror.com/tesis
+- Distribución de LaTex: Tex Live. https://www.tug.org/texlive/
+  - Testing in command line: `tex --version`
+- Compilador: PDFLatTex

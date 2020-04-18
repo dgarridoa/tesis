@@ -1,0 +1,474 @@
+% Template:     Template Tesis LaTeX
+% Documento:    Archivo principal
+% Versión:      1.1.7 (02/10/2019)
+% Codificación: UTF-8
+%
+% Autor: Pablo Pizarro R. @ppizarror
+%        Facultad de Ciencias Físicas y Matemáticas
+%        Universidad de Chile
+%        pablo.pizarro@ing.uchile.cl, ppizarror.com
+%
+% Sitio web:    [https://latex.ppizarror.com/tesis]
+% Licencia MIT: [https://opensource.org/licenses/MIT]
+
+% CREACIÓN DEL DOCUMENTO
+\documentclass[letterpaper,12pt,oneside]{book} % Libro, tamaño carta
+\usepackage[utf8]{inputenc} % Codificación UTF-8
+\bibliographystyle{unsrtnat} %ordenar bibliografía por orden de aparición
+% INFORMACIÓN DEL DOCUMENTO
+\def\titulotesis {Modelamiento y seguimiento de tópicos para detección de modus operandi en robo de vehículos}
+\def\titulogrado {
+	Tesis para optar al grado de magíster en gestión de operaciones
+	\bigbreak\vspace{0.3cm}
+	Memoria para optar al título de ingeniero civil industrial
+}
+
+\def\nombreuniversidad {Universidad de Chile}
+\def\nombrefacultad {Facultad de Ciencias Físicas y Matemáticas}
+\def\departamentouniversidad {Departamento de Ingeniería Industrial}
+\def\imagendepartamento {departamentos/uchile2}
+\def\imagendepartamentoescala {0.7}
+\def\localizacionuniversidad {Santiago, Chile}
+
+% INTEGRANTES, PROFESORES Y FECHAS
+\def\autortesis {DIEGO GARRIDO}
+\def\fechatesis {\the\year}
+
+\def\tablacomision {
+\begin{tabular}{c}
+	\vspace{1.5cm} \\
+	\MakeUppercase{\textbf{\autortesis}} \\
+	\vspace{1.0cm} \\
+	PROFESOR GUÍA: \\
+	RICHARD WEBER \\
+	\vspace{0.5cm} \\
+	MIEMBROS DE LA COMISIÓN: \\
+	PROFESOR 2 \\
+	PROFESOR 3 \\
+	\vspace{0.5cm} \\
+	Este trabajo ha sido parcialmente financiado por: \\
+	NOMBRE INSTITUCIÓN \\
+	\vspace{0.5cm} \\
+	\MakeUppercase{\localizacionuniversidad} \\
+	\MakeUppercase{\fechatesis}
+\end{tabular}}{
+}
+\def\tablaresumen {
+\begin{tabular}{l}
+	RESUMEN DE LA MEMORIA PARA OPTAR \\
+	AL TÍTULO DE MAGÍSTER EN CIENCIAS \\
+	DE LA INGENIERÍA \\
+	POR: \MakeUppercase{\textbf{\autortesis}} \\
+	FECHA: \MakeUppercase{\fechatesis} \\
+	PROF. GUÍA: RICHARD WEBER
+\end{tabular}}{
+}
+
+% CONFIGURACIONES
+\input{lib/config}
+
+% IMPORTACIÓN DE LIBRERÍAS
+\input{lib/env/imports}
+
+% IMPORTACIÓN DE FUNCIONES Y ENTORNOS
+\input{lib/cmd/all}
+
+% IMPORTACIÓN DE ESTILOS
+\input{lib/style/all}
+
+% CONFIGURACIÓN INICIAL DEL DOCUMENTO
+\input{lib/cfg/init}
+
+% INICIO DE LAS PÁGINAS
+\begin{document}
+
+% PORTADA
+\input{lib/page/portrait} % Se puede borrar
+
+% CONFIGURACIÓN DE PÁGINA Y ENCABEZADOS
+\input{lib/cfg/page}
+
+% DEDICATORIA
+\begin{dedicatoria}
+	Una frase de dedicatoria, \\
+	pueden ser dos líneas. \newp
+	\textbf{Saludos}
+\end{dedicatoria}
+
+% AGRADECIMIENTOS
+\begin{agradecimientos}
+	\lipsum[1]
+\end{agradecimientos}
+
+% TABLA DE CONTENIDOS - ÍNDICE
+\input{lib/page/index}
+
+% RESUMEN O ABSTRACT
+\begin{resumen}
+	\lipsum[1]
+\end{resumen}
+
+% CONFIGURACIONES FINALES
+\input{lib/cfg/final}
+\hypersetup{
+    citecolor=Blue
+}
+% ======================= INICIO DEL DOCUMENTO =======================
+% \input{lib/etc/example} % Ejemplo, se puede borrar
+\chapter{Introducción}
+
+\chapter{Definición del problema y Objetivos}
+\section{Problema}
+%apoyar con fuentes los footnotes
+El robo de vehículos o accesorios de vehículos es un problema que afecta a toda la sociedad en Chile y en el mundo. Este problema se ha vuelto más relevante el último tiempo debido al crecimiento en el robo de vehículo motorizado y de los robos con violencia (ver Figura \ref{img:antecedente}). Este fenómeno trae consigo un montón de costos para la sociedad, como incremento en la percepción de la seguridad, aumentos en la prima de los seguros de los asegurados, aumento en los costos de las aseguradoras \footnote{Considerando que el costo promedio incurrido en un auto asegurado robado y no recuperado es de \$ 5.000.000 de pesos, la pérdida total considerando solo los vehículos no recuperados para el año 2015 es de unos \$15.720 millones de pesos.} y el incremento de otros tipos de delitos \footnote{El destino de los vehículos robados es variado, se usan los autos para perpetrar otros delitos y huir, venderlos por piezas en talleres clandestinos o blanquear sus documentos para pasarlos por la frontera y venderlos o cambiarlos por droga en el extranjero''.}
+
+\begin{figure}[h]
+\begin{tabular}{p{0.45\textwidth}p{0.45\textwidth}}
+\includegraphics[width=0.45\textwidth]{img/business/cantidad_robos.png} &
+\includegraphics[width=0.40\textwidth]{img/business/tasa_robos_violencia.png}\\
+ \centering{(a)} & \centering{(b)}\\
+\end{tabular}
+
+\caption{(a) Cantidad de robos de vehículos y robos de accesorios de vehículos anuales en Chile (2004-2014). Fuente: Informe anual Carabineros, 2004-2014, INE. (b) Tasa de robos con violencia del total de robo de autos de lujo 2011-2016.} %Fuente?
+\label{img:antecedente}
+\end{figure}
+
+Bajo este contexto la Universidad de Chile junto a la Pontificia Universidad Católica de Chile se adjudicó el 2017 un proyecto Fondef para desarrollar un proyecto que lleva por nombre ``Observatorio Digital de Delincuencia en Chile: Un sistema inteligente de apoyo a la industria automotriz chilena, en el robo de vehículos y accesorios'' cuyo director es Richard Weber Haas y la institución beneficiaria es la Asociación de Aseguradores de Chile (AACH).\\
+
+Para este problema se cuenta con las fuentes de datos de la AACH, lo que corresponde a relatos de las víctimas del robo de sus vehículos desde el 2011 hasta el 2016, lo cual corresponde a 49.015 relatos. Cabe destacar que se estima que un tercio del parque automotriz se encuentra asegurado, por lo que se trabaja con una muestra del parque automotriz.
+%fuente
+
+\section{Objetivo, Resultados esperados y Alcances}
+El objetivo del trabajo de tesis es caracterizar los \textit{modus operandi} de los delincuentes a partir de los relatos de víctimas de robo de vehículo entregados por la AACH.\\
+
+El resultado esperado es descubrir los \textit{modus operandi} ocultos en los relatos de las víctimas y caracterizarlos a partir de las palabras, como también ver su evolución a través del tiempo, siendo capaz de detectar cuando nacen y mueren, y como cambian en el tiempo.\\
+
+El presente trabajo tiene un propósito académico, puesto que no cuenta con un cliente particular y tiene por objetivo estudiar ténicas de \textit{clustering} dinámico para detectar patrones en el contexto de robo de vehículos, sin embargo, potenciales beneficiarios del trabajo podrían ser las aseguradoras, los asegurados, carabineros de Chile y la sociedad.
+
+\section{Metodología de trabajo}
+%CRISP-DM
+El trabajo se realizó bajo la metodología CRISP-DM (Cross Industry Standard Process for Data mining)\citep{chapman2000crisp}, la cual posee las siguientes seis etapas:
+\begin{enumerate}
+    \item Comprensión del negocio:
+    %This initial phase focuses on understanding the project objectives and requirements from a business perspective, then converting this knowledge into a data mining problem definition and a preliminary plan designed to achieve the objectives.
+    \item Comprensión de los datos
+    %The data understanding phase starts with initial data collection and proceeds with activities that enable you to become familiar with the data, identify data quality problems, discover first insights into the data, and/or detect interesting subsets to form hypotheses regarding hidden information.
+    \item Preparación de los datos
+    %The data preparation phase covers all activities needed to construct the final dataset [data that will be fed into the modeling tool(s)] from the initial raw data. Data preparation tasks are likely to be performed multiple times and not in any prescribed order. Tasks include table, record, and attribute selection, as well as transformation and cleaning of data for modeling tools.
+    \item Modelamiento
+    %In this phase, various modeling techniques are selected and applied, and their parameters are calibrated to optimal values. Typically, there are several techniques for the same data mining problem type. Some techniques have specific requirements on the form of data. Therefore, going back to the data preparation phase is often necessary.
+    \item Evaluación
+    %At this stage in the project, you have built a model (or models) that appears to have high quality from a data analysisperspective. Before proceeding to final deployment of the model, it is important to thoroughly evaluate it and review the steps executed to create it, to be certain the model properly achieves the business objectives. A key objective isto determine if there is some important business issue that has not been sufficiently considered. At the end of this phase, a decision on the use of the data mining results should be reached.
+    \item Implementación
+    %Creation of the model is generally not the end of the project. Even if the purpose of the model is to increase knowledge of the data, the knowledge gained will need to be organized and presented in a way that the customer can use it. It often involves applying “live” models within an organization’s decision making processes—for example, real-time personalization of Web pages or repeated scoring of marketing databases. Depending on the requirements, the deployment phase can be as simple as generating a report or as complex as implementing a repeatable data mining process across the enterprise. In many cases, it is the customer, not the data analyst, who carries out the deploymen steps. However, even if the analyst will carry out the deployment effort, it is important for the customer to understand up front what actions need to be carried out in order to actually make use of the created models.
+\end{enumerate}
+
+Dentro de los alcances del trabajo no está contemplado la puesta en producción de una solución basada en \textit{machine learning}, el alcance es hasta la evaluación e interpretación de los resultados arrojados por el modelo.
+
+\chapter{Revisión bibliográfica}
+
+El problema planteado consiste en un problema de \textit{clustering}, puesto que no se cuenta con una etiqueta del \textit{modus operandi} al que corresponde cada relato, siendo el propósito del trabajo descubrirla. Dentro de los métodos de \textit{clustering} que involucran texto el modelamiento de tópicos es el enfoque más prometedor.% Fuente/Justificación
+El modelamiento de tópicos es una herramienta estadística que busca encontrar los temas (tópicos) presentes en un conjunto de documentos (corpus), permitiendo organizar, buscar, indexar, explorar y comprender grandes colecciones de documentos. %Fuente
+Los modelos de tópicos asumen que los documentos pueden ser representados por una mezcla de tópicos, donde los tópicos son distribuciones sobre las palabras, los tópicos son latentes y la inferencia tiene por objetivo descubrir la mezcla de tópicos que originó cada documento y la distribución sobre las palabras de cada tópico. En modelamiento de tópicos las personas son las que le dan una interpretación a los tópicos inferidos a partir de las palabras más relevantes y en base a esa información los etiquetan, por ejemplo, para un tópico, dentro de sus cinco palabras más probables se halla la siguiente secuencia: ``llaves'', ``domicilio'', ``individuos'', ``casa'' y ``portón'', una etiqueta valida para este tópico podría ser ``portonazo''.\\
+
+Algunas de las técnicas de modelamiento de tópicos están basadas en factorización matricial como LSI (Latent Semantic Indexing) \citep{dumais2004latent} o NMF (Non-negative Matrix Factorization)\citep{xu2003document}, pero en este trabajo se utilizarán técnicas basadas en modelos probabilísticos generativos, como LDA (Latent Dirichlet Allocation)\citep{blei2003latent} o HDP (Hierarchical Dirichlet Process)\citep{teh2005sharing}. Ambos enfoques tienen sus pros y contras, en este trabajo se prefiere el enfoque probabilísticos ya que es capaz de expresar incertidumbre en la asignación de un tópico a un documento y en la asignación de palabras a los tópicos, además, este enfoque suele aprender tópicos más descriptivos \citep{stevens2012exploring}.\\
+
+El presente trabajo busca capturar el dinamismo que puede presentar el fenómeno del robo de vehículos. El aspecto dinámico del problema considera:
+\begin{enumerate}
+    \item Nacimiento, muerte, fusión y división de tópicos: En el contexto de robos es natural que en el tiempo aparezcan nuevos \textit{modus operandi} como también que desaparezcan aquellos que ya no parecen tan atractivos.
+    \item Dinámismo en la mezcla de tópicos: esto permite capturar la popularidad de los tópicos en el tiempo.
+    \item Evolución de los tópicos: la evolución de los tópicos se refleja en el cambio en la distribución sobre las palabras, esto permite detectar cambios en cómo se comete un mismo tipo de delito, por ejemplo, el ``portonazo'' en un determinado momento se comete en grupos de 2-3 personas con arma blanca, luego evoluciona de arma blanca a arma de fuego y lo perpetran jóvenes menores de edad.
+\end{enumerate}
+
+Dentro de los modelos de tópicos probabilísticos existen modelos estáticos y dinámicos:
+\begin{enumerate}
+    \item Dentro de los modelos estáticos destaca LDA y HDP. La diferencia principal en estos dos modelos es que el primero necesita de antemano fijar el número de tópicos a descubrir y el segundo lo infiere a partir del corpus.
+    \item Dentro de los modelos dinámicos están aquellos que mantienen el número de tópicos fijos durante el tiempo y los que no:
+    \begin{enumerate}
+        \item En el primer grupo destaca Dynamic Topic Modelling (DTM)\citep{blei2006dynamic} junto Topic Over Time (TOC)\citep{wang2006topics}, la gran desventaja des estos modelos es que si aparece un nuevo tópico este quedará clasificado dentro de un tópico que existía desde el comienzo, por lo que solo es capaz de capturar el punto 2 y 3.
+        \item Dentro de los modelos que no mantienen el número fijo de tópicos en el tiempo existen de dos tipos, aquellos que modelan todo el problema bajo un modelo monolítico, en este grupo destaca Dynamic Hierarchical Dirichlet Process (DHDP)\citep{ahmed2012timeline}, el cual modela el problema de dinamismo de una forma elegante pero a la vez acompañada de una inferencia bastante complicada, de los dinamismos mencionados captura los puntos 2, 3 y el 1 parcialmente, ya que no es capaz de capturar fusión y división de tópicos, uno de los principales contras de esta solución es que no se trata de una tecnología madura, puesto que no cuenta con una implementación disponible a diferencia de los otros modelos mencionados, los cuales se encuentran disponibles en múltiples lenguajes de programación y cuentan con una amplia adopción de la comunidad científica.El segundo tipo de modelos que no mantienen fijo el número de tópicos utilizan modelos de tópicos estáticos de forma iterativa, lo que hacen es dividir el corpus en épocas, luego entrenan de forma independiente un modelo de tópico para cada época y luego unen los resultados obtenidos, un ejemplo utilizando LDA en \citep{wilson2011tracking}  y con HDP en \citep{beykikhoshk2018discovering}.
+    \end{enumerate}
+
+En este trabajo se utilizarán técnicas de modelado dinámico de tópicos como las presentadas en \citep{wilson2011tracking,beykikhoshk2018discovering}, debido a que son capaces de modelar los tres puntos mencionados sobre dinamismo y se basan en tecnologías maduras.
+\end{enumerate}
+
+\chapter{Marco teórico}
+\section{Modelos de tópicos}
+%soft clustering vs hard clustering
+\subsection{Latent Dirichlet Allocation}
+\subsubsection{Distribución Dirichlet}
+La distribución Dirichlet es una generalización multivariada de la distribución beta, la cual tiene soporte sobre un símplice, definido por:
+\begin{equation}
+    S_{K} = \{x: 0\leq x_{k} \leq 1, \sum_{k=1}^{K}x_{k}=1\}
+\end{equation}
+Luego, su función de densidad de probabilidad (pdf):
+
+\begin{equation}
+    Dir(x|\alpha)=\frac{1}{B(\alpha)}\prod_{k=1}^{K}x_{k}^{\alpha_{k}-1}
+\end{equation}
+
+La distribución Dirichlet es una distribución útil para generar distribuciones de probabilidades categóricas. En general se asume simetría en los parámetros de la distribución, es decir, $\alpha_{k}=\frac{\alpha}{K}$. En la Figura \ref{img:dirichlet_distribution} se observa el efecto de los parámetros de una Dirichlet en la muestra generada, para $\alpha_{k}=1$ se tiene una distribución uniforme en el dominio $S_{K}$, $\alpha_{k}$ controla la \textit{sparsity}, mientras más se acerca a 0 los vectores generados tienen más componentes nulos y se concentra la masa en unas pocas coordenadas, mientras más grande $\alpha_{k}$ la masa tiende a distribuirse uniformemente en las coordenadas de los vectores generados, por último, cuando $\alpha$ no es simétrico la masa se concentra en aquellas coordenadas cuyo $\alpha_{k}$ es más grande.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\textwidth]{img/math/dirichlet_distribution.png}
+    \caption{Efecto de los parámetros de una distribución Dirichlet en el muestreo para $K=3$.}
+    \label{img:dirichlet_distribution}
+\end{figure}
+
+\subsubsection{LDA}
+A continuación se describe el proceso generativo de Latent Dirichlet Allocation (LDA). Sean \textit{K} tópicos, $\phi_{1:K}$ distribuciones de probabilidad sobre un vocabulario fijo, dibujadas por una $Dir(\frac{\eta}{|V|}1_{|V|})$. Para cada documento $d$ del corpus $D$ se asume que es dibujado por el siguiente proceso generativo (ver representación gráfica del modelo en la Figura \ref{img:lda}):
+\begin{enumerate}
+    \item Dibujar una mezcla de tópicos $\pi_{d}\sim Dir(\frac{\alpha}{K}1_{k})$
+    \item Para cada palabra:
+    \begin{enumerate}
+        \item Escoger un tópico $z_{d,n}\sim Mult(\pi_{d})$
+        \item Escoger una palabra $w_{d,n}\sim Mult(\phi_{z_{d,n}})$
+    \end{enumerate}
+\end{enumerate}
+
+\begin{figure}
+  \centering
+  \tikz{ %
+
+    \node[latent, dashed] (alpha) {$\alpha$} ; %
+    \node[latent, right=of alpha] (pi) {$\pi_{d}$} ; %
+    \node[latent, right=of pi] (z) {$z_{d,n}$} ; %
+    \node[obs, right=of z] (w) {$w_{d,n}$}   ; %
+    \node[latent, right=of w] (phi) {$\phi_{k}$} ; %
+    \node[latent, right=of phi, dashed] (eta) {$\eta$} ;%
+    \plate[inner sep=0.25cm, xshift=-0.12cm, yshift=0.12cm] {plate1} {(z) (w)} {$N_{d}$}; %
+    \plate[inner sep=0.25cm, xshift=-0.12cm, yshift=0.12cm] {plate2} {(pi) (plate1)} {$D$}; %
+    \plate[inner sep=0.25cm, xshift=-0.12cm, yshift=0.12cm] {plate3} {(phi)} {$K$}; %
+    \edge {alpha} {pi} ; %
+    \edge {pi} {z} ; %
+    \edge {z,phi} {w} ; %
+    \edge {eta} {phi} ; %
+  }
+\caption{Representación gráfica de LDA: círculos denotan variables aleatorias, círculos abiertos denotan parámetros, círculos sombreados denotan variables observadas y los platos indican replicación.}
+\label{img:lda}
+\end{figure}
+
+La probabilidad conjunta del modelo:
+\begin{equation}
+    p(\phi, \pi, z, w|\alpha, \eta)= \prod_{k=1}^{K}p(\phi_{k}|\eta)\prod_{d=1}^{D}p(\pi_{d}|\alpha)\prod_{n=1}^{N_{d}}p(z_{n,d}|\pi_{d})p(w_{d,n}|\phi_{1:K}, z_{d,n})
+\end{equation}
+
+La distribución a posterior:
+\begin{equation}
+    p(\phi, \pi, z|w, \alpha, \eta) = \frac{p(\phi, \pi, z, w|\alpha, \eta)}{p(w|\alpha, \eta)}
+\end{equation}
+
+La distribución posterior es computacionalmente intratable para inferencia exacta, debido a que para normalizar la distribución debemos marginalizar sobre todas las variables ocultas y escribir la constante de normalización en términos de los parámetros del modelo. Para poder computar la posterior es necesario utilizar algoritmos de inferencia aproximada, en [..] se propone un algoritmo basado en Markov Chain Monte Carlo (MCMC) y en [....] basado en inferencia variacional.
+%citar
+
+\subsection{Hierarchical Dirichlet Process}
+\subsubsection{Proceso Dirichlet}
+
+En los modelos probabilísticos de \textit{clustering} existen aquellos basados en mezcla finita de componentes que utilizan como \textit{prior} la distribución Dirichlet y aquellos basados en mezcla infinita de componentes que utilizan como \textit{prior} el proceso Dirichlet, un \textit{prior} no paramétrico que no impone una cota en el número de \textit{clusters} a encontrar ($K$).\\
+
+Una representación equivalente en LDA sería generar cada palabra de un documento $d$ a partir de una multinomial sobre un tópico dibujado por una distribución $G_{d}$, formalmente, $w_{d,n}\sim Mult(\phi_{d,n})$, donde $\phi_{d,n} \sim G_{d}$ con $\phi_{d,n} \in \{\phi_{k}\}_{k=1}^{K}$, y $G_{d}(\phi)=\sum_{k=1}^{K}\pi_{d, k}\delta_{\phi_{k}}(\phi)$, donde $\delta_{\phi_{k}}(\phi) = \begin{cases}
+    1 & \text{si $\phi_{k}=\phi$}  \\
+    0 & \text{si no}
+  \end{cases}$.\\\\
+
+Un proceso Dirichlet (DP) es una distribución sobre medidas de probabilidad $G: \Theta \rightarrow \mathbf{R}^{+}$, donde $G(\theta)\geq 0$ y $\int_{\Theta}G(\theta)d\theta=1$. Un DP se define implícitamente por cumplir que para cualquier partición finita $(T_{1}, \ldots, T_{k})$ de $\Theta$, una medida base $H$ y un parámetro de concentración $\alpha$ se  tiene que $(G(T_{1}), \ldots, G(T_{K})) \sim Dir(\alpha H(T_{1}), \ldots, \alpha H(T_{k}))$.
+
+\subsubsubsection{Stick breaking construction}
+En esta sección describiremos una definición constructiva para el DP conocida como \textit{stick breaking construction}. Sea $\pi=\{\pi_{k}\}_{k=1}^{\infty}$ una secuencia de mezcla de pesos derivadas a partir del siguiente proceso:
+\begin{equation}
+    \beta_{k}\sim Beta(1, \alpha)
+\end{equation}
+\begin{equation}
+    \pi_{k} = \beta_{k}\prod_{l=1}^{k-1}(1-\beta_{l}) = \beta_{k}(1-\sum_{l=1}^{k-1}\pi_{l})
+\end{equation}
+
+Esto se suele denotar como $\pi \sim GEM(\alpha)$, donde GEM representa Griffiths, Engen y McCloskey. Algunos ejemplos de este proceso son mostrados en la Figura \ref{img:stick_breaking}.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\textwidth]{img/math/stick_breaking.png}
+    \caption{Ilustración de \textit{stick breaking construction}. (a) Tenemos una barra de largo 1, el cual se rompe en un punto aleatorio $\beta_{1}$, el largo de la pieza que conservamos es llamada $\pi_{1}$, luego recursivamente rompemos la barra restante, así generando $\pi_{2}, \pi_{3}, \ldots$. (b) Muestras de $\pi_{k}$ para $\alpha=2$ y $\alpha=5$.}
+    \label{img:stick_breaking}
+\end{figure}
+
+Se puede demostrar que este proceso terminará con probabilidad 1 (convergencia casi segura), a pesar que el número de elementos que este genera incrementa con $\alpha$. Además, el tamaño del componente $\pi_{k}$ decrece en promedio.
+Ahora definamos
+
+\begin{equation}
+    G(\phi) = \sum_{k=1}^{\infty}\pi_{k}\delta_{\phi_{k}}(\phi)
+\end{equation}
+donde $\pi \sim GEM(\alpha)$ y $\phi_{k} \sim H$, se puede demostrar que $G \sim DP(\alpha, H)$. Como consecuencia de esta construcción, las muestras de un DP son discretas con probabilidad uno. En otras palabras, al ir muestreando se tendrán mas repeticiones de valores generados previamente, por lo que la mayoría de los datos vendrán de los $\phi_{k}$ con $\pi_{k}$ mayor.
+
+\subsubsection{HDP}
+
+Hierarchical Dirichlet Process (HDP) es una colección de DP que comparten una distribución base $G_{0}$, la cual además es dibujada a partir de un DP (ver representación gráfica del modelo en la Figura \ref{img:hdp}). Matemáticamente, a nivel corpus se tiene que la distribución base $H \sim Dir(\frac{1}{|V|}1_{|V|})$ y $G_{0} \sim DP(\gamma, H)$, luego, para cada documento $d$ del corpus $D$ se asume que es dibujado por el siguiente proceso generativo:
+\begin{enumerate}
+    \item Dibujar un DP $G_{d} \sim DP(\alpha_{0}, G_{0})$
+    \item Para cada palabra:
+    \begin{enumerate}
+        \item Dibujar un tópico $\phi_{d,n}\sim G_{d}$
+        \item Escoger una palabra $w_{d,n} \sim Mult(\phi_{d,n})$
+    \end{enumerate}
+\end{enumerate}
+
+\begin{figure}
+  \centering
+  \tikz{ %
+    \node[latent, dashed] (H) {$H$} ; %
+    \node[latent, right=of H] (G0) {$G_{0}$} ; %
+    \node[latent, above= of G0, dashed] (gamma) {$\gamma$} ; %
+    \node[latent, right=of G0] (Gd) {$G_{d}$} ; %
+    \node[latent, above= of Gd, dashed] (alpha0) {$\alpha_{0}$} ; %
+    \node[latent, right= of Gd] (phi) {$\phi_{d,n}$} ; %
+    \node[obs, right=of phi] (w) {$w_{d,n}$}   ; %
+    \plate[inner sep=0.25cm, xshift=-0.12cm, yshift=0.12cm] {plate1} {(phi) (w)} {$N_{d}$}; %
+    \plate[inner sep=0.25cm, xshift=-0.12cm, yshift=0.12cm] {plate2} {(Gd) (plate1)} {$D$}; %
+    \edge {H, gamma} {G0} ; %
+    \edge {G0, alpha0} {Gd} ; %
+    \edge {Gd} {phi} ; %
+    \edge {phi} {w} ; %
+  }
+\caption{Representación gráfica de HDP: círculos denotan variables aleatorias, círculos abiertos denotan parámetros, círculos sombreados denotan variables observadas y los platos indican replicación.}
+\label{img:hdp}
+\end{figure}
+
+La discretitud a nivel corpus de $G_{0}$ asegura que todos los documentos comparten el mismo conjunto de tópicos (\textit{mixture components}). A nivel documento $G_{d}$ hereda los tópicos de $G_{0}$, pero los pesos de cada tópico (\textit{mixture proportions}) es específica del documento.\\
+
+Aplicando \textit{stick breaking construction} se tiene que para el DP dibujado a nivel corpus la siguiente representación:
+\begin{equation}
+\begin{aligned}
+    \beta_{k}^{'} \sim Beta(1, \gamma) \\
+    \beta_{k} = \beta_{k}^{'}\prod_{l=1}^{k-1}(1-\beta_{l}^{'})\\
+    \phi_{k} \sim H  \\
+    G_{0}(\phi)=\sum_{k=1}^{\infty}\beta_{k}\delta_{\phi_{k}}(\phi)
+\end{aligned}
+\end{equation}
+
+Así, $G_{0}$ es discreto y tiene soporte en los átomos $\phi = \{\phi\}_{k=1}^{\infty}$ con pesos $\beta=\{\beta_{k}\}_{k=1}^{\infty}$, siendo la distribución de $\beta$ escrita como $\beta \sim GEM(\gamma)$. La construcción a nivel documento de $G_{d}$ es:
+\begin{equation}
+\begin{aligned}
+    \pi_{d,k}^{'}\sim Beta\big(\alpha_{0}\beta_{k}, \alpha_{0}\big(1-\sum_{l=1}^{k}\beta_{l}\big)\big)\\
+    \pi_{d,k} = \pi_{d,k}^{'}\prod_{l=1}^{k-1}(1-\pi_{d,l}^{'})\\
+    G_{d}(\phi)=\sum_{k=1}^{\infty}\pi_{d,k}\delta_{\phi_{k}}(\phi)
+\end{aligned}
+\end{equation}
+Donde $\phi = \{\phi_{k}\}_{k=1}^{\infty}$ son los mismos átomos de $G_{0}$. En la Figura \ref{img:hdp_sbc} se muestra la representación gráfica de esta construcción.
+
+%stick breaking
+\begin{figure}
+  \centering
+  \tikz{ %
+    \node[latent] (beta) {$\beta$} ; %
+    \node[latent, above= of beta, dashed] (gamma) {$\gamma$} ; %
+    \node[latent, right=of beta] (pi) {$\pi_{d}$} ; %
+    \node[latent, above= of pi, dashed] (alpha0) {$\alpha_{0}$} ; %
+    \node[latent, right= of pi] (z) {$z_{d,n}$} ; %
+    \node[obs, right=of z] (w) {$w_{d,n}$}   ; %
+    \node[latent, right=of w] (phi) {$\phi$} ; %
+    \node[latent, above=of phi, dashed] (H) {$H$} ; %
+    \plate[inner sep=0.25cm, xshift=-0.12cm, yshift=0.12cm] {plate1} {(z) (w)} {$N_{d}$}; %
+    \plate[inner sep=0.25cm, xshift=-0.12cm, yshift=0.12cm] {plate2} {(pi) (plate1)} {$D$}; %
+    \plate[inner sep=0.25cm, xshift=-0.12cm, yshift=0.12cm] {plate3} {(phi)} {$K (\infty)$}; %
+    \edge {gamma} {beta} ; %
+    \edge {beta, alpha0} {pi} ; %
+    \edge {pi} {z} ; %
+    \edge {z, phi} {w} ; %
+    \edge {H} {phi} ; %
+  }
+\caption{Representación gráfica de la construcción stick-breaking de HDP: circulos denotan variables aleatorias, circulos abiertos denotan parámetros, círculos sombreados denotan variables observadas y los platos indican replicación.}
+\label{img:hdp_sbc}
+\end{figure}
+
+\subsubsection{LDA versus HDP}
+HDP es un modelo no paramétrico similar en estructura a LDA, la principal desventaja de LDA frente a HDP es que LDA requiere escoger el número de tópicos $K$ por adelantado, por otro lado, HDP el número de tópicos no está acotado y es inferido a partir de los datos. En un enfoque tradicional, se requiere de entrenar múltiples veces LDA para diferentes valores de $K$ y se escoge el que tiene mejor la configuración con mejor desempeño en un conjunto de validación, por lo que LDA termina siendo computacionalmente más costoso que HDP, además este enfoque se vuelve impracticable cuando el conjunto de datos es largo. En el aspecto de cualitativo ambos modelos entregan tópicos igual de consistentes, en métricas de desempeño como $\textit{perplexity}$ HDP suele tener mejor desempeño (\cite{teh2005sharing}).
+
+\section{Inferencia Bayesiana}
+%PENDIENTE A IMPLEMENTACIÓN
+%IDEAS:
+%Justificar por qué HDP>LDA
+% \subsection{Inferencia Bayesiana}
+% MCMC mejor sobre colecciones gigantes
+% VI mejor colecciones pequeñas
+% Mundo dinámico las colecciones o chunk de data son más pequeños
+% VI GAP
+% MCMC promesa que en N->infinito converge
+% MCMC varianza
+% VI sesgo 0 varianza
+% VI más rápido, determinista?
+% \subsubsection{Inferencia Varacional}
+% \subsubsection{Inferencia Varacional LDA}
+% \subsubsection{Inferencia Varacional HDP}
+%Justificar por qué VI > MCMC
+
+\section{Modelamiento de la evolución de los tópicos en el tiempo}
+
+Nuestro objetivo es modelar la evolución en el tiempo de los tópicos, para esto el corpus es divido en $T$ épocas, en cada época se entrena un modelo de tópicos estático y se obteniéndose $T$ conjuntos de tópicos $\phi=\{\phi_{1}, \ldots, \phi_{T}\}$, donde $\phi_{t}=\{\phi_{t,1}, \ldots, \phi_{t,K_{t}}\}$ es el conjunto de tópicos que describen la época $t$, y $K_{t}$ el número de tópicos inferido en esa época.
+
+\subsection{Gráfo de similitud temporal}
+Para relacionar los tópicos de una época necesitamos una medida de similitud $\rho \in [0,1]$, con esta médida de similitud se puede construir un gráfo, donde los nodos son los tópicos de una época y los arcos relacionan tópicos de una época con la siguiente, siendo el peso del arco la similitud entre los tópicos. Una vez construido el grafo se eliminan las conexiones débiles en base a un umbral $\zeta \in [0,1]$ a definir, reteniendo solo aquellas conexiones entre tópicos suficientemente similares entre épocas adyacentes, matemáticamente podamos el arco entre los tópicos $\phi_{t,i}$ y $\phi_{t+1,j}$ si $\rho(\phi_{t,i}, \phi_{t+1,j})\leq \zeta$. Una ilustración conceptual del grafo de similitud es mostrado en la Figura \ref{img:graph}, este muestra tres épocas consecutivas.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\textwidth]{img/math/similarity_graph.png}
+    \caption{Ilustración conceptual del grafo de similitud que modela la dinámica de los tópicos en el tiempo. Un nodo corresponde a un tópico en una época específica; el ancho de los arcos es proporcional a la similitud entre los tópicos, arcos ausentes fueron eliminados por presentar una similitud menor a un umbral.}
+    \label{img:graph}
+\end{figure}
+
+Está metodología permite fácilmente detectar desaparición de un tópico, nacimiento de un nuevo tópico, como también dividir o fusionar diferentes tópicos, a continuación se define en detalle cada uno de estos dinamismos:
+
+\begin{itemize}
+    \item \textbf{Nacimiento de un tópico:} Si un tópico no tiene ningún arco entrante, por ejemplo, en la Figura \ref{img:graph} el tópico $\phi_{j+2}$ en $t$.
+    \item \textbf{Muerte de un tópico:} Si un tópico no tiene ningún arco saliente, por ejemplo, en la Figura \ref{img:graph} el tópico $\phi_{j}$ en $t$.
+    \item \textbf{Evolución de un tópico:} Cuando un tópico tiene exactamente un arco de entrada y salida, por ejemplo, en la Figura \ref{img:graph} entre las épocas $t$ y $t+1$ se tiene que el tópico $\phi_{j+2}$ evoluciona del tópico $\phi_{k+1}$.
+    \item \textbf{División de un tópico:} Si un tópico tiene más de un arco saliente, por ejemplo, en la Figura \ref{img:graph} el tópico $\phi_{i}$ de $t-1$ se divide en $t+1$ en los tópicos $\phi_{j}$ y $\phi_{j+1}$.
+    \item \textbf{Fusión de un tópico:} Cuando un tópico tiene más de un arco entrante, este tipo de tópicos también pueden ser entendidos como un nuevo tópico, por ejemplo, en la Figura \ref{img:graph} los tópicos $\phi_{i}$ y $\phi_{i+1}$ de $t-1$ forman al tópico $\phi_{j+1}$ en $t$.
+\end{itemize}
+
+Un aspecto relevante de esta metodología es definir el úmbral de corte $\rho$, el cual no es fácilmente interpretable, además el úmbral depende de la médida de similitud escogida, dificultando así la comparación entre médidas de similitud. En \cite{beykikhoshk2018discovering} proponen una alternativa más interpretable para definir el úmbral, para esto estiman función de densidad acumulada (cdf) del grafo inicial, donde todos los nodos de una época están conectados con todos los nodos de la época adyacente, sea $F_{p}$ la cdf sobre las similitudes del grafo inicial, luego sea $\zeta \in [0,1]$ el punto operante de la cdf, luego eliminamos el arco entre los tópicos $\phi_{t,i}$ y $\phi_{t+1,j}$ si $\rho(\phi_{t,i}, \phi_{t+1,j})\leq F_{p}^{-1}(\zeta)$, donde  $F_{p}^{-1}(\zeta)$ es el cuantil $\zeta$ de $F_{p}$.
+
+\subsection{Medidas de similitud}
+Los tópicos son distribuciones de probabilidad sobre un vocabulario fijos de términos. La gran mayoría de medidas de similitud comparan vectores con el mismo dominio y dimensión, esto significa que los tópicos de épocas adyacentes deben compartir el mismo vocabulario, matemáticamente, sea $\phi_{t, i}$ un tópico de la época $t$ y $V_{t}$ su vocabulario, sea  $\phi_{t+1, j}$ un tópico de la época $t+1$ y $V_{t+1}$ su vocabulario, lo más probables es que existan palabras en $V_{t}$ que no existan en $V_{t+1}$ y viceversa, para poder comparar tópicos en estas épocas adyacentes se debe construye el vocabulario $V_{t+1}^{'}=V_{t}\cup V_{t+1}$, luego se aplica $padding$ a los vectores $\phi_{t, i}$ y $\phi_{t+1, j}$, es decir, se rellenan con ceros las posiciones de palabras que no están en el vocabulario de su dominio.\\
+
+La gran desventaja del enfoque anterior es que no captura similitud entre palabras, es decir, dos palabras diferentes que pueden llegar a ser sinónimos ocuparan una posición diferente dentro del vector, siendo no robusta a cuando una palabra esta presente en la época $t$ y no en $t-1$ por lo que no hay forma de compararla por ejemplo con la palabra de $t-1$ más símil, por lo que se compara la palabra consigo misma, donde en $t$ tiene un peso positivo y en $t-1$ un peso cero. El pero caso sería considerar los vocabularios $V_{t}$ y $V_{t+1}$, donde $V_{t}\cap V_{t+1} =  \emptyset$, a pesar de que cada palabra en $V_{t}$ tiene un sinónimo en $V_{t+1}$ la similitud entre tópicos entre las épocas $t$ y $t+1$ sería cero.\\
+
+Para lidiar con el problema anterior en \citep{kusner2015word} se propone una medida de distancia llamada Word Mover's Distance (WMD) para comparar dos documento con bajo una representación $bag of words$, donde $i$ y $j$ son los documentos, $V_{i}$ y $V_{j}$ los vocabularios, y el peso asociado a cada palabra de un documento  es igual a la frecuencia normalizada. Generalizar al caso de tópicos es bastante sencillo, puesto a que estos se construyen bajo una representación bag of words, por ejemplo, para comparar el tópico $i$ de la época $t$ con el tópico $j$ de la época $t+1$, se usan los pesos $\phi_{t,i}$ y $\phi_{t+1,j}$ sobre el vocabulario $V_{t}$ y $V_{t+1}$ respectivamente. WMD calcula el costo mínimo de transformar un documento en otro, en esto caso particular sería el costo mínimo de llevar un tópico a otro, para esto se resuelve un problema de flujo a costo mínimo (MCF), donde los flujos son los pesos $\phi_{t,i}$ y $\phi_{t+1,j}$ y la matriz de costos es una matriz de distancia euclidiana entre los \textit{word embedding} (\cite{mikolov2013distributed}) de todas las palabras de $V_{t}$ con $V_{t+1}$. En la Figura \ref{img:wmd_obama} se ilustra el espacio en el que viven las palabras de dos tópicos.
+
+\begin{figure}
+    \centering
+\includegraphics[width=1\textwidth]{img/math/wmd-obama.png}
+    \caption{Espacio vectorial de los \textit{word embeddings} de las palabras de dos tópicos con un vocabulario de tamaño 4.}
+    \label{img:wmd_obama}
+\end{figure}
+
+Matemáticamente, la WMD entre el tópico $i$ de la época $t$ y el tópico $j$ de la época $t+1$ viene dado por $WMD(\phi_{i,t}, \phi_{j,t+1})$:
+
+\begin{align}
+\nonumber
+\underset{T}{\text{minimize}}&\sum_{u \in V_{t}}\sum_{v \in V_{t+1}} c_{u,v}T_{u,v} \\ \nonumber
+\textrm{s.t.}\qquad &\sum_{v \in V_{t+1}}T_{u,v}= \phi_{i,t,u} \;, u \in V_{t}\\ \nonumber
+& \sum_{u \in V_{t}}T_{u,v}= \phi_{j,t+1,v} \;, v\in V_{t+1}\\ \nonumber
+& T_{u,v} \geq 0,\; u \in V_{t} \;, v \in V_{t+1}\\ \nonumber
+\end{align}
+
+
+Donde $T_{u,v}$ es el flujo que va de la palabra $u$ del tópico $i$ de la época $t$ a la palabra $v$ del tópico $j$ de la época $t+1$, $\phi_{i,t,u}$, es la probabilidad de la palabra $u$ en el tópico $i$ de la época $t$, $c_{u,v}$ es el costo de mover una unidad de flujo por el arco $(u,v)$, el costo entre palabras se mide como la distancia euclidiana entre los \textit{word embedding} de dichas palabras. La primera restricción indica que el flujo que se mueve de una palabra $u$ del tópico $i$ a todas las palabras del tópico $j$ debe sumar su peso ($\phi_{i,t,u}$), la segunda restricción significa que el flujo que se mueve de una palabra $v$ del tópico $j$ a todas las palabras del tópico $i$ debe sumar su peso ($\phi_{j,t+1,v}$). Esta médida de distancia se puede fácilmente transformar en una médida de similitud $\rho(\phi_{i,t}, \phi_{j,t+1}) = \frac{1}{1+WMD(\phi_{i,t}, \phi_{j,t+1})}$, notar que si la WMD es 0 la similitud es 1 y si es $\infty$ la similitud es 0.
+
+%Word embedding y cómo obtener
+
+
+\chapter{Experimento}
+\section{Datos}
+%replicar gráficos del Informe_1_fondef
+\section{Procesamiento}
+
+\section{Análisis cuantitativo de resultados}
+\section{Análisis cualitativo de resultados}
+
+\chapter{Conclusiones}
+
+
+\bibliography{library}
+
+% FIN DEL DOCUMENTO
+\end{document}

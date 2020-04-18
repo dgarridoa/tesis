@@ -2,9 +2,15 @@
 /bib
 /data
 *.xlsx
+*.csv
 *.pkl
 *.mm
 *.dict
 *.index
 *.exe
 dtm.js
+*.pdf
+*.pptx
+*.docx
+*.odt
+/reports/templates

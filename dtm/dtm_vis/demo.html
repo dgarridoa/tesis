@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="iso-8859">
+    <title></title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="nav/nav_scroll.css">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="serie.css" type="text/css" media="all" />
+
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+    <script src="https://www.amcharts.com/lib/3/amcharts.js"></script>
+    <script src="https://www.amcharts.com/lib/3/serial.js"></script>
+    <script src="https://www.amcharts.com/lib/3/themes/light.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+  </head>
+  <body>
+
+<script src='nav/nav_scroll.js'></script>
+
+<div class="container">
+  <nav class="navbar navbar-default navbar-fixed-top navbar-fixed-top.scrolled">
+    <div class="navbar-header">
+      <form class="navbar-form navbar-left" role="search">
+        <div class="form-group">
+          <a class="navbar-brand" href="#"> <strong>Dynamic Topic Model</strong> </a>
+        </div>
+        <input type="text"  maxlength="8" id='value' class="form-control" placeholder="slice">
+        <input type="text"  maxlength="4" id='ntopic' class="form-control" placeholder="ntopic">
+        <!-- Example slice=Jan 2011, ntopic=2, slice in [2011,2016] and topic in [2,10]  -->
+        <input id='form' type="button" class="btn btn-default"  value='Submit'>
+
+      </form>
+    </div>
+  </nav>
+  <br></br>
+  <br></br>
+
+ <table>
+
+ <tr>
+  <div id="chartdiv"></div>
+      <script src="series_data.js"></script>
+      <script src="graph_data.js"></script>
+      <script src="serie.js"></script>
+  </div>
+  </tr>
+<tr>
+  <div id="ldavis_el604422654636080886007232696">
+    <script src="dtm.js"></script>
+    <script src="lda_vis.js"></script>
+  </div>
+  </tr>
+  </table>
+
+    <script>
+    $(document).ready(function(){
+        $("#form").click(function(){
+          var dt = document.getElementById('value').value;
+
+          var k =  document.getElementById('ntopic').value;
+            $.ajax({success: series(k)});
+            $.ajax({success: lda_vis(k, dt)});
+        });
+    });
+    </script>
+
+    <div id="metrics">
+      <script src='avgcossim_data.js'></script>
+      <script src='avgjs_data.js'></script>
+
+      <script src='metrics.js'></script>
+    </div>
+
+</div>
+
+</body>
+</html>

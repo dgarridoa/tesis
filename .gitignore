@@ -9,10 +9,6 @@
 *.index
 *.exe
 dtm.js
-*.pdf
-*.pptx
-*.docx
-*.odt
 /reports/templates
 *.ipynb_checkpoints
 *__pycache__

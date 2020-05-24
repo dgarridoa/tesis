@@ -1,92 +1,101 @@
+import os
 import pandas as pd
-import pickle as pkl
-#Preprocesamiento
-import re
-import spacy
-from spacy.lang.es.stop_words import STOP_WORDS #importar set de stopwords
-from nltk.stem import SnowballStemmer #importar stemmer
-nlp = spacy.load('es') #python -m spacy download es
+import json
+import logging
 from sklearn.feature_extraction.text import CountVectorizer
 from tokenizer import tokenizer
 from gensim.corpora import Dictionary
-from gensim.corpora.mmcorpus import MmCorpus
+from gensim.corpora.bleicorpus import BleiCorpus
 
-## Importar la base de datos
-df = pd.read_csv('../data/robos_prose.csv', index_col = 'id_prose', usecols = ['id_prose', 'sin_fecha_siniestro', 'sin_relato'], sep=',')
-# cambiar el tipo de dato a timestamp
-df['sin_fecha_siniestro'] = pd.to_datetime(df['sin_fecha_siniestro'])
-# ordenar relatos por fecha
-df.sort_values('sin_fecha_siniestro', inplace=True)
-# seleccionar relatos entre 2011-2016 y omitir registros con relatos nulos
-df = df[(df['sin_fecha_siniestro']>=pd.Timestamp(2011,1,1)) & (df['sin_fecha_siniestro']<pd.Timestamp(2017,1,1)) & (df['sin_relato'].isnull()==False)]
+# get logger
+logging.basicConfig(level = os.environ.get("LOGLEVEL", "INFO"))
+logger = logging.getLogger("processing-data")
 
-# exportar dataframe
-df.to_pickle('../data/robos_prose_v1.pkl')
+logger.info("***Loading Data***")
 
-#Importar la base de datos
-df = pd.read_pickle('../data/robos_prose_v1.pkl')
+# load args
+with open("args.json", "r") as f:
+    args = json.load(f)
 
-## Reducción de vocabulario: Eliminación de stopwords y palabras poco frecuentes
+# load documents
+if args["target_data"]!="":
+    # load data
+    df = pd.read_csv(args["raw_data"], index_col = 'id_prose',
+    usecols = ['id_prose', 'sin_fecha_siniestro', 'sin_relato'], sep=',')
+    # change data type
+    df['sin_fecha_siniestro'] = pd.to_datetime(df['sin_fecha_siniestro'])
+    # sort by date
+    df.sort_values('sin_fecha_siniestro', inplace=True)
+    # select data between 2011-2016 and skip nulls
+    df = df[(df['sin_fecha_siniestro']>=pd.Timestamp(2011,1,1)) 
+        & (df['sin_fecha_siniestro']<pd.Timestamp(2017,1,1)) 
+        & (df['sin_relato'].isnull()==False)]
+    # export data
+    path_to_export = args["raw_data"].split(".csv")[0]+".pkl"
+    df.to_pickle(path_to_export) 
+else:
+    # load data
+    df = pd.read_pickle(args["target_data"])
 
-# Creamos objetos para llevar el corpus a bag-of-words
-tf_vectorizer = CountVectorizer(analyzer='word', tokenizer= tokenizer)
+logger.info(f"Corpus size: {len(df)}")
 
-# Extraer vocabulario
+# load stopwords
+if args["stopwords"]!="":
+    with open(args["stopwords"], "r") as f:
+        stopwords = [line.strip() for line in f]
+else:
+    stopwords = None
+
+# load dicionary with homologations
+if args["homol_dict"]!="":
+    with open(args["homol_dict"], "r") as f:
+        homol_dict = json.load(f)
+else:
+    homol_dict = None
+
+logger.info("***Data Processing***")
+logger.info("Extracting Vocabulary")
+
+tokenizer_args = {"stopwords": stopwords, "homol_dict": homol_dict, 
+                "stemming": args["stemming"], "lemmatization": args["lemmatization"]}
+tf_vectorizer = CountVectorizer(analyzer='word', tokenizer=lambda text: tokenizer(text, **tokenizer_args))
 tf_vectorizer.fit(df['sin_relato'])
 vocabulary = tf_vectorizer.get_feature_names()
 frequency = tf_vectorizer.transform(df['sin_relato']).toarray().sum(axis=0)
-data = {'vocabulary':pd.Series(vocabulary), 'frequency': pd.Series(frequency)}
-df_freq = pd.DataFrame(data)
+word_freq = {'vocabulary':pd.Series(vocabulary), 'frequency': pd.Series(frequency)}
+df_word_freq = pd.DataFrame(word_freq)
 
+logger.info(f"Vocabulary size: {len(vocabulary)}")
 
-# Extraer stopwords contextuales: palabras muy frecuentes que aportan poca información
-stopwords_filter = ['veh', 'vh', 'culo', 'aut', 'camion', 'camión','rob', 'denun', 'dej',
-                    'daño', 'dano', 'daos', 'perc' ,'sinies' ,'llev' ,'volver' ,'sali' ,
-                    'hrs' ,'dedu' ,'hecho' , 'habia', 'busc' ,'regre' ,'aseg' ,
-                    'frent' ,'comuna' ,'direcc' ,'aprox' ,'circun' ,'lleg' , 'afuera' ,
-                    'hora' ,'indica' ,'ubica' ,'minut' ,'conta', 'presen', 'senal',
-                    'señal', 'web', 'descrip', 'carabi', 'fech', 'avis', 'docu', 'ppu',
-                    'dya', 'mario', 'medina', 'alcoholemiano'
-                   ]
-#ppu:patente, web: página web para denunciar
+# remove words with less of 10 ocurrence in corpus and with 3 char or less 
+vocabulary = df_word_freq[(df_word_freq['frequency']>=10) & (df_word_freq['vocabulary'].str.len()>3)]['vocabulary'].to_list()
 
-contextual_stopwords = set()
+logger.info(f"Vocabulary size after elimination: {len(vocabulary)}")
 
-for word in stopwords_filter:
-    words_to_filter = set(df_freq[df_freq['vocabulary'].str.contains(word)]['vocabulary'])
-    contextual_stopwords = contextual_stopwords.union(words_to_filter)
+# save vocabulary
+if args["vocabulary"]!="":
+    with open(args["vocabulary"], "w") as f:
+        for word in vocabulary:
+            f.write("%s\n" % word)
 
-not_stopwords = set(['autopista', 'autopistas', 'autoservicio', 'automático', 'algarrobo', 'petrobras'])
-contextual_stopwords = contextual_stopwords-not_stopwords
-contextual_stopwords = contextual_stopwords.union(set(['via', 'vía', 'uf', 'numero', 'número']))
+logger.info("*** Getting corpus in Blei’s LDA-C format ***")
 
-# Nuevo conjunto de stopwords
-stopwords_set = STOP_WORDS.union(contextual_stopwords)
+# tokenized corpus using vocabulary
+tokenizer_args = {"stopwords": stopwords, "homol_dict": homol_dict, "vocabulary": vocabulary, 
+                "lemmatization": args["lemmatization"], "stemming": args["stemming"]}
+corpus = [tokenizer(doc, **tokenizer_args) for doc in df['sin_relato']]
+# remove empty documents
+corpus = [doc for doc in corpus if len(doc)>0]
 
-# Extraer palabras que aparecen almenos 10 veces en el corpus y tienen más de tres caracteres
-most_freq_words = set(df_freq[(df_freq['frequency']>=10) & (df_freq['vocabulary'].str.len()>3)]['vocabulary'])
+logger.info(f"Corpus size after elimination: {len(corpus)}")
 
-# Vocabulario final corresponde most_freq_words menos los elementos en stopwords_set
-vocabulary = most_freq_words-stopwords_set
-# Guardar vocabulario en ../data/ con como un objeto tipo set
-with open('../data/vocabulary.pickle', 'wb') as f:
-    pkl.dump(vocabulary, f, protocol=pkl.HIGHEST_PROTOCOL)
+# map each word to an id {id->word}
+dictionary = Dictionary(corpus)
+# a document is a list of tuples, each tuples has two element, the first is the id of the word and the second is its frequency
+corpus = [dictionary.doc2bow(text) for text in corpus]
 
-#Importar vocabulario
-with open('../data/vocabulary.pickle', 'rb') as f:
-    vocabulary = pkl.load(f)
+# save dictionary and corpus 
+dictionary.save(args["dictionary"])
+BleiCorpus.serialize(args["corpus"], corpus)
 
-#Corpus tokenizado utilizando el vocabulario
-data_tokenized = [tokenizer(doc, vocabulary=vocabulary) for doc in df['sin_relato']]
-
-#Creamos el diccionario a partir de los textos procesados en el formato que necesita LDA en gensim
-dictionary = Dictionary(data_tokenized)
-
-#Transformamos el corpus al formato que requiere la librería
-#El corpus contiene una representacion numerica de los textos, un texto es representado por una lista de tuplas
-#donde el primer elemento de la tupla es la id de la palabra y el segundo es su frecuencia de aparición en el texto.
-corpus = [dictionary.doc2bow(text) for text in data_tokenized]
-
-#Guardamos el diccionario y el corpus
-dictionary.save('../data/dictionary.dict')
-MmCorpus.serialize('../data/corpus.mm', corpus)
+logger.info("***Data Processing Completed***")

@@ -1,51 +1,56 @@
-#Preprocesamiento
 import re
 import spacy
-from spacy.lang.es.stop_words import STOP_WORDS #importar set de stopwords
-from nltk.stem import SnowballStemmer #importar stemmer
-nlp = spacy.load('es_core_news_sm') #python -m spacy download es
+#python -m spacy download es
+from nltk.stem import SnowballStemmer 
 
-## Función para procesar texto
-def tokenizer(doc, sep=None, vocabulary = None, homol_dict=None, lemmatization=False, stemming = False):
+lemmatizer = spacy.load('es_core_news_sm') 
+stemmer = SnowballStemmer('spanish')
+
+def tokenizer(doc, sep=None, stopwords = None, homol_dict=None, vocabulary = None, lemmatization=False, stemming = False):
     '''
-    Por defecto divide la sentencia por el carácter espacio.
-    Ej: 'Data Mining is the best course'->['Data',  'Mining', 'is', 'the', 'best', 'course']
+    Extracts a list of processed words from a document.
 
     Input:
-    1. doc: str, documento.
-    2. sep: str, carácter para dividir el documento en tokens, por defecto es el espacio.
-    3. vocabuary: set, si un vocabulario es dado filtra las palabras que no estan presentes en el.
-    4. homol_dict: dict, diccionario de homologaciones.
-    5. lemmatization: bool, si es True lleva las palabras a su lema.
-    6. stemming: bool, si es True lleva las palabas a su raíz.
+        doc: str, document.
+        sep: str, split char, by defect space is used.
+        stopwords: list[str], list of word to remove.
+        homol_dict: dict, dictionary with homologations between words.
+        vocabuary: list[str], list of word allowed.
+        lemmatization: bool, if is True takes the words to their lemma.
+        stemming: bool, if is True takes the words to their stem.
 
     Output:
-    list, lista de tokens.
-
-    Nota: aplicar stemming y lemmatization al mismo tiempo no es correcto.
+        tokens: list[str], list of processed words.
     '''
-    doc = re.sub(r'\S+@\S+', '', doc) #elimina correos electrónicos
-    doc = re.sub(r'[\xa0]', '', doc) #elimina el patrón \xa0
-    doc = re.sub(r'[^\w\s]','', doc) #elimina los símbolos de puntuación excepto underscore
-    doc = re.sub(r'[_]', '', doc) #elimina underscore
-    doc = re.sub(r'[a-zA-Z]+[0-9]+', '', doc) #elimina los tokens que contienen letras y números
-    doc = re.sub(r'([ø ÿ þ])', ' ', doc) #reemplazas los símbolos contenidos por un espacio
-    doc = re.sub(r'[0-9]', '', doc) #elimina los tokens númericos
-    tokens = doc.split(sep) #tokenización
-    tokens = [word.lower() for word in tokens] #pasar todas las palabras a minúsculas
+    doc = re.sub(r'\S+@\S+', '', doc) # remove e-mails
+    doc = re.sub(r'[\xa0]', '', doc) # remove pattern \xa0
+    doc = re.sub(r'[^\w\s]','', doc) # remove punctuation symbols except underscore
+    doc = re.sub(r'[_]', '', doc) # remove underscore
+    doc = re.sub(r'[a-zA-Z]+[0-9]+', '', doc) # remove tokens with letters and numbers 
+    doc = re.sub(r'([ø ÿ þ])', ' ', doc) # replace ø ÿ þ by space
+    doc = re.sub(r'[0-9]', '', doc) # remove numbers
+    tokens = doc.split(sep) # tokenization
+    tokens = [word.lower() for word in tokens] # to lowercase
 
-
-    if vocabulary is not None:
-        #solo considera caracteres que tokens que estan en vocabulary
-        tokens = [word for word in tokens if word in vocabulary]
-
-    #if homol_dict is not None:
-
-    if lemmatization==True:
-        tokens = [nlp(word)[0].lemma_ for word in tokens]
-
-    if stemming == True:
-        stemmer = SnowballStemmer('spanish')
+    # remove stopwords
+    if stopwords is not None:
+        tokens = [word for word in tokens if word not in stopwords]
+    # homologate word with similar meaning
+    if homol_dict is not None:
+        for i, word in enumerate(tokens):
+            for key in homol_dict.keys():
+                if word in homol_dict[key]:
+                    tokens[i] = key
+                    break        
+    # take the words to their lemma
+    if lemmatization is True:
+        tokens = [lemmatizer(word)[0].lemma_ for word in tokens]
+    # take the words to their stem
+    if stemming is True:
         tokens = [stemmer.stem(word) for word in tokens]
+
+     # filter by vocabulary
+    if vocabulary is not None:
+        tokens = [word for word in tokens if word in vocabulary]
 
     return tokens

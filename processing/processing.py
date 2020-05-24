@@ -14,7 +14,7 @@ logger = logging.getLogger("processing-data")
 logger.info("***Loading Data***")
 
 # load args
-with open("args.json", "r") as f:
+with open("../args.json", "r") as f:
     args = json.load(f)
 
 # load documents
@@ -67,8 +67,8 @@ df_word_freq = pd.DataFrame(word_freq)
 
 logger.info(f"Vocabulary size: {len(vocabulary)}")
 
-# remove words with less of 10 ocurrence in corpus and with 3 char or less 
-vocabulary = df_word_freq[(df_word_freq['frequency']>=10) & (df_word_freq['vocabulary'].str.len()>3)]['vocabulary'].to_list()
+# remove words with less of 5 ocurrences in corpus and with 3 char or less 
+vocabulary = df_word_freq[(df_word_freq['frequency']>=5) & (df_word_freq['vocabulary'].str.len()>3)]['vocabulary'].to_list()
 
 logger.info(f"Vocabulary size after elimination: {len(vocabulary)}")
 

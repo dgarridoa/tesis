@@ -1,0 +1,11 @@
+{
+    "stopwords": "../data/stopwords.txt",
+    "vocabulary": "../data/vocabulary.txt", 
+    "homol_dict": "",
+    "raw_data": "../data/robos_prose.csv",
+    "target_data": "../data/robos_prose.pkl",
+    "lemmatization": false,
+    "stemming": true,
+    "dictionary": "../data/dictionary.dict",
+    "corpus": "../data/corpus.mm"
+}

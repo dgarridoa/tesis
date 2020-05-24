@@ -61,7 +61,7 @@ The following shows an example of performing posterior inference on a set of doc
 ```bash
 hdp --algorithm train --data data --directory train_dir
 
-hdp --algorithm train --data ../../../data/corpus.mm --directory ../hdp_results/ --save_lag -1 --random_sed 123
+hdp --algorithm train --data ../../../data/corpus.mm --directory ../hdp_results/ --save_lag -1 --random_sed 123 --max_iter 5000 --split-merge yes
 ```
 
 Data format

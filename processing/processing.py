@@ -37,8 +37,6 @@ else:
     # load data
     df = pd.read_pickle(args["target_data"])
 
-logger.info(f"Corpus size: {len(df)}")
-
 # load stopwords
 if args["stopwords"]!="":
     with open(args["stopwords"], "r") as f:
@@ -54,48 +52,90 @@ else:
     homol_dict = None
 
 logger.info("***Data Processing***")
-logger.info("Extracting Vocabulary")
 
-tokenizer_args = {"stopwords": stopwords, "homol_dict": homol_dict, 
-                "stemming": args["stemming"], "lemmatization": args["lemmatization"]}
-tf_vectorizer = CountVectorizer(analyzer='word', tokenizer=lambda text: tokenizer(text, **tokenizer_args))
-tf_vectorizer.fit(df['sin_relato'])
-vocabulary = tf_vectorizer.get_feature_names()
-frequency = tf_vectorizer.transform(df['sin_relato']).toarray().sum(axis=0)
-word_freq = {'vocabulary':pd.Series(vocabulary), 'frequency': pd.Series(frequency)}
-df_word_freq = pd.DataFrame(word_freq)
+def split_docs(df, slice_type):
+    """
+    Input
+        df: pandas.DataFrame, corpus dataframe.
+        slice_type: str, type of temporal division of the corpus ('year', 'quarter' or 'month').
+    Output
+        df_slices: pandas.DataFrame, dataframe with slice assignment for each pair of (year, month).
+    """
+    df_slices = df[["year", "month"]].drop_duplicates()
+    df_slices.reset_index(inplace=True, drop=True)
+    df_slices["slice"] = 0
+    N = len(df_slices)
+    if slice_type == "year":
+        steps = 12
+        M = int(N/steps)
+        slices = range(1, M+1)
+    elif slice_type == "quarter":
+        steps = 3
+        M = int(N/steps)
+        slices = range(1, M+1)
+    else:
+        # slice_type == "month"
+        steps = 1
+        slices = range(1, N+1)
 
-logger.info(f"Vocabulary size: {len(vocabulary)}")
+    for slice in slices:
+        df_slices.loc[steps*(slice-1):steps*slice, "slice"] = slice
 
-# remove words with less of 5 ocurrences in corpus and with 3 char or less 
-vocabulary = df_word_freq[(df_word_freq['frequency']>=5) & (df_word_freq['vocabulary'].str.len()>3)]['vocabulary'].to_list()
+    return df_slices
 
-logger.info(f"Vocabulary size after elimination: {len(vocabulary)}")
+# group corpus into slices
+df.loc[:, "year"] = df.apply(lambda x: x["sin_fecha_siniestro"].year, axis=1)
+df.loc[:, "month"] = df.apply(lambda x: x["sin_fecha_siniestro"].month, axis=1)
+df.loc[:, "slice"] = 0
+df_slices = split_docs(df, args["slice_type"])
+slices = df_slices["slice"].unique()
 
-# save vocabulary
-if args["vocabulary"]!="":
-    with open(args["vocabulary"], "w") as f:
-        for word in vocabulary:
-            f.write("%s\n" % word)
+for row in df_slices.values: 
+    year, month, slice = row[0], row[1], row[2]
+    df.loc[(df["year"]==year) & (df["month"]==month), "slice"] = slice
 
-logger.info("*** Getting corpus in Blei’s LDA-C format ***")
+for slice in slices:
+    logger.info(f"***Slices Completed:{slice-1}/{slices[-1]}***")
+    
+    docs = df[df["slice"] == slice]["sin_relato"]
+    logger.info(f"Corpus size: {len(docs)}")
 
-# tokenized corpus using vocabulary
-tokenizer_args = {"stopwords": stopwords, "homol_dict": homol_dict, "vocabulary": vocabulary, 
-                "lemmatization": args["lemmatization"], "stemming": args["stemming"]}
-corpus = [tokenizer(doc, **tokenizer_args) for doc in df['sin_relato']]
-# remove empty documents
-corpus = [doc for doc in corpus if len(doc)>0]
+    logger.info("Extracting Vocabulary")
 
-logger.info(f"Corpus size after elimination: {len(corpus)}")
+    tokenizer_args = {"stopwords": stopwords, "homol_dict": homol_dict, 
+                      "stemming": args["stemming"], "lemmatization": args["lemmatization"]}
+    tf_vectorizer = CountVectorizer(analyzer='word', tokenizer=lambda text: tokenizer(text, **tokenizer_args))
+    tf_vectorizer.fit(docs)
+    vocabulary = tf_vectorizer.get_feature_names()
+    frequency = tf_vectorizer.transform(docs).toarray().sum(axis=0)
+    word_freq = {'vocabulary':pd.Series(vocabulary), 'frequency': pd.Series(frequency)}
+    df_word_freq = pd.DataFrame(word_freq)
 
-# map each word to an id {id->word}
-dictionary = Dictionary(corpus)
-# a document is a list of tuples, each tuples has two element, the first is the id of the word and the second is its frequency
-corpus = [dictionary.doc2bow(text) for text in corpus]
+    logger.info(f"Vocabulary size: {len(vocabulary)}")
 
-# save dictionary and corpus 
-dictionary.save(args["dictionary"])
-BleiCorpus.serialize(args["corpus"], corpus)
+    # remove words with less frequency and with little chars
+    vocabulary = df_word_freq[(df_word_freq['frequency']>=2) & (df_word_freq['vocabulary'].str.len()>3)]['vocabulary'].to_list()
+    logger.info(f"Vocabulary size after elimination: {len(vocabulary)}")
+
+    logger.info("Getting corpus in Blei’s LDA-C format")
+
+    # tokenized corpus using vocabulary
+    tokenizer_args = {"stopwords": stopwords, "homol_dict": homol_dict, "vocabulary": vocabulary, 
+                      "lemmatization": args["lemmatization"], "stemming": args["stemming"]}
+    corpus = [tokenizer(doc, **tokenizer_args) for doc in docs]
+    # remove empty documents
+    corpus = [doc for doc in corpus if len(doc)>0]
+
+    logger.info(f"Corpus size after elimination of empty docs: {len(corpus)}")
+
+    # map each word to an id {id->word}
+    dictionary = Dictionary(corpus)
+    # a document is a list of tuples, each tuples has two element, the first is the id of the word and the second is its frequency
+    corpus = [dictionary.doc2bow(text) for text in corpus]
+
+    logger.info("Saving Corpus")
+    # save dictionary and corpus 
+    dictionary.save(args["corpus"]+f"dictionary_{slice}.dict")
+    BleiCorpus.serialize(args["corpus"]+f"corpus_{slice}.mm", corpus)
 
 logger.info("***Data Processing Completed***")

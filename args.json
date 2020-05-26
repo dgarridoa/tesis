@@ -1,11 +1,14 @@
 {
     "stopwords": "../data/stopwords.txt",
-    "vocabulary": "../data/vocabulary.txt", 
+    "vocabulary": "", 
     "homol_dict": "",
     "raw_data": "../data/robos_prose.csv",
     "target_data": "../data/robos_prose.pkl",
     "lemmatization": false,
     "stemming": true,
-    "dictionary": "../data/dictionary.dict",
-    "corpus": "../data/corpus.mm"
+    "corpus": "../data/corpus/",
+    "slice_type": "quarter",
+    "embeddings": "fasttext-sbwc.bin",
+    "hdp_results": "results/hdp/",
+    "prunning_threshold": 0.05
 }

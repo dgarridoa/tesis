@@ -11,4 +11,9 @@
 dtm.js
 /reports/templates
 *.ipynb_checkpoints
-*__pycache__
+*__pycache__s
+*.dat
+*.bin
+*.log
+*.vec
+.history

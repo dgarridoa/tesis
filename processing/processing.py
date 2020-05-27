@@ -57,10 +57,13 @@ logger.info("***Data Processing***")
 def split_docs(df, slice_type):
     """
     Input
-        df: pandas.DataFrame, corpus dataframe.
-        slice_type: str, type of temporal division of the corpus ('year', 'quarter' or 'month').
+        df: pandas.DataFrame, 
+            corpus dataframe.
+        slice_type: str, 
+            type of temporal division of the corpus ('year', 'quarter' or 'month').
     Output
-        df_slices: pandas.DataFrame, dataframe with slice assignment for each pair of (year, month).
+        df_slices: pandas.DataFrame, 
+            dataframe with slice assignment for each pair of (year, month).
     """
     df_slices = df[["year", "month"]].drop_duplicates()
     df_slices.reset_index(inplace=True, drop=True)

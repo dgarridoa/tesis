@@ -11,16 +11,24 @@ def tokenizer(doc, sep=None, stopwords = None, homol_dict=None, vocabulary = Non
     Extracts a list of processed words from a document.
 
     Input
-        doc: str, document.
-        sep: str, split char, by defect space is used.
-        stopwords: list[str], list of word to remove.
-        homol_dict: dict, dictionary with homologations between words.
-        vocabuary: list[str], list of word allowed.
-        lemmatization: bool, if is True takes the words to their lemma.
-        stemming: bool, if is True takes the words to their stem.
+        doc: str, 
+            document.
+        sep: str, 
+            split char, by defect space is used.
+        stopwords: list[str], optional
+            list of word to remove.
+        homol_dict: dict, optional
+            dictionary with homologations between words.
+        vocabuary: list[str], optional
+            list of word allowed.
+        lemmatization: bool, default False
+            if is True takes the words to their lemma.
+        stemming: bool, default False
+            if is True takes the words to their stem.
 
     Output
-        tokens: list[str], list of processed words.
+        tokens: list[str], 
+            list of processed words.
     '''
     doc = re.sub(r'\S+@\S+', '', doc) # remove e-mails
     doc = re.sub(r'[\xa0]', '', doc) # remove pattern \xa0

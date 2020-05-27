@@ -10,5 +10,6 @@
     "slice_type": "quarter",
     "embeddings": "fasttext-sbwc.bin",
     "hdp_results": "results/hdp/",
+    "topic_quantile_threshold": 0.95,
     "prunning_threshold": 0.05
 }

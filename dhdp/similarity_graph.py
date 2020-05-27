@@ -45,8 +45,8 @@ def wmd(embeddings, token2id1, token2id2, topic1, topic2, q=None):
         vocabulary = vocabulary1.union(vocabulary2)
     else:
         # get vocabulary from union of topic vocabularies
-        vocabulary1 = set(dict1.token2id.keys())
-        vocabulary2 = set(dict2.token2id.keys())
+        vocabulary1 = set(token2id1.keys())
+        vocabulary2 = set(token2id2.keys())
         vocabulary = vocabulary1.union(vocabulary2)
     # topics distributions with padding
     first_histogram = np.array([topic1[token2id1[word]] if word in vocabulary1 else 0 for word in vocabulary])
@@ -108,6 +108,5 @@ for slice in slices[:-1]:
         for j, topic_j in enumerate(topics_dists2):
             distance = wmd(embeddings, token2id1, token2id2, topic_i, topic_j)
             grap_similarity[(slice, i, j)] = 1/(1+distance)
-
 
 #args["prunning_threshold"]

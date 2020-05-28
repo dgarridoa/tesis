@@ -12,7 +12,7 @@ from gensim.corpora.bleicorpus import BleiCorpus
 logging.basicConfig(level = os.environ.get("LOGLEVEL", "INFO"))
 logger = logging.getLogger("processing-data")
 
-logger.info("***Loading Data***")
+logger.info("Loading Data")
 
 # load args
 with open("../args.json", "r") as f:
@@ -52,7 +52,7 @@ if args["homol_dict"]!="":
 else:
     homol_dict = None
 
-logger.info("***Data Processing***")
+logger.info("Data Processing")
 
 def split_docs(df, slice_type):
     """
@@ -106,7 +106,7 @@ if os.path.exists(path_to_save):
 os.makedirs(path_to_save)
 
 for slice in slices:
-    logger.info(f"***Slices Completed:{slice-1}/{slices[-1]}***")
+    logger.info(f"Slices Completed:{slice-1}/{slices[-1]}")
     
     docs = df[df["slice"] == slice]["sin_relato"]
     logger.info(f"Corpus size: {len(docs)}")
@@ -151,4 +151,4 @@ for slice in slices:
     dictionary.save(f"{path_to_save}dictionary_{slice_string}.dict")
     BleiCorpus.serialize(f"{path_to_save}corpus_{slice_string}.mm", corpus)
 
-logger.info("***Data Processing Completed***")
+logger.info("Data Processing Completed")

@@ -2,10 +2,12 @@ import os
 import json
 import numpy as np
 import logging
+from time import time
 from pyemd import emd
 from gensim.corpora import Dictionary
 from gensim.corpora.bleicorpus import BleiCorpus
 from gensim.models.fasttext import load_facebook_vectors
+
 
 def wmd(embeddings, token2id1, token2id2, topic1, topic2, q=None):
     """
@@ -64,7 +66,7 @@ def wmd(embeddings, token2id1, token2id2, topic1, topic2, q=None):
 logging.basicConfig(level = os.environ.get("LOGLEVEL", "INFO"))
 logger = logging.getLogger("similarity-graph")
 
-logger.info("***Loading Data***")
+logger.info("Loading Data")
 
 # load args
 with open("../args.json", "r") as f:
@@ -72,7 +74,7 @@ with open("../args.json", "r") as f:
 
 path_corpus = f'{args["corpus"]}{args["slice_type"]}'
 dict_files = sorted([file for file in os.listdir(path_corpus) if ".dict" in file])
-path_models = f'{args["hdp_results"]}{args["slice_type"]}'
+path_models = f'{args["results"]}hdp/{args["slice_type"]}'
 models_dir = sorted(os.listdir(path_models))
 
 slices = range(1, len(models_dir)+1)
@@ -91,22 +93,30 @@ for slice in slices:
     #save data in a dict
     data[slice] = {"token2id": token2id, "topics_dists": topics_dists}
 
-logger.info("***Loading Embeddings***")
+logger.info("Loading Embeddings")
 
 embeddings = load_facebook_vectors(args["embeddings"])
 
-logger.info("***Computing Similarity Graph***")
-
-grap_similarity = {}
+logger.info("Computing Similarity Graph")
+ti = time()
+similarity_graph = {}
 for slice in slices[:-1]:
-    logger.info(f"***Steps Completed:{slice-1}/{slices[-1]-1}***")
+    logger.info(f"Steps Completed:{slice-1}/{slices[-1]-1}")
+    similarity_graph[slice] = {}
     token2id1 = data[slice]["token2id"]
     token2id2 = data[slice+1]["token2id"]
     topics_dists1 = data[slice]["topics_dists"] 
     topics_dists2 = data[slice+1]["topics_dists"]
     for i, topic_i in enumerate(topics_dists1):
+        similarity_graph[slice][i] = {}
         for j, topic_j in enumerate(topics_dists2):
             distance = wmd(embeddings, token2id1, token2id2, topic_i, topic_j)
-            grap_similarity[(slice, i, j)] = 1/(1+distance)
+            similarity_graph[slice][i][j] = 1/(1+distance)
+tf = time()
+logger.info(f"Total Time [s]: {round(tf-ti)}")
 
+logger.info(f"Saving Graph")
+path_to_save_graph = f'{args["results"]}graph/graph_{args["slice_type"]}.json'
+with open(path_to_save_graph, "w") as f:
+    json.dump(similarity_graph, f)
 #args["prunning_threshold"]

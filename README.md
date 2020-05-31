@@ -10,9 +10,9 @@ Para esto se propone utilizar un modelo de clustering dinámico como el propuest
 
 La estructura del proyecto es la siguiente:
 
-1. **bib**: bibliografía.
+1. **bib(drive)**: bibliografía.
 2. **reports**: reportes sobre el proyecto de tesis y del proyecto fondef. El LaTex de la tesis se encuentra en `tesis/`.
-3. **data**: almacena la base de datos de estudio `robos_prose.csv` y subproductos de este.
+3. **data(drive)**: almacena la base de datos de estudio `robos_prose.csv` y subproductos de este.
 4. **processing**: archivos de código para el procesamiento de relatos.
 5. **dtm**: prueba de concepto usando Dynamic Topic Model (DTM).
 6. **dhdp**: código con el modelo de clustering dinámico propuesto para el trabajo de tesis.

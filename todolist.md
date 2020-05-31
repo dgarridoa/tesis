@@ -18,7 +18,7 @@
 ## 2. Implementation
 - [x] poc hdp python
 - [x] learn c++
-- [ ] hdp c++
+- [x] hdp c++
 - [ ] similarity graph
 - [ ] visualizations
 ## 3. Data processing
@@ -36,4 +36,3 @@
 ## 5. Lectures
 - [ ] MCMC
 - [ ] Chinese Restaurant Process
-- [ ] Infinite LDA

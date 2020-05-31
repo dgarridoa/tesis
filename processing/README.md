@@ -1,5 +1,5 @@
 # Procesamiento de relatos
-
+## Actualizar
 El presente directorio contiene todo lo relacionado al procesamiento de los relatos. Descripción del contenido:
 
 1. **resume.ipynb**: notebook con algunas estadísticas descriptivas sobre `robos_prose.csv`. Del notebook se justifica que la elección de la muestra son los relatos de los años 2011-2016.

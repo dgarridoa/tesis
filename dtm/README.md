@@ -2,11 +2,9 @@
 
 Prueba de concepto usando DTM sobre la base de datos de **robos_prose.csv** para *K=2,...,10*. El directorio cuenta con los siguientes archivos relevantes.
 
-
-1. **robos_prose_clean_2.0.xlsx**: base de datos preprocesada usando text mining, cuenta con 49.015 documentos y un vocabulario de 30.284 palabras.
-2. **dtm_model.ipynb**: notebook que post procesa *robos_prose_clean_2.0.xlsx* eliminando palabras con frecuencia menor a 10, reduciendo el vocabulario a  5.430 y exporta el corpus en formato gensim `corpora.mm` y `dictionary.dict`. Además entrena DTM (Ejecutable: `dtm-win64.exe`) y exporta los modelos entrenados.
-3. **dtm_evaluation.ipynb**: notebook que exporta data para evaluar la calidad de los modelos.
-4. **dtm_vis/**: directorio con el archivo **demo.html**,archivo que muestra tres visualizaciones:
+1. **dtm_model.ipynb**: notebook que post procesa *robos_prose_clean_2.0.xlsx* eliminando palabras con frecuencia menor a 10, reduciendo el vocabulario a  5.430 y exporta el corpus en formato gensim `corpora.mm` y `dictionary.dict`. Además entrena DTM (Ejecutable: `dtm-win64.exe`) y exporta los modelos entrenados.
+2. **dtm_evaluation.ipynb**: notebook que exporta data para evaluar la calidad de los modelos.
+3. **dtm_vis/**: directorio con el archivo **demo.html**,archivo que muestra tres visualizaciones:
   - Dos métricas en función del número de tópicos.
   - Serie de tiempo de los tópicos en el tiempo.
   - LDAVis: muestra la relación entre los tópicos y la relevancia de las palabras en un tópico. Eeste gráfico es parámetrizable por:

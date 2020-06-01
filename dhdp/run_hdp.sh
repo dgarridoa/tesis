@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # relevants paths
-data_path="../data/corpus/quarter/"
+data_path="../data/corpus/year/"
 files=$(find ${data_path}corpus*.mm)
 hdp="hdp/hdp/./hdp"
-dir_to_save="results/hdp/quarter"
+dir_to_save="results/hdp/year"
 N=$(wc -w <<< $files)
 
 # clean previous results

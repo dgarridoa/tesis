@@ -5,11 +5,11 @@
     "raw_data": "../data/robos_prose.csv",
     "target_data": "../data/robos_prose.pkl",
     "lemmatization": false,
-    "stemming": true,
+    "stemming": false,
     "corpus": "../data/corpus/",
-    "slice_type": "quarter",
+    "slice_type": "year",
     "embeddings": "fasttext-sbwc.bin",
     "results": "results/",
-    "topic_quantile_threshold": 0.95,
+    "topic_quantile_threshold": 0.8,
     "prunning_threshold": 0.05
 }

@@ -1,14 +1,68 @@
 import os
 import json
 import numpy as np
+import pandas as pd
 import logging
 from time import time
+from sklearn.metrics import pairwise_distances
 from pyemd import emd
 from gensim.corpora import Dictionary
 from gensim.corpora.bleicorpus import BleiCorpus
 from gensim.models.fasttext import load_facebook_vectors
 
 
+# get logger
+logging.basicConfig(level = os.environ.get("LOGLEVEL", "INFO"))
+logger = logging.getLogger("similarity-graph")
+
+def timeit(method):
+    def timed(*args, **kw):
+        ts = time()
+        result = method(*args, **kw)
+        te = time()
+        if 'log_time' in kw:
+            name = kw.get('log_name', method.__name__.upper())
+            kw['log_time'][name] = int((te - ts) * 1000)
+        else:
+            logger.info('%r  %2.2f [s]' % (method.__name__, (te - ts)))
+        return result
+    return timed
+
+def get_quantile(array, q=0.05):
+    """
+    Input
+        array: numpy.array, 
+            1D array.
+        q: float, 
+            quantile, defaut=0.05.
+    Output
+        quantile: int
+            number of elements below 100q% of cumulative distribution of the array.
+       
+    """
+    #cumulative distribution
+    serie = pd.Series(array)
+    serie_sorted = serie.sort_values(ascending=False)
+    cum_dist = []
+
+    cum = 0
+    for value in serie_sorted:
+        cum += value
+        cum_dist.append(cum)
+
+    cum_dist = pd.Series(cum_dist)
+    
+    #get quantile 
+    cut = cum_dist.max()*q
+    tail = np.array(cum_dist[cum_dist<=cut])
+    if len(tail)>=1:
+        quantile = np.argmax(tail)+1
+    else:
+        quantile = 1
+    
+    return quantile
+
+@timeit
 def wmd(embeddings, token2id1, token2id2, topic1, topic2, q=None):
     """
     Input
@@ -33,11 +87,11 @@ def wmd(embeddings, token2id1, token2id2, topic1, topic2, q=None):
     
     if q:
         # get quantiles 
-        q1 = get_quantile(topic_1, q) 
-        q2 = get_quantile(topic_2, q)
+        q1 = get_quantile(topic1, q) 
+        q2 = get_quantile(topic2, q)
         # get indexs of useful tokens
-        index1 = pd.Series(topic_1).sort_values(ascending=False).index[0:q1]
-        index2 = pd.Series(topic_2).sort_values(ascending=False).index[0:q2]
+        index1 = pd.Series(topic1).sort_values(ascending=False).index[0:q1]
+        index2 = pd.Series(topic2).sort_values(ascending=False).index[0:q2]
         # map id->token
         id2token1 = {v: k for k, v in token2id1.items()}
         id2token2 = {v: k for k, v in token2id2.items()}
@@ -55,16 +109,13 @@ def wmd(embeddings, token2id1, token2id2, topic1, topic2, q=None):
     second_histogram = np.array([topic2[token2id2[word]] if word in vocabulary2 else 0 for word in vocabulary])    
     # compute euclidean distance matrix between vocabulary words
     vocabulary_array = np.array([embeddings[word] for word in vocabulary])
-    distance_matrix = np.sqrt(np.sum((vocabulary_array[:, np.newaxis, :] - vocabulary_array[np.newaxis, :, :])**2, axis = -1))
+    distance_matrix = pairwise_distances(X=vocabulary_array, metric="euclidean", n_jobs=-1)
     distance_matrix = distance_matrix.astype("float64")
+    distance_matrix = distance_matrix.copy(order="C")
     # compute Earth Mover Distances
     distance = emd(first_histogram, second_histogram, distance_matrix)
     return distance
 
-
-# get logger
-logging.basicConfig(level = os.environ.get("LOGLEVEL", "INFO"))
-logger = logging.getLogger("similarity-graph")
 
 logger.info("Loading Data")
 
@@ -90,7 +141,7 @@ for slice in slices:
         topics = np.array([[int(word) for word in line.strip().split()] for line in f])
     topics_dists = (topics.T/topics.sum(axis=1)).T
 
-    #save data in a dict
+    # save data in a dict
     data[slice] = {"token2id": token2id, "topics_dists": topics_dists}
 
 logger.info("Loading Embeddings")
@@ -110,7 +161,7 @@ for slice in slices[:-1]:
     for i, topic_i in enumerate(topics_dists1):
         similarity_graph[slice][i] = {}
         for j, topic_j in enumerate(topics_dists2):
-            distance = wmd(embeddings, token2id1, token2id2, topic_i, topic_j)
+            distance = wmd(embeddings, token2id1, token2id2, topic_i, topic_j, q = args["topic_quantile_threshold"])
             similarity_graph[slice][i][j] = 1/(1+distance)
 tf = time()
 logger.info(f"Total Time [s]: {round(tf-ti)}")

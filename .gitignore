@@ -1,11 +1,11 @@
 *.model
 /bib
-/data
 *.xlsx
 *.csv
 *.pkl
 *.mm
 *.dict
+*.vocab
 *.index
 *.exe
 dtm.js
@@ -17,3 +17,5 @@ dtm.js
 *.log
 *.vec
 .history
+!stopwords.txt
+!stopwords.xlsx

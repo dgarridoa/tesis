@@ -1,9 +1,13 @@
 import re
 import spacy
-#python -m spacy download es
+# https://github.com/pablodms/spacy-spanish-lemmatizer/
+from spacy_spanish_lemmatizer import SpacyCustomLemmatizer
+# python -m spacy_spanish_lemmatizer download wik
 from nltk.stem import SnowballStemmer 
 
-lemmatizer = spacy.load('es_core_news_sm') 
+lemmatizer = spacy.load("es")
+lemmatizer.add_pipe(SpacyCustomLemmatizer(), name="lemmatizer", after="tagger")
+
 stemmer = SnowballStemmer('spanish')
 
 def tokenizer(doc, sep=None, stopwords = None, homol_dict=None, vocabulary = None, lemmatization=False, stemming = False):
@@ -43,6 +47,9 @@ def tokenizer(doc, sep=None, stopwords = None, homol_dict=None, vocabulary = Non
     # remove stopwords
     if stopwords is not None:
         tokens = [word for word in tokens if word not in stopwords]
+    # filter by vocabulary
+    if vocabulary is not None:
+        tokens = [word for word in tokens if word in vocabulary]
     # homologate word with similar meaning
     if homol_dict is not None:
         for i, word in enumerate(tokens):
@@ -52,12 +59,9 @@ def tokenizer(doc, sep=None, stopwords = None, homol_dict=None, vocabulary = Non
                     break        
     # take the words to their lemma
     if lemmatization is True:
-        tokens = [lemmatizer(word)[0].lemma_ for word in tokens]
+        doc = " ".join(tokens)
+        tokens = [token.lemma_ for token in lemmatizer(doc)]
     # take the words to their stem
     if stemming is True:
         tokens = [stemmer.stem(word) for word in tokens]
-     # filter by vocabulary
-    if vocabulary is not None:
-        tokens = [word for word in tokens if word in vocabulary]
-
     return tokens

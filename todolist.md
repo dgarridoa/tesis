@@ -22,11 +22,9 @@
 - [ ] similarity graph
 - [ ] visualizations
 ## 3. Data processing
-- [ ] build stopwords list
-- [ ] equivalence dictionary
-- [ ] phrases
-- [ ] orthography corrections
+- [x] build stopwords list
 - [ ] normalizations
+- [ ] quality measures
 ## 4. Results analysis
 - [ ] quantitative analysis
   - [ ] analysis for different percentiles

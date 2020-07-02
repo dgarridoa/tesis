@@ -10,11 +10,10 @@
 %
 % Sitio web:    [https://latex.ppizarror.com/tesis]
 % Licencia MIT: [https://opensource.org/licenses/MIT]
-
 % CREACIÓN DEL DOCUMENTO
 \documentclass[letterpaper,12pt,oneside]{book} % Libro, tamaño carta
 \usepackage[utf8]{inputenc} % Codificación UTF-8
-\bibliographystyle{unsrtnat} %ordenar bibliografía por orden de aparición
+
 % INFORMACIÓN DEL DOCUMENTO
 \def\titulotesis {Modelamiento y seguimiento de tópicos para detección de modus operandi en robo de vehículos}
 \def\titulogrado {
@@ -26,7 +25,7 @@
 \def\nombreuniversidad {Universidad de Chile}
 \def\nombrefacultad {Facultad de Ciencias Físicas y Matemáticas}
 \def\departamentouniversidad {Departamento de Ingeniería Industrial}
-\def\imagendepartamento {departamentos/uchile2}
+\def\imagendepartamento {img/departamentos/uchile2.pdf}
 \def\imagendepartamentoescala {0.7}
 \def\localizacionuniversidad {Santiago, Chile}
 
@@ -69,7 +68,7 @@
 
 % IMPORTACIÓN DE LIBRERÍAS
 \input{lib/env/imports}
-
+\graphicspath{img/} 
 % IMPORTACIÓN DE FUNCIONES Y ENTORNOS
 \input{lib/cmd/all}
 
@@ -120,15 +119,14 @@
 \chapter{Definición del problema y Objetivos}
 \section{Problema}
 %apoyar con fuentes los footnotes
-El robo de vehículos o accesorios de vehículos es un problema que afecta a toda la sociedad en Chile y en el mundo. Este problema se ha vuelto más relevante el último tiempo debido al crecimiento en el robo de vehículo motorizado y de los robos con violencia (ver Figura \ref{img:antecedente}). Este fenómeno trae consigo un montón de costos para la sociedad, como incremento en la percepción de la seguridad, aumentos en la prima de los seguros de los asegurados, aumento en los costos de las aseguradoras \footnote{Considerando que el costo promedio incurrido en un auto asegurado robado y no recuperado es de \$ 5.000.000 de pesos, la pérdida total considerando solo los vehículos no recuperados para el año 2015 es de unos \$15.720 millones de pesos.} y el incremento de otros tipos de delitos \footnote{El destino de los vehículos robados es variado, se usan los autos para perpetrar otros delitos y huir, venderlos por piezas en talleres clandestinos o blanquear sus documentos para pasarlos por la frontera y venderlos o cambiarlos por droga en el extranjero''.}
+El robo de vehículos o accesorios de vehículos es un problema que afecta a toda la sociedad en Chile y en el mundo. Este problema se ha vuelto más relevante el último tiempo debido al crecimiento en el robo de vehículo motorizado y de los robos con violencia (ver Figura \ref{img:antecedente}). Este fenómeno trae consigo un montón de costos para la sociedad, como incremento en la percepción de la seguridad, aumentos en la prima de los seguros de los asegurados, aumento en los costos de las aseguradoras \footnote{Considerando que el costo promedio incurrido en un auto asegurado robado y no recuperado es de \$ 5.000.000 de pesos, la pérdida total considerando solo los vehículos no recuperados para el año 2015 es de unos \$15.720 millones de pesos.} y el incremento de otros tipos de delitos \footnote{El destino de los vehículos robados es variado, se usan los autos para perpetrar otros delitos y huir, venderlos por piezas en talleres clandestinos o blanquear sus documentos para pasarlos por la frontera y venderlos o cambiarlos por droga en el extranjero''.} 
 
 \begin{figure}[h]
 \begin{tabular}{p{0.45\textwidth}p{0.45\textwidth}}
-\includegraphics[width=0.45\textwidth]{img/business/cantidad_robos.png} &
-\includegraphics[width=0.40\textwidth]{img/business/tasa_robos_violencia.png}\\
- \centering{(a)} & \centering{(b)}\\
+\includegraphics[width=0.45\textwidth]{business/cantidad_robos.png} &
+\includegraphics[width=0.40\textwidth]{business/tasa_robos_violencia.png}\\
+\centering{(a)} & \centering{(b)}\\
 \end{tabular}
-
 \caption{(a) Cantidad de robos de vehículos y robos de accesorios de vehículos anuales en Chile (2004-2014). Fuente: Informe anual Carabineros, 2004-2014, INE. (b) Tasa de robos con violencia del total de robo de autos de lujo 2011-2016.} %Fuente?
 \label{img:antecedente}
 \end{figure}
@@ -211,7 +209,7 @@ La distribución Dirichlet es una distribución útil para generar distribucione
 
 \begin{figure}
     \centering
-    \includegraphics[width=1\textwidth]{img/math/dirichlet_distribution.png}
+    \includegraphics[width=1\textwidth]{math/dirichlet_distribution.png}
     \caption{Efecto de los parámetros de una distribución Dirichlet en el muestreo para $K=3$.}
     \label{img:dirichlet_distribution}
 \end{figure}
@@ -287,7 +285,7 @@ Esto se suele denotar como $\pi \sim GEM(\alpha)$, donde GEM representa Griffith
 
 \begin{figure}
     \centering
-    \includegraphics[width=1\textwidth]{img/math/stick_breaking.png}
+    \includegraphics[width=1\textwidth]{math/stick_breaking.png}
     \caption{Ilustración de \textit{stick breaking construction}. (a) Tenemos una barra de largo 1, el cual se rompe en un punto aleatorio $\beta_{1}$, el largo de la pieza que conservamos es llamada $\pi_{1}$, luego recursivamente rompemos la barra restante, así generando $\pi_{2}, \pi_{3}, \ldots$. (b) Muestras de $\pi_{k}$ para $\alpha=2$ y $\alpha=5$.}
     \label{img:stick_breaking}
 \end{figure}
@@ -410,7 +408,7 @@ Para relacionar los tópicos de una época necesitamos una medida de similitud $
 
 \begin{figure}
     \centering
-    \includegraphics[width=1\textwidth]{img/math/similarity_graph.png}
+    \includegraphics[width=1\textwidth]{math/similarity_graph.png}
     \caption{Ilustración conceptual del grafo de similitud que modela la dinámica de los tópicos en el tiempo. Un nodo corresponde a un tópico en una época específica; el ancho de los arcos es proporcional a la similitud entre los tópicos, arcos ausentes fueron eliminados por presentar una similitud menor a un umbral.}
     \label{img:graph}
 \end{figure}
@@ -436,7 +434,7 @@ Para lidiar con el problema anterior en \citep{kusner2015word} se propone una me
 
 \begin{figure}
     \centering
-\includegraphics[width=1\textwidth]{img/math/wmd-obama.png}
+\includegraphics[width=1\textwidth]{math/wmd-obama.png}
     \caption{Espacio vectorial de los \textit{word embeddings} de las palabras de dos tópicos con un vocabulario de tamaño 4.}
     \label{img:wmd_obama}
 \end{figure}
@@ -468,7 +466,7 @@ Donde $T_{u,v}$ es el flujo que va de la palabra $u$ del tópico $i$ de la époc
 \chapter{Conclusiones}
 
 
-\bibliography{library}
+\bibliography{main}
 
 % FIN DEL DOCUMENTO
 \end{document}

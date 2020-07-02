@@ -19,3 +19,12 @@ dtm.js
 .history
 !stopwords.txt
 !stopwords.xlsx
+*.aux
+*.bbl
+*.fdb_latexmk
+*.fls
+*.gz
+*.toc
+*.blg
+*.lof
+setting.json

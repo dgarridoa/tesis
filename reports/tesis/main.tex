@@ -13,7 +13,7 @@
 % CREACIÓN DEL DOCUMENTO
 \documentclass[letterpaper,12pt,oneside]{book} % Libro, tamaño carta
 \usepackage[utf8]{inputenc} % Codificación UTF-8
-
+\bibliographystyle{unsrtnat}
 % INFORMACIÓN DEL DOCUMENTO
 \def\titulotesis {Modelamiento y seguimiento de tópicos para detección de modus operandi en robo de vehículos}
 \def\titulogrado {
@@ -119,7 +119,7 @@
 \chapter{Definición del problema y Objetivos}
 \section{Problema}
 %apoyar con fuentes los footnotes
-El robo de vehículos o accesorios de vehículos es un problema que afecta a toda la sociedad en Chile y en el mundo. Este problema se ha vuelto más relevante el último tiempo debido al crecimiento en el robo de vehículo motorizado y de los robos con violencia (ver Figura \ref{img:antecedente}). Este fenómeno trae consigo un montón de costos para la sociedad, como incremento en la percepción de la seguridad, aumentos en la prima de los seguros de los asegurados, aumento en los costos de las aseguradoras \footnote{Considerando que el costo promedio incurrido en un auto asegurado robado y no recuperado es de \$ 5.000.000 de pesos, la pérdida total considerando solo los vehículos no recuperados para el año 2015 es de unos \$15.720 millones de pesos.} y el incremento de otros tipos de delitos \footnote{El destino de los vehículos robados es variado, se usan los autos para perpetrar otros delitos y huir, venderlos por piezas en talleres clandestinos o blanquear sus documentos para pasarlos por la frontera y venderlos o cambiarlos por droga en el extranjero''.} 
+El robo de vehículos o accesorios de vehículos es un problema que afecta a toda la sociedad en Chile y en el mundo. Este problema se ha vuelto más relevante el último tiempo debido al crecimiento en el robo de vehículo motorizado y de los robos con violencia (ver Figura \ref{fig:antecedente}). Este fenómeno trae consigo un montón de costos para la sociedad, como incremento en la percepción de la seguridad, aumentos en la prima de los seguros de los asegurados, aumento en los costos de las aseguradoras \footnote{Considerando que el costo promedio incurrido en un auto asegurado robado y no recuperado es de \$ 5.000.000 de pesos, la pérdida total considerando solo los vehículos no recuperados para el año 2015 es de unos \$15.720 millones de pesos.} y el incremento de otros tipos de delitos \footnote{El destino de los vehículos robados es variado, se usan los autos para perpetrar otros delitos y huir, venderlos por piezas en talleres clandestinos o blanquear sus documentos para pasarlos por la frontera y venderlos o cambiarlos por droga en el extranjero''.} 
 
 \begin{figure}[h]
 \begin{tabular}{p{0.45\textwidth}p{0.45\textwidth}}
@@ -128,7 +128,7 @@ El robo de vehículos o accesorios de vehículos es un problema que afecta a tod
 \centering{(a)} & \centering{(b)}\\
 \end{tabular}
 \caption{(a) Cantidad de robos de vehículos y robos de accesorios de vehículos anuales en Chile (2004-2014). Fuente: Informe anual Carabineros, 2004-2014, INE. (b) Tasa de robos con violencia del total de robo de autos de lujo 2011-2016.} %Fuente?
-\label{img:antecedente}
+\label{fig:antecedente}
 \end{figure}
 
 Bajo este contexto la Universidad de Chile junto a la Pontificia Universidad Católica de Chile se adjudicó el 2017 un proyecto Fondef para desarrollar un proyecto que lleva por nombre ``Observatorio Digital de Delincuencia en Chile: Un sistema inteligente de apoyo a la industria automotriz chilena, en el robo de vehículos y accesorios'' cuyo director es Richard Weber Haas y la institución beneficiaria es la Asociación de Aseguradores de Chile (AACH).\\
@@ -260,6 +260,8 @@ La distribución a posterior:
 La distribución posterior es computacionalmente intratable para inferencia exacta, debido a que para normalizar la distribución debemos marginalizar sobre todas las variables ocultas y escribir la constante de normalización en términos de los parámetros del modelo. Para poder computar la posterior es necesario utilizar algoritmos de inferencia aproximada, en [..] se propone un algoritmo basado en Markov Chain Monte Carlo (MCMC) y en [....] basado en inferencia variacional.
 %citar
 
+%Hablar sobre la estimación puntual
+
 \subsection{Hierarchical Dirichlet Process}
 \subsubsection{Proceso Dirichlet}
 
@@ -381,11 +383,12 @@ Donde $\phi = \{\phi_{k}\}_{k=1}^{\infty}$ son los mismos átomos de $G_{0}$. En
 \subsubsection{LDA versus HDP}
 HDP es un modelo no paramétrico similar en estructura a LDA, la principal desventaja de LDA frente a HDP es que LDA requiere escoger el número de tópicos $K$ por adelantado, por otro lado, HDP el número de tópicos no está acotado y es inferido a partir de los datos. En un enfoque tradicional, se requiere de entrenar múltiples veces LDA para diferentes valores de $K$ y se escoge el que tiene mejor la configuración con mejor desempeño en un conjunto de validación, por lo que LDA termina siendo computacionalmente más costoso que HDP, además este enfoque se vuelve impracticable cuando el conjunto de datos es largo. En el aspecto de cualitativo ambos modelos entregan tópicos igual de consistentes, en métricas de desempeño como $\textit{perplexity}$ HDP suele tener mejor desempeño (\cite{teh2005sharing}).
 
+% Hablar sobre la estimación puntual
+% Chinese Restaurant Franchise Process (Gibbs Sampling)
+
 \section{Inferencia Bayesiana}
 %PENDIENTE A IMPLEMENTACIÓN
 %IDEAS:
-%Justificar por qué HDP>LDA
-% \subsection{Inferencia Bayesiana}
 % MCMC mejor sobre colecciones gigantes
 % VI mejor colecciones pequeñas
 % Mundo dinámico las colecciones o chunk de data son más pequeños
@@ -456,12 +459,42 @@ Donde $T_{u,v}$ es el flujo que va de la palabra $u$ del tópico $i$ de la époc
 
 
 \chapter{Experimento}
+
 \section{Datos}
-%replicar gráficos del Informe_1_fondef
+% descripción detallada del conjunto de datos
+% gráficos del Informe_1_fondef?
+
+
 \section{Procesamiento}
 
+% estadísticas del corpus, docs, vocabulary, tokens para tres niveles (raw, norm básico y norm final)
+
+
+En minería de texto con el objetivo de extraer el core de palabras del corpus se utilizan algunas técnicas para reducir el vocabulario, la reducción del vocabulario mejora la significancia estadística de los modelos, puesto que se obtiene un mejor balance entre cantidad de parámetros y cantidad de observaciones, por otro lado puede verse fácilitada la interpretación de los tópicos al remover "grasa" del texto. \\
+
+En minería de texto el primer paso es tokenizar un documento, la tokenización es una operación sobre una cadena de carácteres (\textit{string}) que consiste en dividir el string en un conjunto de términos, en este caso la división se hizo por el carácter \textbf{" "}, como resultado de esto se obtiene una lista de elementos, a cada elemento de esta lista se le denomina token que en términos simples puede considerarse como una palabra o unigrama para ejemplo mencionado. \\
+
+Luego, en el primer paso de normalización no interesa hacer distinción entre mayúsculas o minúsculas\footnote{En análisis de sentimiento puede ser interesante ya que el uso de mayúsculas en todos los caractéres de una palabra puede interpretarse como un señal de enfado}, por lo que los carácteres de cada token se llevaron a minúscula, también se eliminaron carácteres y tokens que no aportan información, como símbolos de puntuación, correos electrónicos y tokens que contienen números.\\
+
+% long-tail para norm básico
+
+Como segundo paso de normalización se eliminaron las \texit{stopwords}, palabras que aportan poca información, como artículos, preposiciones y conectores, para esto se utilizó la lista de \textit{stopwords} disponible en el paquete NLTK de Python \citep{bird2009natural} la cual cuenta con 313 palabras. Además, esta lista de \textit{stopwords} se alimentó con \textit{stopwords} contextuales, palabras específicas del corpus que aportan poca información, para esto se hizó un etiquetado de las 1000 palabras más frecuentes del corpus incorporando 417 nuevas palabras, algunos ejemplos son palabras que hacen reverencia a vehículo y robo, puesto que todos los documentos corresponden a robos de vehículos.\\
+
+El tercer paso consiste en normalizar los tokens para reducir aún más el vocabulario, como métodos de normalización los más utilizados son \textit{stemming}  y lematización. \textit{Stemming} es el proceso de llevar una palabra a su raíz (\textit{stem}), en la práctica \textit{stemming} consiste en aplicar un algoritmo basado en ciertas reglas gramáticales para extraer sufijos \citep{porter1980algorithm}, como desventaja es que stemming no tiene en cuenta el contexto de la palabra por lo que la raíz obtenida puede no corresponder a la raíz verdadera de la palabra, además, para el caso de modelamiento de tópicos los tópicos se vuelve más difícil de interpretar, por un lado porque palabras con significado completamente distinto terminan con la misma raíz o porque la raíz encontrada no tiene un significado claro. Por otro lado, lematización es el proceso de agrupar juntas las formas flexionadas de una palabra para que puedan analizarse como un elemento, identificado como lema, su diferencia principal con \textit{stemming} es que opera con conocimiento del contexto de la palabra para discriminar entre palabras que tienen significado diferente dependiendo del \textit{part of speech tagging} (POST) y de una tabla de búsqueda (\textit{lookup table}). Como método de normalización se decidió utilizar lematización en vez de \texit{stemming} debido a que tiene menos impacto en la interpretación de los tópicos, sin embargo es una operación más intensiva debido a que \texit{stemming} es un algoritmo basado en reglas simples mientras que el estado del arte en algoritmos de lematización consiste en usar redes neuronales recurrentes (RNNs) para el POST y una vez determinadas las etiquetas gramaticales de las palabras en un documento se utiliza una \textit{lookup table} enorme para encontrar el lema. La implementación de lematización utilizada es la implemtación de lematización en español del paquete spaCy de Python \citep{spacy2}.\\
+
+
+% eliminación de elementos poco frecuentes
+
+% long-tail para norm final
+
+
+
+
 \section{Análisis cuantitativo de resultados}
+
+
 \section{Análisis cualitativo de resultados}
+
 
 \chapter{Conclusiones}
 

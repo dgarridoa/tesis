@@ -7,7 +7,8 @@ all: build
 build:
 	pdflatex -interaction=nonstopmode $(DOCNAME).tex || true
 	bibtex $(DOCNAME) || true
-	pdflatex -interaction=nonstopmode $(DOCNAME).tex  
+	pdflatex -interaction=nonstopmode $(DOCNAME).tex || true
+	pdflatex -interaction=nonstopmode $(DOCNAME).tex 
 view: 
 	open $(DOCNAME).pdf
 

@@ -11,8 +11,8 @@
 - [x] hdp
 - [x] similarity graph
 - [x] distance metrics
-- [ ] word embeddings
-- [ ] bayesian inference
+- [x] word embeddings
+- [x] bayesian inference
 - [ ] metrics
 ## 2. Implementation
 - [x] poc hdp python
@@ -28,6 +28,7 @@
 - [x] build stopwords list
 - [x] lemmatization
 - [x] remove tokens with lower frequency
+- [ ] describe data used
 - [x] describe processing steps in tesis
 - [x] add statistics of the processing process
 ## 4. Results analysis
@@ -36,3 +37,4 @@
   - [ ] choice de best hiperparameters based on some metric
     - similarity measure, percentile, overlap, etc
 - [ ] qualitative analysis
+- [ ] conclusion and future work

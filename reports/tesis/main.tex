@@ -215,7 +215,7 @@ La distribución Dirichlet es una distribución útil para generar distribucione
     \caption{Efecto de los parámetros de una distribución Dirichlet en el muestreo para $K=3$.}
     \label{img:dirichlet_distribution}
 \end{figure}
-
+% citar ilustración o crear
 \subsubsection{LDA}
 A continuación se describe el proceso generativo de Latent Dirichlet Allocation (LDA). Sean \textit{K} tópicos, $\phi_{1:K}$ distribuciones de probabilidad sobre un vocabulario fijo, dibujadas por una $Dir(\frac{\eta}{|V|}1_{|V|})$. Para cada documento $d$ del corpus $D$ se asume que es dibujado por el siguiente proceso generativo (ver representación gráfica del modelo en la Figura \ref{img:lda}):
 \begin{enumerate}
@@ -259,10 +259,7 @@ La distribución a posterior:
     p(\phi, \pi, z|w, \alpha, \eta) = \frac{p(\phi, \pi, z, w|\alpha, \eta)}{p(w|\alpha, \eta)}
 \end{equation}
 
-La distribución posterior es computacionalmente intratable para inferencia exacta, debido a que para normalizar la distribución debemos marginalizar sobre todas las variables ocultas y escribir la constante de normalización en términos de los parámetros del modelo. Para poder computar la posterior es necesario utilizar algoritmos de inferencia aproximada, en [..] se propone un algoritmo basado en Markov Chain Monte Carlo (MCMC) y en [....] basado en inferencia variacional.
-%citar
-
-%Hablar sobre la estimación puntual
+La distribución posterior es computacionalmente intratable para inferencia exacta, debido a que para normalizar la distribución debemos marginalizar sobre todas las variables ocultas y escribir la constante de normalización en términos de los parámetros del modelo. Para poder computar la posterior es necesario utilizar algoritmos de inferencia aproximada, donde el enfoque habitual es Markov Chain Monte Carlo (MCMC), en \citep{griffiths2004finding} se propone un algoritmo basado en Gibbs Sampling. Luego para estimación puntual de las cantidades relevantes se utiliza Monte Carlo para computar la esperanza.
 
 \subsection{Hierarchical Dirichlet Process}
 \subsubsection{Proceso Dirichlet}
@@ -293,6 +290,7 @@ Esto se suele denotar como $\pi \sim GEM(\alpha)$, donde GEM representa Griffith
     \caption{Ilustración de \textit{stick breaking construction}. (a) Tenemos una barra de largo 1, el cual se rompe en un punto aleatorio $\beta_{1}$, el largo de la pieza que conservamos es llamada $\pi_{1}$, luego recursivamente rompemos la barra restante, así generando $\pi_{2}, \pi_{3}, \ldots$. (b) Muestras de $\pi_{k}$ para $\alpha=2$ y $\alpha=5$.}
     \label{img:stick_breaking}
 \end{figure}
+% citar ilustración
 
 Se puede demostrar que este proceso terminará con probabilidad 1 (convergencia casi segura), a pesar que el número de elementos que este genera incrementa con $\alpha$. Además, el tamaño del componente $\pi_{k}$ decrece en promedio.
 Ahora definamos
@@ -382,27 +380,10 @@ Donde $\phi = \{\phi_{k}\}_{k=1}^{\infty}$ son los mismos átomos de $G_{0}$. En
 \label{img:hdp_sbc}
 \end{figure}
 
+Al igual que LDA la distribución posterior es intratable, por lo que en \cite{teh2005sharing} se marginaliza $G_{0}$ y $G_{d}'s$ afuera, obteniéndose así un nuevo proceso generativo denominado \textit{Chinese restaurant franchise process} (CRF), esta representación permite construir algoritmos eficientes basados en Gibbs Sampling.
+
 \subsubsection{LDA versus HDP}
 HDP es un modelo no paramétrico similar en estructura a LDA, la principal desventaja de LDA frente a HDP es que LDA requiere escoger el número de tópicos $K$ por adelantado, por otro lado, HDP el número de tópicos no está acotado y es inferido a partir de los datos. En un enfoque tradicional, se requiere de entrenar múltiples veces LDA para diferentes valores de $K$ y se escoge el que tiene mejor la configuración con mejor desempeño en un conjunto de validación, por lo que LDA termina siendo computacionalmente más costoso que HDP, además este enfoque se vuelve impracticable cuando el conjunto de datos es largo. En el aspecto de cualitativo ambos modelos entregan tópicos igual de consistentes, en métricas de desempeño como $\textit{perplexity}$ HDP suele tener mejor desempeño (\cite{teh2005sharing}).
-
-% Hablar sobre la estimación puntual
-% Chinese Restaurant Franchise Process (Gibbs Sampling)
-
-\section{Inferencia Bayesiana}
-%PENDIENTE A IMPLEMENTACIÓN
-%IDEAS:
-% MCMC mejor sobre colecciones gigantes
-% VI mejor colecciones pequeñas
-% Mundo dinámico las colecciones o chunk de data son más pequeños
-% VI GAP
-% MCMC promesa que en N->infinito converge
-% MCMC varianza
-% VI sesgo 0 varianza
-% VI más rápido, determinista?
-% \subsubsection{Inferencia Varacional}
-% \subsubsection{Inferencia Varacional LDA}
-% \subsubsection{Inferencia Varacional HDP}
-%Justificar por qué VI > MCMC
 
 \section{Modelamiento de la evolución de los tópicos en el tiempo}
 
@@ -457,8 +438,6 @@ Matemáticamente, la WMD entre el tópico $i$ de la época $t$ y el tópico $j$ 
 
 Donde $T_{u,v}$ es el flujo que va de la palabra $u$ del tópico $i$ de la época $t$ a la palabra $v$ del tópico $j$ de la época $t+1$, $\phi_{i,t,u}$, es la probabilidad de la palabra $u$ en el tópico $i$ de la época $t$, $c_{u,v}$ es el costo de mover una unidad de flujo por el arco $(u,v)$, el costo entre palabras se mide como la distancia euclidiana entre los \textit{word embedding} de dichas palabras. La primera restricción indica que el flujo que se mueve de una palabra $u$ del tópico $i$ a todas las palabras del tópico $j$ debe sumar su peso ($\phi_{i,t,u}$), la segunda restricción significa que el flujo que se mueve de una palabra $v$ del tópico $j$ a todas las palabras del tópico $i$ debe sumar su peso ($\phi_{j,t+1,v}$). Esta médida de distancia se puede fácilmente transformar en una médida de similitud $\rho(\phi_{i,t}, \phi_{j,t+1}) = \frac{1}{1+WMD(\phi_{i,t}, \phi_{j,t+1})}$, notar que si la WMD es 0 la similitud es 1 y si es $\infty$ la similitud es 0.
 
-%Word embedding y cómo obtener
-
 
 \chapter{Experimento}
 
@@ -470,6 +449,8 @@ Para este experimento se cuenta con las fuentes de datos de la Asociación de As
 % gráficos del Informe_1_fondef?
 % hablar del nivel de granularidad
 
+
+Para el uso de WMD es necesario contar con \textit{words embeddings}, para esto se utilizaron los \textit{embeddings} de \citep{fastextSBWC}, estos \textit{embeddings} fueron obtenidos utilizando el algoritmo FastText \citep{bojanowski2017enriching} sobre el corpus Spanish Billion Word Corpus (SBWC) \citep{cardellinoSBWCE}. FasText en comparación a otros enfoques para extraer \textit{embeddings} representa los \textit{tokens} a través de n-gramas de caracteres, de esta manera se pueden obtener \textit{embeddings} de \textit{tokens} no vistos durante el entrenamiento a partir de los \textit{embeddings} de los caracteres que lo componen.
 
 \section{Procesamiento}
 

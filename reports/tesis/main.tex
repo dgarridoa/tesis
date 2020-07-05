@@ -380,10 +380,10 @@ Donde $\phi = \{\phi_{k}\}_{k=1}^{\infty}$ son los mismos átomos de $G_{0}$. En
 \label{img:hdp_sbc}
 \end{figure}
 
-Al igual que LDA la distribución posterior es intratable, por lo que en \cite{teh2005sharing} se marginaliza $G_{0}$ y $G_{d}'s$ afuera, obteniéndose así un nuevo proceso generativo denominado \textit{Chinese restaurant franchise process} (CRF), esta representación permite construir algoritmos eficientes basados en Gibbs Sampling.
+Al igual que LDA la distribución posterior es intratable, por lo que en \cite{teh2005sharing} se marginaliza $G_{0}$ y $G_{d}$'s afuera, obteniéndose así un nuevo proceso generativo denominado \textit{Chinese restaurant franchise process} (CRF), esta representación permite construir algoritmos eficientes basados en Gibbs Sampling.
 
 \subsubsection{LDA versus HDP}
-HDP es un modelo no paramétrico similar en estructura a LDA, la principal desventaja de LDA frente a HDP es que LDA requiere escoger el número de tópicos $K$ por adelantado, por otro lado, HDP el número de tópicos no está acotado y es inferido a partir de los datos. En un enfoque tradicional, se requiere de entrenar múltiples veces LDA para diferentes valores de $K$ y se escoge el que tiene mejor la configuración con mejor desempeño en un conjunto de validación, por lo que LDA termina siendo computacionalmente más costoso que HDP, además este enfoque se vuelve impracticable cuando el conjunto de datos es largo. En el aspecto de cualitativo ambos modelos entregan tópicos igual de consistentes, en métricas de desempeño como $\textit{perplexity}$ HDP suele tener mejor desempeño (\cite{teh2005sharing}).
+HDP es un modelo no paramétrico similar en estructura a LDA, la principal desventaja de LDA frente a HDP es que LDA requiere escoger el número de tópicos $K$ por adelantado, por otro lado, en HDP el número de tópicos no está acotado y es inferido a partir de los datos. En un enfoque tradicional, se requiere de entrenar múltiples veces LDA para diferentes valores de $K$ y se escoge el que tiene mejor la configuración con mejor desempeño en un conjunto de validación, por lo que LDA termina siendo computacionalmente más costoso que HDP, además este enfoque se vuelve impracticable cuando el conjunto de datos es largo. En el aspecto de cualitativo ambos modelos entregan tópicos igual de consistentes, en métricas de desempeño como $\textit{perplexity}$ HDP suele tener mejor desempeño (\cite{teh2005sharing}).
 
 \section{Modelamiento de la evolución de los tópicos en el tiempo}
 
@@ -416,7 +416,7 @@ Los tópicos son distribuciones de probabilidad sobre un vocabulario fijos de t�
 
 La gran desventaja del enfoque anterior es que no captura similitud entre palabras, es decir, dos palabras diferentes que pueden llegar a ser sinónimos ocuparan una posición diferente dentro del vector, siendo no robusta a cuando una palabra esta presente en la época $t$ y no en $t-1$ por lo que no hay forma de compararla por ejemplo con la palabra de $t-1$ más símil, por lo que se compara la palabra consigo misma, donde en $t$ tiene un peso distinto de cero y en $t-1$ un peso nulo. El peor caso sería considerar los vocabularios $V_{t}$ y $V_{t+1}$, donde $V_{t}\cap V_{t+1} =  \emptyset$, a pesar de que cada palabra en $V_{t}$ tiene un sinónimo en $V_{t+1}$ la similitud entre tópicos entre las épocas $t$ y $t+1$ sería cero.\\
 
-Para lidiar con el problema anterior en \citep{kusner2015word} se propone una medida de distancia llamada Word Mover's Distance (WMD) para comparar dos documento bajo una representación \textit{bag of words}, donde $i$ y $j$ son los documentos, $V_{i}$ y $V_{j}$ los vocabularios, y el peso asociado a cada palabra de un documento  es igual a la frecuencia normalizada. Generalizar al caso de tópicos es bastante sencillo, puesto a que estos se construyen bajo una representación bag of words, por ejemplo, para comparar el tópico $i$ de la época $t$ con el tópico $j$ de la época $t+1$, se usan los pesos $\phi_{t,i}$ y $\phi_{t+1,j}$ sobre el vocabulario $V_{t}$ y $V_{t+1}$ respectivamente. WMD calcula el costo mínimo de transformar un documento en otro, en esto caso particular sería el costo mínimo de llevar un tópico a otro, para esto se resuelve un problema de flujo a costo mínimo (MCF), donde los flujos son los pesos $\phi_{t,i}$ y $\phi_{t+1,j}$ y la matriz de costos es una matriz de distancia euclidiana entre los \textit{word embedding} (\cite{mikolov2013distributed}) de todas las palabras de $V_{t}$ con $V_{t+1}$. En la Figura \ref{img:wmd_obama} se ilustra el espacio en el que viven las palabras de dos tópicos.
+Para lidiar con el problema anterior en \citep{kusner2015word} se propone una medida de distancia llamada Word Mover's Distance (WMD) para comparar dos documento bajo una representación \textit{bag of words}, donde $i$ y $j$ son los documentos, $V_{i}$ y $V_{j}$ los vocabularios, y el peso asociado a cada palabra de un documento  es igual a la frecuencia normalizada. Generalizar al caso de tópicos es bastante sencillo, puesto a que estos se construyen bajo una representación bag of words, por ejemplo, para comparar el tópico $i$ de la época $t$ con el tópico $j$ de la época $t+1$, se usan los pesos $\phi_{t,i}$ y $\phi_{t+1,j}$ sobre el vocabulario $V_{t}$ y $V_{t+1}$ respectivamente. WMD calcula el costo mínimo de transformar un documento en otro, en esto caso particular sería el costo mínimo de llevar un tópico a otro, para esto se resuelve el problema de transporte, donde los flujos son los pesos $\phi_{t,i}$ y $\phi_{t+1,j}$ y la matriz de costos es una matriz de distancia euclidiana entre los \textit{word embedding} (\cite{mikolov2013distributed}) de todas las palabras de $V_{t}$ con $V_{t+1}$. La implementación utilizada para resolver este problema está disponible en \citep{PyEMD}. En la Figura \ref{img:wmd_obama} se ilustra el espacio en el que viven las palabras de dos tópicos.
 
 \begin{figure}
     \centering
@@ -435,9 +435,9 @@ Matemáticamente, la WMD entre el tópico $i$ de la época $t$ y el tópico $j$ 
 & T_{u,v} \geq 0,\; u \in V_{t} \;, v \in V_{t+1}\\ \nonumber
 \end{align}
 
+Donde $T_{u,v}$ es el flujo que va de la palabra $u$ del tópico $i$ de la época $t$ a la palabra $v$ del tópico $j$ de la época $t+1$, $\phi_{i,t,u}$, es la probabilidad de la palabra $u$ en el tópico $i$ de la época $t$, $c_{u,v}$ es el costo de mover una unidad de flujo por el arco $(u,v)$, el costo entre palabras se mide como la distancia euclidiana entre los \textit{word embedding} de dichas palabras. La primera restricción indica que el flujo que se mueve de una palabra $u$ del tópico $i$ a todas las palabras del tópico $j$ debe sumar su peso ($\phi_{i,t,u}$), la segunda restricción significa que el flujo que se mueve de una palabra $v$ del tópico $j$ a todas las palabras del tópico $i$ debe sumar su peso ($\phi_{j,t+1,v}$). Esta médida de distancia se puede fácilmente transformar en una médida de similitud $\rho(\phi_{i,t}, \phi_{j,t+1}) = \frac{1}{1+WMD(\phi_{i,t}, \phi_{j,t+1})}$, notar que si la WMD es 0 la similitud es 1 y si es $\infty$ la similitud es 0. \\
 
-Donde $T_{u,v}$ es el flujo que va de la palabra $u$ del tópico $i$ de la época $t$ a la palabra $v$ del tópico $j$ de la época $t+1$, $\phi_{i,t,u}$, es la probabilidad de la palabra $u$ en el tópico $i$ de la época $t$, $c_{u,v}$ es el costo de mover una unidad de flujo por el arco $(u,v)$, el costo entre palabras se mide como la distancia euclidiana entre los \textit{word embedding} de dichas palabras. La primera restricción indica que el flujo que se mueve de una palabra $u$ del tópico $i$ a todas las palabras del tópico $j$ debe sumar su peso ($\phi_{i,t,u}$), la segunda restricción significa que el flujo que se mueve de una palabra $v$ del tópico $j$ a todas las palabras del tópico $i$ debe sumar su peso ($\phi_{j,t+1,v}$). Esta médida de distancia se puede fácilmente transformar en una médida de similitud $\rho(\phi_{i,t}, \phi_{j,t+1}) = \frac{1}{1+WMD(\phi_{i,t}, \phi_{j,t+1})}$, notar que si la WMD es 0 la similitud es 1 y si es $\infty$ la similitud es 0.
-
+WMD es una medida de distancia intensiva en recursos computacionales, para entender mejor esto utilizaremos la representación poliedral del problema, sea $N$ el tamaño del vocabulario entre dos épocas adyacentes, luego la región factible del problema anterior se puede representar como ${x| Ax=b, x\geq 0}$, con $A\in \mathb{R}^{2NxN^{2}}$ la matriz de costos, $b\in \mathb{R^{2N}}$ el flujo disponible y $x\in \math^{N^{1}}$ el flujo a enviar por cada uno de los arcos, la complejidad del mejor tiempo promedio de resolver este problema de optimización escala $\mathbcal{O}(N^{2}log N)$ \citep{pele2009fast}, por lo que si se reduce el vocabulario a un décimo esto trae una reducción de al menos unas 200 veces (en el peor caso promedio). Como los tópicos siguen una distribución de ley de potencia sobre los \textit{tokens}, donde una fracción de los \textit{tokens} concentran la mayor parte de la masa de la distribución, además, en la práctica la interpretación de los tópicos se basa en los top $T$ \textit{tokens} más probables, entonces, podemos aprovechar esto estructura para efectos de computar WMD de un forma más eficient, por ejemplo, utilizando los \textit{tokens}  que capturan un 95\% de la distribución acumulada del tópico.
 
 \chapter{Experimento}
 
@@ -447,7 +447,7 @@ Para este experimento se cuenta con las fuentes de datos de la Asociación de As
 
 % descripción detallada del conjunto de datos
 % gráficos del Informe_1_fondef?
-% hablar del nivel de granularidad
+% hablar del nivel de granularidad, justificar en base facilidad de análisis de resultados, interpretación, largo del grafo, combinatoria, etc
 
 
 Para el uso de WMD es necesario contar con \textit{words embeddings}, para esto se utilizaron los \textit{embeddings} de \citep{fastextSBWC}, estos \textit{embeddings} fueron obtenidos utilizando el algoritmo FastText \citep{bojanowski2017enriching} sobre el corpus Spanish Billion Word Corpus (SBWC) \citep{cardellinoSBWCE}. FasText en comparación a otros enfoques para extraer \textit{embeddings} representa los \textit{tokens} a través de n-gramas de caracteres, de esta manera se pueden obtener \textit{embeddings} de \textit{tokens} no vistos durante el entrenamiento a partir de los \textit{embeddings} de los caracteres que lo componen.
@@ -513,6 +513,16 @@ En la tabla \ref{table:innovation_rate} se muestra el detalle del vocabulario pa
 
 \section{Análisis cuantitativo de resultados}
 
+En la figura \ref{img:cum_dist3} se muestra la distribución acumulada promedio de los tópicos, se tiene que en promedio un 8.54\% y 21.42\% del vocabulario se puede capturar un 80\% y 95\% respectivamente de la distribución acumulada de los tópicos, además, para un 99\% de los tópicos basta con un 37\% del vocabulario para capturar el 95\% de su distribución acumulada, por tanto, una representación incompleta de los tópicos usando las palabras más probables que capturan el 80\% de la distribución acumulada trae consigo una disminución importante en el tamaño del vocabulario. 
+
+% tabla con tiempos de ejecución
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\textwidth]{experiments/cum_dist_3.png}
+    \caption{Distribución acumulada promedio de los tópicos en función del vocabulario. El punto (x,y) en el gráfico corresponde a la fracción x del vocabulario que explica la fracción y de la distribución acumulada del tópico. Los puntos corresponden a los cuantiles 60\%, 80\%, 90\%, 95\% y 99\%.}
+    \label{img:cum_dist3}
+\end{figure}
 
 \section{Análisis cualitativo de resultados}
 

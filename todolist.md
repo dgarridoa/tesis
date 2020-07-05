@@ -1,8 +1,8 @@
 # To do list
 - [ ] theorical framework (90%)
 - [ ] implementation (80%)
-- [x] data processing (100%)
-- [ ] results analysis (0%)
+- [x] data processing (90%)
+- [ ] results analysis (10%)
 
 ## 1. Theorical framework
 - [x] vehicle robbery
@@ -31,10 +31,12 @@
 - [ ] describe data used
 - [x] describe processing steps in tesis
 - [x] add statistics of the processing process
+- [ ] postprocessing (after model tunning)
 ## 4. Results analysis
 - [ ] quantitative analysis
-  - [ ] analysis for different percentiles
+  - [ ] wmd analysis based in vocabulary size
+  - [ ] analysis of different prunning threshold
   - [ ] choice de best hiperparameters based on some metric
-    - similarity measure, percentile, overlap, etc
+    - similarity measure, threshold, overlap, HDP parameters, etc
 - [ ] qualitative analysis
 - [ ] conclusion and future work

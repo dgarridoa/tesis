@@ -1,5 +1,6 @@
 import os
 import json
+import pickle as pkl
 import numpy as np
 import pandas as pd
 import logging
@@ -106,7 +107,9 @@ def wmd(embeddings, token2id1, token2id2, topic1, topic2, q=None):
         vocabulary = vocabulary1.union(vocabulary2)
     # topics distributions with padding
     first_histogram = np.array([topic1[token2id1[word]] if word in vocabulary1 else 0 for word in vocabulary])
+    first_histogram = first_histogram/first_histogram.sum()
     second_histogram = np.array([topic2[token2id2[word]] if word in vocabulary2 else 0 for word in vocabulary])    
+    second_histogram = second_histogram/second_histogram.sum()
     # compute euclidean distance matrix between vocabulary words
     vocabulary_array = np.array([embeddings[word] for word in vocabulary])
     distance_matrix = pairwise_distances(X=vocabulary_array, metric="euclidean", n_jobs=-1)
@@ -150,24 +153,28 @@ embeddings = load_facebook_vectors(args["embeddings"])
 
 logger.info("Computing Similarity Graph")
 ti = time()
-similarity_graph = {}
+similarity_graph = []
 for slice in slices[:-1]:
     logger.info(f"Steps Completed:{slice-1}/{slices[-1]-1}")
-    similarity_graph[slice] = {}
     token2id1 = data[slice]["token2id"]
     token2id2 = data[slice+1]["token2id"]
     topics_dists1 = data[slice]["topics_dists"] 
     topics_dists2 = data[slice+1]["topics_dists"]
-    for i, topic_i in enumerate(topics_dists1):
-        similarity_graph[slice][i] = {}
-        for j, topic_j in enumerate(topics_dists2):
+    K1 = len(topics_dists1)
+    K2 = len(topics_dists2)
+    similarity_edges = np.zeros((K1, K2))
+    for i in range(K1):
+        topic_i = topics_dists1[i]
+        for j in range(K2):
+            topic_j = topics_dists2[j]
             distance = wmd(embeddings, token2id1, token2id2, topic_i, topic_j, q = args["topic_quantile_threshold"])
-            similarity_graph[slice][i][j] = 1/(1+distance)
+            similarity = 1/(1+distance)
+            similarity_edges[i,j] = similarity
+    similarity_graph.append(similarity_edges)
 tf = time()
 logger.info(f"Total Time [s]: {round(tf-ti)}")
 
 logger.info(f"Saving Graph")
-path_to_save_graph = f'{args["results"]}graph/graph_{args["slice_type"]}.json'
-with open(path_to_save_graph, "w") as f:
-    json.dump(similarity_graph, f)
-#args["prunning_threshold"]
+path_to_save_graph = f'{args["results"]}graph/graph_{args["slice_type"]}.pkl'
+with open(path_to_save_graph, "wb") as f:
+    pkl.dump(similarity_graph, f, pkl.HIGHEST_PROTOCOL)

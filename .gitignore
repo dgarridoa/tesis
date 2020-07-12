@@ -27,4 +27,5 @@ dtm.js
 *.toc
 *.blg
 *.lof
+*.lot
 setting.json

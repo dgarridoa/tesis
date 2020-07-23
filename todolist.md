@@ -23,6 +23,7 @@
 - [x] graph visualization
 - [ ] tunning
 - [ ] new features
+- [ ] packing
 ## 3. Data processing
 - [x] basic processing
 - [x] build stopwords list

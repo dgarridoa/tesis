@@ -1,8 +1,8 @@
 import os
 import shutil
 import pandas as pd
-import json
 import logging
+from dotenv import load_dotenv
 from sklearn.feature_extraction.text import CountVectorizer
 from tokenizer import tokenizer
 from gensim.corpora import Dictionary
@@ -47,14 +47,13 @@ logger = logging.getLogger("processing-data")
 
 logger.info("Loading Data")
 
-# load args
-with open("../args.json", "r") as f:
-    args = json.load(f)
+# load environment variables
+load_dotenv()
 
 # load documents
-if args["target_data"]!="":
+if os.getenv("TARGET_DATA")!="":
     # load data
-    df = pd.read_csv(args["raw_data"], index_col = 'id_prose',
+    df = pd.read_csv(os.getenv("RAW_DATA"), index_col = 'id_prose',
     usecols = ['id_prose', 'sin_fecha_siniestro', 'sin_relato'], sep=',')
     # change data type
     df['sin_fecha_siniestro'] = pd.to_datetime(df['sin_fecha_siniestro'])
@@ -65,32 +64,27 @@ if args["target_data"]!="":
         & (df['sin_fecha_siniestro']<pd.Timestamp(2017,1,1)) 
         & (df['sin_relato'].isnull()==False)]
     # export data
-    path_to_export = args["raw_data"].split(".csv")[0]+".pkl"
+    path_to_export = os.getenv("RAW_DATA").split(".csv")[0]+".pkl"
     df.to_pickle(path_to_export) 
 else:
     # load data
-    df = pd.read_pickle(args["target_data"])
+    df = pd.read_pickle(os.getenv("TARGET_DATA"))
 
 # load stopwords
-if args["stopwords"]!="":
-    with open(args["stopwords"], "r") as f:
+if os.getenv("STOPWORDS")!="":
+    with open(os.getenv("STOPWORDS"), "r") as f:
         stopwords = [line.strip() for line in f]
 else:
     stopwords = None
-
-# load vocabulary
-if args["vocabulary"]!="":
-    with open(args["vocabulary"], "r") as f:
-        vocabulary = [line.strip() for line in f]
+# stemming and lemmatization
+if os.getenv("STEMMING") == "true":
+    stemming = True
 else:
-    vocabulary = None
-
-# load dicionary with homologations
-if args["homol_dict"]!="":
-    with open(args["homol_dict"], "r") as f:
-        homol_dict = json.load(f)
+    stemming = False
+if os.getenv("LEMMATIZATION") == "true":
+    lemmatization = True
 else:
-    homol_dict = None
+    lemmatization = False
 
 logger.info("Data Processing")
 
@@ -98,7 +92,7 @@ logger.info("Data Processing")
 df.loc[:, "year"] = df.apply(lambda x: x["sin_fecha_siniestro"].year, axis=1)
 df.loc[:, "month"] = df.apply(lambda x: x["sin_fecha_siniestro"].month, axis=1)
 df.loc[:, "slice"] = 0
-df_slices = split_docs(df, args["slice_type"])
+df_slices = split_docs(df, os.getenv("SLICE_TYPE"))
 slices = df_slices["slice"].unique()
 
 for row in df_slices.values: 
@@ -106,11 +100,11 @@ for row in df_slices.values:
     df.loc[(df["year"]==year) & (df["month"]==month), "slice"] = slice
 
 # make folder to export results
-path_to_save = f'{args["corpus"]}{args["slice_type"]}/'
-if os.path.exists(path_to_save):
-    # remove pre executions
-    shutil.rmtree(path_to_save)
-os.makedirs(path_to_save)
+path_to_save = f'{os.getenv("CORPUS")}{os.getenv("SLICE_TYPE")}/'
+# if os.path.exists(path_to_save):
+#     # remove pre executions
+#     shutil.rmtree(path_to_save)
+# os.makedirs(path_to_save)
 
 for slice in slices:
     logger.info(f"Slices Completed: {slice-1}/{slices[-1]}")
@@ -119,7 +113,7 @@ for slice in slices:
     logger.info(f"Corpus size: {len(docs)}")
 
     logger.info(f"Processing docs in slice: {slice}")
-    tokenizer_args = {"stopwords": stopwords, "vocabulary": vocabulary, "homol_dict": homol_dict, "stemming": args["stemming"], "lemmatization": args["lemmatization"]}
+    tokenizer_args = {"stopwords": stopwords, "stemming": stemming, "lemmatization":lemmatization }
     corpus = [tokenizer(doc, **tokenizer_args) for doc in docs]
     
     logger.info("Extracting Vocabulary")
@@ -128,7 +122,9 @@ for slice in slices:
     logger.info(f"Vocabulary size: {len(dictionary)}")
 
     # remove words with higher and lower frequency into the corpus
-    dictionary.filter_extremes(no_below=args["no_below"], no_above=int(args["no_above"]*len(corpus)))
+    lb = int(float(os.getenv("NO_BELOW"))*len(corpus))
+    ub = int(float(os.getenv("NO_ABOVE"))*len(corpus))
+    dictionary.filter_extremes(no_below=lb, no_above=ub)
     logger.info(f"Vocabulary size after elimination: {len(dictionary)}")
     
     logger.info("Getting corpus in Blei’s LDA-C format")
@@ -142,7 +138,7 @@ for slice in slices:
     # save dictionary and corpus 
     zeros = "0"*(len(str(slices[-1]))-len(str(slice)))
     slice_string = f"{zeros}{slice}"
-    dictionary.save(f"{path_to_save}dictionary_{slice_string}.dict")
-    BleiCorpus.serialize(f"{path_to_save}corpus_{slice_string}.mm", corpus)
+    # dictionary.save(f"{path_to_save}dictionary_{slice_string}.dict")
+    # BleiCorpus.serialize(f"{path_to_save}corpus_{slice_string}.mm", corpus)
 
 logger.info("Data Processing Completed")

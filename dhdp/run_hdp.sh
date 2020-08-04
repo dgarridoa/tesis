@@ -1,10 +1,16 @@
 #!/bin/bash
 
+# load environment variables
+if [ -f "../.env" ]
+then
+	export $(cat ../.env | xargs)
+fi
+
 # relevants paths
-data_path="../data/corpus/year/"
+data_path="${CORPUS}${SLICE_TYPE}/"
 files=$(find ${data_path}corpus*.mm)
 hdp="hdp/hdp/./hdp"
-dir_to_save="results/hdp/year"
+dir_to_save="${RESULTS}hdp/${SLICE_TYPE}"
 N=$(wc -w <<< $files)
 
 # clean previous results

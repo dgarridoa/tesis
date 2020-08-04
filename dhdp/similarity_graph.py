@@ -18,8 +18,8 @@ load_dotenv()
 
 logger.info("Loading Data")
 
-corpus_path = f'{os.getenv("CORPUS")}{os.getenv("SLICE_TYPE")}'
-files_dict = sorted([file for file in os.listdir(corpus_path) if ".dict" in file])
+corpus_dir = f'{os.getenv("CORPUS")}{os.getenv("SLICE_TYPE")}'
+dict_files = sorted([file for file in os.listdir(corpus_dir) if ".dict" in file])
 models_path = f'{os.getenv("RESULTS")}hdp/{os.getenv("SLICE_TYPE")}'
 models_dir = sorted(os.listdir(models_path))
 
@@ -27,7 +27,7 @@ slices = range(1, len(models_dir)+1)
 data = {}
 for slice in slices:
     # load dictionary {word->id}
-    dict_path = f'{corpus_path}/{files_dict[slice-1]}'
+    dict_path = f'{corpus_dir}/{dict_files[slice-1]}'
     token2id = Dictionary.load(dict_path).token2id
 
     # load topics distributions

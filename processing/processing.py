@@ -101,10 +101,10 @@ for row in df_slices.values:
 
 # make folder to export results
 path_to_save = f'{os.getenv("CORPUS")}{os.getenv("SLICE_TYPE")}/'
-# if os.path.exists(path_to_save):
-#     # remove pre executions
-#     shutil.rmtree(path_to_save)
-# os.makedirs(path_to_save)
+if os.path.exists(path_to_save):
+    # remove pre executions
+    shutil.rmtree(path_to_save)
+os.makedirs(path_to_save)
 
 for slice in slices:
     logger.info(f"Slices Completed: {slice-1}/{slices[-1]}")
@@ -138,7 +138,7 @@ for slice in slices:
     # save dictionary and corpus 
     zeros = "0"*(len(str(slices[-1]))-len(str(slice)))
     slice_string = f"{zeros}{slice}"
-    # dictionary.save(f"{path_to_save}dictionary_{slice_string}.dict")
-    # BleiCorpus.serialize(f"{path_to_save}corpus_{slice_string}.mm", corpus)
+    dictionary.save(f"{path_to_save}dictionary_{slice_string}.dict")
+    BleiCorpus.serialize(f"{path_to_save}corpus_{slice_string}.mm", corpus)
 
 logger.info("Data Processing Completed")

@@ -52,7 +52,11 @@ def relevance(topic, term_probability, alpha):
             relevance = alpha log p(w|k)+(1-alpha)log p(w|k)/p(w).
             then map relevance to a vector with r[i]>=0 and sum_i r[i]=1.
     """
-    r = alpha*np.nan_to_num(np.log(topic))+(1-alpha)*np.nan_to_num(np.log(topic/term_probability))
+    # log function with exception, -1e-16 for log(1)
+    log = lambda x: -1e-16 if x==1  else np.log(x)
+    log = np.vectorize(log)
+    # relevance
+    r = alpha*np.nan_to_num(log(topic))+(1-alpha)*np.nan_to_num(log(topic/term_probability))
     r = 1/np.abs(r)
     r = r/r.sum()
     r[r<np.finfo(np.float).eps] = 0

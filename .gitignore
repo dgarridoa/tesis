@@ -31,3 +31,4 @@ dtm.js
 setting.json
 .metals
 backlog.md
+!ground_truth.pkl

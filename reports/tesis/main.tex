@@ -25,7 +25,7 @@
 \def\nombreuniversidad {Universidad de Chile}
 \def\nombrefacultad {Facultad de Ciencias Físicas y Matemáticas}
 \def\departamentouniversidad {Departamento de Ingeniería Industrial}
-\def\imagendepartamento {img/departamentos/uchile2.pdf}
+\def\imagendepartamento {img/departments/uchile2.pdf}
 \def\imagendepartamentoescala {0.7}
 \def\localizacionuniversidad {Santiago, Chile}
 
@@ -145,27 +145,7 @@ El resultado esperado es descubrir los \textit{modus operandi} ocultos en los re
 
 El presente trabajo tiene un propósito académico, puesto que no cuenta con un cliente particular y tiene por objetivo estudiar ténicas de \textit{clustering} dinámico para detectar patrones en el contexto de robo de vehículos, sin embargo, potenciales beneficiarios del trabajo podrían ser las aseguradoras, los asegurados, carabineros de Chile y la sociedad.
 
-\section{Metodología de trabajo}
-%CRISP-DM
-El trabajo se realizó bajo la metodología CRISP-DM (Cross Industry Standard Process for Data mining)\citep{chapman2000crisp}, la cual posee las siguientes seis etapas:
-\begin{enumerate}
-    \item Comprensión del negocio:
-    %This initial phase focuses on understanding the project objectives and requirements from a business perspective, then converting this knowledge into a data mining problem definition and a preliminary plan designed to achieve the objectives.
-    \item Comprensión de los datos
-    %The data understanding phase starts with initial data collection and proceeds with activities that enable you to become familiar with the data, identify data quality problems, discover first insights into the data, and/or detect interesting subsets to form hypotheses regarding hidden information.
-    \item Preparación de los datos
-    %The data preparation phase covers all activities needed to construct the final dataset [data that will be fed into the modeling tool(s)] from the initial raw data. Data preparation tasks are likely to be performed multiple times and not in any prescribed order. Tasks include table, record, and attribute selection, as well as transformation and cleaning of data for modeling tools.
-    \item Modelamiento
-    %In this phase, various modeling techniques are selected and applied, and their parameters are calibrated to optimal values. Typically, there are several techniques for the same data mining problem type. Some techniques have specific requirements on the form of data. Therefore, going back to the data preparation phase is often necessary.
-    \item Evaluación
-    %At this stage in the project, you have built a model (or models) that appears to have high quality from a data analysisperspective. Before proceeding to final deployment of the model, it is important to thoroughly evaluate it and review the steps executed to create it, to be certain the model properly achieves the business objectives. A key objective isto determine if there is some important business issue that has not been sufficiently considered. At the end of this phase, a decision on the use of the data mining results should be reached.
-    \item Implementación
-    %Creation of the model is generally not the end of the project. Even if the purpose of the model is to increase knowledge of the data, the knowledge gained will need to be organized and presented in a way that the customer can use it. It often involves applying “live” models within an organization’s decision making processes—for example, real-time personalization of Web pages or repeated scoring of marketing databases. Depending on the requirements, the deployment phase can be as simple as generating a report or as complex as implementing a repeatable data mining process across the enterprise. In many cases, it is the customer, not the data analyst, who carries out the deploymen steps. However, even if the analyst will carry out the deployment effort, it is important for the customer to understand up front what actions need to be carried out in order to actually make use of the created models.
-\end{enumerate}
-
-Dentro de los alcances del trabajo no está contemplado la puesta en producción de una solución basada en \textit{machine learning}, el alcance es hasta la evaluación e interpretación de los resultados arrojados por el modelo.
-
-\chapter{Revisión bibliográfica}
+\chapter{Revisión del estado del arte}
 
 El problema planteado consiste en un problema de \textit{clustering}, puesto que no se cuenta con una etiqueta del \textit{modus operandi} al que corresponde cada relato, siendo el propósito del trabajo descubrirla. Dentro de los métodos de \textit{clustering} que involucran texto el modelamiento de tópicos es el enfoque más prometedor.% Fuente/Justificación
 El modelamiento de tópicos es una herramienta estadística que busca encontrar los temas (tópicos) presentes en un conjunto de documentos (corpus), permitiendo organizar, buscar, indexar, explorar y comprender grandes colecciones de documentos. %Fuente
@@ -193,30 +173,148 @@ En este trabajo se utilizarán técnicas de modelado dinámico de tópicos como 
 \end{enumerate}
 
 \chapter{Marco teórico}
-\section{Modelos de tópicos}
-%soft clustering vs hard clustering
-\subsection{Latent Dirichlet Allocation}
-\subsubsection{Distribución Dirichlet}
-La distribución Dirichlet es una generalización multivariada de la distribución beta, la cual tiene soporte sobre un símplice, definido por:
+% intro
+\section{Mixture Models}
+% referencia
+
+
+La básica asumpción en \textit{clustering} es asumir que cada observación $x_{i}$ pertenece a un solo \textit{cluster} $k$. Podemos expresar la asignación a un \textit{cluster} como una variable aleatoria $z_{i}$, donde $z_{i}=k$ significa que $x$ pertenece al \textit{cluster} $k$, esta variable no es observada en los datos y se considera una variable oculta. Podemos obtener la distribución que caracteriza a un solo \textit{cluster} $k$ condicionando en $z_{i}$
+
+\begin{align}
+    p(x_{i}|z=k_{i}, \phi) & = p(x_{i}|\phi_{k})\\
+\end{align}
+
+Además, podemos definir la probabilidad de que una nueva observación pertenezca al \textit{cluster} $k$ 
+
+\begin{align}
+    p(z_{i}=k|\pi) & = \pi_{k}
+\end{align}
+
+$\sum_{k}\pi_{k} = 1$, ya que $\pi_{k}$ son probabilidades de eventos mutuamente excluyentes. La distribución de $x_{i}$ es entonces de la forma
+
+\begin{align}
+    p(x_{i}) = \sum_{k}\pi_{k}p(x_{i}|\phi_{k})
+\end{align}
+
+Podemos escribir $p(x_{i}|\phi_{k})$ como $x \sim F(\phi_{z_{i}})$, donde $F$ es la distribución asociada a las observaciones. Similarmente, podemos asumir un prior sobre $\pi$ y $\phi_{k}$, a esta configuración se le conoce como \textbf{Bayesian mixture model}.\\
+
+Una representación equivalente para este modelo viende de considerar que el parámetro $\bar{\phi_{i}}$ usado para generar la observación $x_{i}$ proviene de una distribucion discreta $G$, la cual tiene la forma
+
+\begin{align}
+    G(\phi) = \sum_{k} \pi_{k}\delta_{\phi_{k}}(\phi)
+\end{align}
+
+Así, $G$ es una mezcla de funciones delta, donde la probabilidad que $\bar{\phi_{i}}$ es igual a $\phi_{k}$ es $\pi_{k}$.\\
+
+En la sección x.x se describe la distribución de Dirichlet, prior usado para construir \textbf{finite mixture model}, donde el número de componentes o \textit{clusters} a descubrir es finito, denotado por $K$. En la sección x.x se describe un prior no paramétrico denominado Dirichlet Process (DP), el cual permite construir \textbf{infinite mixture model}, donde el número de \textit{clusters} no está acotado. 
+
+
+\subsection{Distribución Dirichlet}
+La distribución Dirichlet es una generalización multivariada de la distribución beta, la cual tiene soporte sobre un \textbraceleft{simplex}, definido por:
 \begin{equation}
     S_{K} = \{x: 0\leq x_{k} \leq 1, \sum_{k=1}^{K}x_{k}=1\}
 \end{equation}
 Luego, su función de densidad de probabilidad (pdf):
 
 \begin{equation}
-    Dir(x|\alpha)=\frac{1}{B(\alpha)}\prod_{k=1}^{K}x_{k}^{\alpha_{k}-1}
+    Dir(x|\alpha)=\frac{1}{B(\alpha)}\prod_{k=1}^{K}x_{k}^{\alpha_{k}-1}\mathbb{I}(x\in S_{K})
 \end{equation}
 
-La distribución Dirichlet es una distribución útil para generar distribuciones de probabilidades categóricas. En general se asume simetría en los parámetros de la distribución, es decir, $\alpha_{k}=\frac{\alpha}{K}$. En la Figura \ref{img:dirichlet_distribution} se observa el efecto de los parámetros de una Dirichlet en la muestra generada, para $\alpha_{k}=1$ se tiene una distribución uniforme en el dominio $S_{K}$, $\alpha_{k}$ controla la \textit{sparsity}, mientras más se acerca a 0 los vectores generados tienen más componentes nulos y se concentra la masa en unas pocas coordenadas, mientras más grande $\alpha_{k}$ la masa tiende a distribuirse uniformemente en las coordenadas de los vectores generados, por último, cuando $\alpha$ no es simétrico la masa se concentra en aquellas coordenadas cuyo $\alpha_{k}$ es más grande.
+donde $B(\alpha) = B(\alpha_{1}, \ldots, \alpha_{K})$ es la generalización de la función beta a $K$ variables:
+
+\begin{align}
+    B(\alpha) \triangleq \frac{\prod_{k=1}^{K}\Gamma(\alpha_{k})}{\Gamma(\alpha_{0})}
+\end{align}
+
+donde $\alpha_{0} \triangleq \sum_{k=1}^{K}\alpha_{k}$.
+
+La distribución dirichlet permite generar distribuciones de probabilidad sobre variables aleatorias categóricas y dado que es conjuda con la distribución multinomial y multinoulli se suele utilizar como prior de estas.\\
+
+En la Figura \ref{img:dirichlet_distribution} se observa el efecto de los parámetros en la distribución Dirichlet para $K=3$, para $\alpha_{k}=1$ se tiene una distribución uniforme en el dominio $S_{K}$, $\alpha_{k}$ controla la \textit{sparsity}, mientras más se acerca a 0 los vectores generados tienen más componentes nulos y se concentra la masa en unas pocas coordenadas, mientras más grande $\alpha_{k}$ la masa más se concentra en el centro (1/3, 1/3, 1/3), por último, cuando $\alpha$ no es simétrico la masa se concentra proporcionalmente en los $\alpha_{k}$ más grandes.\\
+
+
+En general se asume simetría en los parámetros de la distribución Dirichlet de la forma $\alpha_{k}=\frac{\alpha}{K}$, de esta manera se tiene un $\alpha$ funciona como parámetro de concentración. En la Figura \ref{img:dirichlet_samples} se oberva una realización de una distribución Dirichlet para $\alpha \in \{0.1, 1, 10\}$ y $K\in\{2, 10, 100\}$, donde podemos observar que a mayor $alpha$ las componenetes del vector $x$ más similares se vuelven y esto es más notorio a mayor dimencionalidad debido a que hay más dimensiones donde distribuir la masa.\\
+
+Finalmente, la distribución Dirichlet puede ser utilizado como prior en un \textit{finite mixture model} asumiendo que $\pi\sim Dir(\frac{\alpha}{K}1_{K})$ y $\phi_{k} \sim H$.
 
 \begin{figure}
     \centering
-    \includegraphics[width=1\textwidth]{math/dirichlet_distribution.png}
-    \caption{Efecto de los parámetros de una distribución Dirichlet en el muestreo para $K=3$.}
+    \includegraphics[width=0.65\textwidth]{math/dirichlet_simplex.png}
+    \caption{Densidad de la distribución Dirichlet para $K=3$ define una distribución sobre el \textit{simplex}, el cual puede ser representado por una superficie trinagular.}
     \label{img:dirichlet_distribution}
 \end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.7\textwidth]{math/dirichlet_samples.png}
+    \caption{Muestras de una distribución Dirichlet simétrica para $\alpha \in \{0.1, 1, 10\}$ y $K\in\{2, 10, 100\}$.}
+    \label{img:dirichlet_samples}
+\end{figure}
+
+\subsection{Proceso Dirichlet}
+
+Un \textit{finite mixture model} puede representarse como 
+\begin{align}
+    p(x_{i}|z_{i}=j, \phi) &= p(x_{i}|\phi_{k})\\
+    p(z_{i}=k|\pi) &= \pi_{k}\\
+    \pi &\sim Dir(\frac{\alpha}{K}1_{K})\\
+    \phi_{k} & \sim H\\
+    G(\phi) &= \sum_{k} \pi_{k}\delta_{\phi_{k}}(\phi)\\
+\end{align}
+
+Si muestreamos a partir de este modelo, siempre (con probabilidad uno) obtendrémos exactamente $K$ \textit{clusters}. Nos gustaría tener un modelo más flexible, que pueda generar un número variable de \textit{clusters}. El camino para hacer esto es remplazar la distribución discreta $G$ con una medida aleatoria de probabilidad. Abajo mostraremos que el Dirichlet Process, denotado $G\sim DP(\alpha, H)$, es una manera de hacer esto.\\
+
+Un \textbf{Dirichlet Process} (DP) es una distribución sobre medidas de probabilidad $G: \Phi \rightarrow \mathbf{R}^{+}$, donde $G(\phi)\geq 0$ y $\int_{\Phi}G(\phi)d\phi=1$. Un DP se define implícitamente por cumplir 
+
+\begin{align}
+    (G(T_{1}), \ldots, G(T_{K})) \sim Dir(\alpha H(T_{1}), \ldots, \alpha H(T_{k}))
+\end{align}
+
+para cualquier partición finita $(T_{1}, \ldots, T_{k})$ de $\Phi$. En estecaso, decimos que $G\sim DP(\alpha, H)$, donde $\alpha$ es llamado el \textbf{parámetro de concentración} y $H: \Phi \rightarrow \mathbf{R}^{+}$ es llamado la \textbf{medida base}.
+
+\subsubsubsection{Stick breaking construction}
+En esta sección describiremos una construcción para el DP conocida como \textit{stick breaking construction}. Sea $\pi=\{\pi_{k}\}_{k=1}^{\infty}$ una secuencia de mezcla de pesos derivadas a partir del siguiente proceso:
+\begin{equation}
+    \beta_{k}\sim Beta(1, \alpha)
+\end{equation}
+\begin{equation}
+    \pi_{k} = \beta_{k}\prod_{l=1}^{k-1}(1-\beta_{l}) = \beta_{k}(1-\sum_{l=1}^{k-1}\pi_{l})
+\end{equation}
+
+Esto se suele denotar como $\pi \sim GEM(\alpha)$, donde GEM representa Griffiths, Engen y McCloskey. Algunos ejemplos de este proceso son mostrados en la Figura \ref{img:stick_breaking}.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\textwidth]{math/stick_breaking.png}
+    \caption{Ilustración de \textit{stick breaking construction}. (a) Tenemos una barra de largo 1, el cual se rompe en un punto aleatorio $\beta_{1}$, el largo de la pieza que conservamos es llamada $\pi_{1}$, luego recursivamente rompemos la barra restante, así generando $\pi_{2}, \pi_{3}, \ldots$. (b) Muestras de $\pi_{k}$ para $\alpha=2$ y $\alpha=5$.}
+    \label{img:stick_breaking}
+\end{figure}
+% citar ilustración
+
+Se puede demostrar que este proceso terminará con probabilidad 1 (convergencia casi segura), a pesar que el número de elementos que este genera incrementa con $\alpha$. Además, el tamaño del componente $\pi_{k}$ decrece en promedio.
+Ahora definamos
+
+\begin{equation}
+    G(\phi) = \sum_{k=1}^{\infty}\pi_{k}\delta_{\phi_{k}}(\phi)
+\end{equation}
+donde $\pi \sim GEM(\alpha)$ y $\phi_{k} \sim H$, se puede demostrar que $G \sim DP(\alpha, H)$. Como consecuencia de esta construcción, las muestras de un DP son discretas con probabilidad uno. En otras palabras, al ir muestreando se tendrán mas repeticiones de valores generados previamente, por lo que la mayoría de los datos vendrán de los $\phi_{k}$ con $\pi_{k}$ mayor.
+
+
+
+\section{Modelos de tópicos}
+
+En este capitulo se describe en detalle dos modelos de tópicos probabilísticos,  Latent Dirichlet Allocation (LDA) y Hierarchical Dirichlet Process (HDP), siendo este último la generalización no parámetrica de LDA, donde el número de tópicos a descubrir no está acotado y se infiere a partir del corpus.\\
+
+Ambos modelos se consideran modelos de clustering que involucran multiples grupos de datos. Como los modelos de tópicos se suelen aplicar al dominio del texto a la colección de grupos se le llama corpus y a cada grupo se le llama documento, siendo un documento una colección palabras u observaciones. 
+
+Los modelos de tópicos trabajan bajo el asumpción de \textit{bag of words}, es decir, las palabras son intercambibles, por lo que podemos aplicar un modelo de clustering probabilístico a nivel documento, esto significa asumir que lo que las realizaciones independientes de un \textit{mixture model}
+
+Motivar sharing parameter y luego LDA y HDP
+
+\subsection{Latent Dirichlet Allocation}
+
 % citar ilustración o crear
-\subsubsection{LDA}
+
 A continuación se describe el proceso generativo de Latent Dirichlet Allocation (LDA). Sean \textit{K} tópicos, $\phi_{1:K}$ distribuciones de probabilidad sobre un vocabulario fijo, dibujadas por una $Dir(\frac{\eta}{|V|}1_{|V|})$. Para cada documento $d$ del corpus $D$ se asume que es dibujado por el siguiente proceso generativo (ver representación gráfica del modelo en la Figura \ref{img:lda}):
 \begin{enumerate}
     \item Dibujar una mezcla de tópicos $\pi_{d}\sim Dir(\frac{\alpha}{K}1_{K})$
@@ -261,46 +359,15 @@ La distribución a posterior:
 
 La distribución posterior es computacionalmente intratable para inferencia exacta, debido a que para normalizar la distribución debemos marginalizar sobre todas las variables ocultas y escribir la constante de normalización en términos de los parámetros del modelo. Para poder computar la posterior es necesario utilizar algoritmos de inferencia aproximada, donde el enfoque habitual es Markov Chain Monte Carlo (MCMC), en \citep{griffiths2004finding} se propone un algoritmo basado en Gibbs Sampling para la inferencia. Los métodos basados en MCMC entregan una estimación empírica de la distribución posterior llamada (traza), es decir, representan la posterior a través de muestras que distribuyen como esta, luego para estimación puntual, como por ejemplo obtener el valor esperado de la posterior se utiliza integración de Monte Carlo para aproximar la esperanza, esto es promediar los valores de la traza.
 
-\subsection{Hierarchical Dirichlet Process}
-\subsubsection{Proceso Dirichlet}
-
-En los modelos probabilísticos de \textit{clustering} existen aquellos basados en mezcla finita de componentes que utilizan como \textit{prior} la distribución Dirichlet y aquellos basados en mezcla infinita de componentes que utilizan como \textit{prior} el proceso Dirichlet, un \textit{prior} no paramétrico que no impone una cota en el número de \textit{clusters} a encontrar ($K$).\\
 
 Una representación equivalente en LDA sería generar cada palabra de un documento $d$ a partir de una multinomial sobre un tópico dibujado por una distribución $G_{d}$, formalmente, $w_{d,n}\sim Mult(\phi_{d,n})$, donde $\phi_{d,n} \sim G_{d}$ con $\phi_{d,n} \in \{\phi_{k}\}_{k=1}^{K}$, y $G_{d}(\phi)=\sum_{k=1}^{K}\pi_{d, k}\delta_{\phi_{k}}(\phi)$, donde $\delta_{\phi_{k}}(\phi) = \begin{cases}
     1 & \text{si $\phi_{k}=\phi$}  \\
     0 & \text{si no}
   \end{cases}$.\\\\
 
-Un proceso Dirichlet (DP) es una distribución sobre medidas de probabilidad $G: \Theta \rightarrow \mathbf{R}^{+}$, donde $G(\theta)\geq 0$ y $\int_{\Theta}G(\theta)d\theta=1$. Un DP se define implícitamente por cumplir que para cualquier partición finita $(T_{1}, \ldots, T_{k})$ de $\Theta$, una medida base $H$ y un parámetro de concentración $\alpha$ se  tiene que $(G(T_{1}), \ldots, G(T_{K})) \sim Dir(\alpha H(T_{1}), \ldots, \alpha H(T_{k}))$.
+\subsection{Hierarchical Dirichlet Process}
 
-\subsubsubsection{Stick breaking construction}
-En esta sección describiremos una construcción para el DP conocida como \textit{stick breaking construction}. Sea $\pi=\{\pi_{k}\}_{k=1}^{\infty}$ una secuencia de mezcla de pesos derivadas a partir del siguiente proceso:
-\begin{equation}
-    \beta_{k}\sim Beta(1, \alpha)
-\end{equation}
-\begin{equation}
-    \pi_{k} = \beta_{k}\prod_{l=1}^{k-1}(1-\beta_{l}) = \beta_{k}(1-\sum_{l=1}^{k-1}\pi_{l})
-\end{equation}
 
-Esto se suele denotar como $\pi \sim GEM(\alpha)$, donde GEM representa Griffiths, Engen y McCloskey. Algunos ejemplos de este proceso son mostrados en la Figura \ref{img:stick_breaking}.
-
-\begin{figure}
-    \centering
-    \includegraphics[width=1\textwidth]{math/stick_breaking.png}
-    \caption{Ilustración de \textit{stick breaking construction}. (a) Tenemos una barra de largo 1, el cual se rompe en un punto aleatorio $\beta_{1}$, el largo de la pieza que conservamos es llamada $\pi_{1}$, luego recursivamente rompemos la barra restante, así generando $\pi_{2}, \pi_{3}, \ldots$. (b) Muestras de $\pi_{k}$ para $\alpha=2$ y $\alpha=5$.}
-    \label{img:stick_breaking}
-\end{figure}
-% citar ilustración
-
-Se puede demostrar que este proceso terminará con probabilidad 1 (convergencia casi segura), a pesar que el número de elementos que este genera incrementa con $\alpha$. Además, el tamaño del componente $\pi_{k}$ decrece en promedio.
-Ahora definamos
-
-\begin{equation}
-    G(\phi) = \sum_{k=1}^{\infty}\pi_{k}\delta_{\phi_{k}}(\phi)
-\end{equation}
-donde $\pi \sim GEM(\alpha)$ y $\phi_{k} \sim H$, se puede demostrar que $G \sim DP(\alpha, H)$. Como consecuencia de esta construcción, las muestras de un DP son discretas con probabilidad uno. En otras palabras, al ir muestreando se tendrán mas repeticiones de valores generados previamente, por lo que la mayoría de los datos vendrán de los $\phi_{k}$ con $\pi_{k}$ mayor.
-
-\subsubsection{HDP}
 
 Hierarchical Dirichlet Process (HDP) es una colección de DP que comparten una distribución base $G_{0}$, la cual además es dibujada a partir de un DP (ver representación gráfica del modelo en la Figura \ref{img:hdp}). Matemáticamente, a nivel corpus se tiene que la distribución base $H \sim Dir(\frac{1}{|V|}1_{|V|})$ y $G_{0} \sim DP(\gamma, H)$, luego, para cada documento $d$ del corpus $D$ se asume que es dibujado por el siguiente proceso generativo:
 \begin{enumerate}

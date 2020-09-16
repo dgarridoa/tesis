@@ -29,4 +29,3 @@ do
     echo "***Step: ${slice}/${N}***"
     $hdp --algorithm train --data $file --directory $path_to_save --save_lag -1 --random_seed 123 --max_iter 5000 --split_merge yes
 done
-

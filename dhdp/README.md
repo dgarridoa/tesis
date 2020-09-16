@@ -1,5 +1,5 @@
 # Dynamic Hierarchical Dirichlet Process (DHDP)
-## Actualizar
+
 El presente directorio contiene la implementación del algoritmo de clustering dinámico propuesto para el trabajo de tesis. Para esto el algoritmo supone que el corpus está divido en épocas y entrena de forma independiente HDP en cada una de ellas, luego cálcula el grafo de similitud entre tópicos de épocas adyacentes para luego fijar un umbral que definirá las relaciones entre tópicos adyacentes, como nacimiento, muerte, evolución, división y fusión.
 
 

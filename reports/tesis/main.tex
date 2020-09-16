@@ -25,7 +25,7 @@
 \def\nombreuniversidad {Universidad de Chile}
 \def\nombrefacultad {Facultad de Ciencias Físicas y Matemáticas}
 \def\departamentouniversidad {Departamento de Ingeniería Industrial}
-\def\imagendepartamento {img/departamentos/uchile2.pdf}
+\def\imagendepartamento {img/departments/uchile2.pdf}
 \def\imagendepartamentoescala {0.7}
 \def\localizacionuniversidad {Santiago, Chile}
 
@@ -145,27 +145,7 @@ El resultado esperado es descubrir los \textit{modus operandi} ocultos en los re
 
 El presente trabajo tiene un propósito académico, puesto que no cuenta con un cliente particular y tiene por objetivo estudiar ténicas de \textit{clustering} dinámico para detectar patrones en el contexto de robo de vehículos, sin embargo, potenciales beneficiarios del trabajo podrían ser las aseguradoras, los asegurados, carabineros de Chile y la sociedad.
 
-\section{Metodología de trabajo}
-%CRISP-DM
-El trabajo se realizó bajo la metodología CRISP-DM (Cross Industry Standard Process for Data mining)\citep{chapman2000crisp}, la cual posee las siguientes seis etapas:
-\begin{enumerate}
-    \item Comprensión del negocio:
-    %This initial phase focuses on understanding the project objectives and requirements from a business perspective, then converting this knowledge into a data mining problem definition and a preliminary plan designed to achieve the objectives.
-    \item Comprensión de los datos
-    %The data understanding phase starts with initial data collection and proceeds with activities that enable you to become familiar with the data, identify data quality problems, discover first insights into the data, and/or detect interesting subsets to form hypotheses regarding hidden information.
-    \item Preparación de los datos
-    %The data preparation phase covers all activities needed to construct the final dataset [data that will be fed into the modeling tool(s)] from the initial raw data. Data preparation tasks are likely to be performed multiple times and not in any prescribed order. Tasks include table, record, and attribute selection, as well as transformation and cleaning of data for modeling tools.
-    \item Modelamiento
-    %In this phase, various modeling techniques are selected and applied, and their parameters are calibrated to optimal values. Typically, there are several techniques for the same data mining problem type. Some techniques have specific requirements on the form of data. Therefore, going back to the data preparation phase is often necessary.
-    \item Evaluación
-    %At this stage in the project, you have built a model (or models) that appears to have high quality from a data analysisperspective. Before proceeding to final deployment of the model, it is important to thoroughly evaluate it and review the steps executed to create it, to be certain the model properly achieves the business objectives. A key objective isto determine if there is some important business issue that has not been sufficiently considered. At the end of this phase, a decision on the use of the data mining results should be reached.
-    \item Implementación
-    %Creation of the model is generally not the end of the project. Even if the purpose of the model is to increase knowledge of the data, the knowledge gained will need to be organized and presented in a way that the customer can use it. It often involves applying “live” models within an organization’s decision making processes—for example, real-time personalization of Web pages or repeated scoring of marketing databases. Depending on the requirements, the deployment phase can be as simple as generating a report or as complex as implementing a repeatable data mining process across the enterprise. In many cases, it is the customer, not the data analyst, who carries out the deploymen steps. However, even if the analyst will carry out the deployment effort, it is important for the customer to understand up front what actions need to be carried out in order to actually make use of the created models.
-\end{enumerate}
-
-Dentro de los alcances del trabajo no está contemplado la puesta en producción de una solución basada en \textit{machine learning}, el alcance es hasta la evaluación e interpretación de los resultados arrojados por el modelo.
-
-\chapter{Revisión bibliográfica}
+\chapter{Revisión del estado del arte}
 
 El problema planteado consiste en un problema de \textit{clustering}, puesto que no se cuenta con una etiqueta del \textit{modus operandi} al que corresponde cada relato, siendo el propósito del trabajo descubrirla. Dentro de los métodos de \textit{clustering} que involucran texto el modelamiento de tópicos es el enfoque más prometedor.% Fuente/Justificación
 El modelamiento de tópicos es una herramienta estadística que busca encontrar los temas (tópicos) presentes en un conjunto de documentos (corpus), permitiendo organizar, buscar, indexar, explorar y comprender grandes colecciones de documentos. %Fuente
@@ -193,30 +173,148 @@ En este trabajo se utilizarán técnicas de modelado dinámico de tópicos como 
 \end{enumerate}
 
 \chapter{Marco teórico}
-\section{Modelos de tópicos}
-%soft clustering vs hard clustering
-\subsection{Latent Dirichlet Allocation}
-\subsubsection{Distribución Dirichlet}
-La distribución Dirichlet es una generalización multivariada de la distribución beta, la cual tiene soporte sobre un símplice, definido por:
+% intro
+\section{Mixture Models}
+% referencia
+
+
+La básica asumpción en \textit{clustering} es asumir que cada observación $x_{i}$ pertenece a un solo \textit{cluster} $k$. Podemos expresar la asignación a un \textit{cluster} como una variable aleatoria $z_{i}$, donde $z_{i}=k$ significa que $x$ pertenece al \textit{cluster} $k$, esta variable no es observada en los datos y se considera una variable oculta. Podemos obtener la distribución que caracteriza a un solo \textit{cluster} $k$ condicionando en $z_{i}$
+
+\begin{align}
+    p(x_{i}|z=k_{i}, \phi) & = p(x_{i}|\phi_{k})\\
+\end{align}
+
+Además, podemos definir la probabilidad de que una nueva observación pertenezca al \textit{cluster} $k$ 
+
+\begin{align}
+    p(z_{i}=k|\pi) & = \pi_{k}
+\end{align}
+
+$\sum_{k}\pi_{k} = 1$, ya que $\pi_{k}$ son probabilidades de eventos mutuamente excluyentes. La distribución de $x_{i}$ es entonces de la forma
+
+\begin{align}
+    p(x_{i}) = \sum_{k}\pi_{k}p(x_{i}|\phi_{k})
+\end{align}
+
+Podemos escribir $p(x_{i}|\phi_{k})$ como $x \sim F(\phi_{z_{i}})$, donde $F$ es la distribución asociada a las observaciones. Similarmente, podemos asumir un prior sobre $\pi$ y $\phi_{k}$, a esta configuración se le conoce como \textbf{Bayesian mixture model}.\\
+
+Una representación equivalente para este modelo viende de considerar que el parámetro $\bar{\phi_{i}}$ usado para generar la observación $x_{i}$ proviene de una distribucion discreta $G$, la cual tiene la forma
+
+\begin{align}
+    G(\phi) = \sum_{k} \pi_{k}\delta_{\phi_{k}}(\phi)
+\end{align}
+
+Así, $G$ es una mezcla de funciones delta, donde la probabilidad que $\bar{\phi_{i}}$ es igual a $\phi_{k}$ es $\pi_{k}$.\\
+
+En la sección x.x se describe la distribución de Dirichlet, prior usado para construir \textbf{finite mixture model}, donde el número de componentes o \textit{clusters} a descubrir es finito, denotado por $K$. En la sección x.x se describe un prior no paramétrico denominado Dirichlet Process (DP), el cual permite construir \textbf{infinite mixture model}, donde el número de \textit{clusters} no está acotado. 
+
+
+\subsection{Distribución Dirichlet}
+La distribución Dirichlet es una generalización multivariada de la distribución beta, la cual tiene soporte sobre un \textbraceleft{simplex}, definido por:
 \begin{equation}
     S_{K} = \{x: 0\leq x_{k} \leq 1, \sum_{k=1}^{K}x_{k}=1\}
 \end{equation}
 Luego, su función de densidad de probabilidad (pdf):
 
 \begin{equation}
-    Dir(x|\alpha)=\frac{1}{B(\alpha)}\prod_{k=1}^{K}x_{k}^{\alpha_{k}-1}
+    Dir(x|\alpha)=\frac{1}{B(\alpha)}\prod_{k=1}^{K}x_{k}^{\alpha_{k}-1}\mathbb{I}(x\in S_{K})
 \end{equation}
 
-La distribución Dirichlet es una distribución útil para generar distribuciones de probabilidades categóricas. En general se asume simetría en los parámetros de la distribución, es decir, $\alpha_{k}=\frac{\alpha}{K}$. En la Figura \ref{img:dirichlet_distribution} se observa el efecto de los parámetros de una Dirichlet en la muestra generada, para $\alpha_{k}=1$ se tiene una distribución uniforme en el dominio $S_{K}$, $\alpha_{k}$ controla la \textit{sparsity}, mientras más se acerca a 0 los vectores generados tienen más componentes nulos y se concentra la masa en unas pocas coordenadas, mientras más grande $\alpha_{k}$ la masa tiende a distribuirse uniformemente en las coordenadas de los vectores generados, por último, cuando $\alpha$ no es simétrico la masa se concentra en aquellas coordenadas cuyo $\alpha_{k}$ es más grande.
+donde $B(\alpha) = B(\alpha_{1}, \ldots, \alpha_{K})$ es la generalización de la función beta a $K$ variables:
+
+\begin{align}
+    B(\alpha) \triangleq \frac{\prod_{k=1}^{K}\Gamma(\alpha_{k})}{\Gamma(\alpha_{0})}
+\end{align}
+
+donde $\alpha_{0} \triangleq \sum_{k=1}^{K}\alpha_{k}$.
+
+La distribución dirichlet permite generar distribuciones de probabilidad sobre variables aleatorias categóricas y dado que es conjuda con la distribución multinomial y multinoulli se suele utilizar como prior de estas.\\
+
+En la Figura \ref{img:dirichlet_distribution} se observa el efecto de los parámetros en la distribución Dirichlet para $K=3$, para $\alpha_{k}=1$ se tiene una distribución uniforme en el dominio $S_{K}$, $\alpha_{k}$ controla la \textit{sparsity}, mientras más se acerca a 0 los vectores generados tienen más componentes nulos y se concentra la masa en unas pocas coordenadas, mientras más grande $\alpha_{k}$ la masa más se concentra en el centro (1/3, 1/3, 1/3), por último, cuando $\alpha$ no es simétrico la masa se concentra proporcionalmente en los $\alpha_{k}$ más grandes.\\
+
+
+En general se asume simetría en los parámetros de la distribución Dirichlet de la forma $\alpha_{k}=\frac{\alpha}{K}$, de esta manera se tiene un $\alpha$ funciona como parámetro de concentración. En la Figura \ref{img:dirichlet_samples} se oberva una realización de una distribución Dirichlet para $\alpha \in \{0.1, 1, 10\}$ y $K\in\{2, 10, 100\}$, donde podemos observar que a mayor $alpha$ las componenetes del vector $x$ más similares se vuelven y esto es más notorio a mayor dimencionalidad debido a que hay más dimensiones donde distribuir la masa.\\
+
+Finalmente, la distribución Dirichlet puede ser utilizado como prior en un \textit{finite mixture model} asumiendo que $\pi\sim Dir(\frac{\alpha}{K}1_{K})$ y $\phi_{k} \sim H$.
 
 \begin{figure}
     \centering
-    \includegraphics[width=1\textwidth]{math/dirichlet_distribution.png}
-    \caption{Efecto de los parámetros de una distribución Dirichlet en el muestreo para $K=3$.}
+    \includegraphics[width=0.65\textwidth]{math/dirichlet_simplex.png}
+    \caption{Densidad de la distribución Dirichlet para $K=3$ define una distribución sobre el \textit{simplex}, el cual puede ser representado por una superficie trinagular.}
     \label{img:dirichlet_distribution}
 \end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.7\textwidth]{math/dirichlet_samples.png}
+    \caption{Muestras de una distribución Dirichlet simétrica para $\alpha \in \{0.1, 1, 10\}$ y $K\in\{2, 10, 100\}$.}
+    \label{img:dirichlet_samples}
+\end{figure}
+
+\subsection{Proceso Dirichlet}
+
+Un \textit{finite mixture model} puede representarse como 
+\begin{align}
+    p(x_{i}|z_{i}=j, \phi) &= p(x_{i}|\phi_{k})\\
+    p(z_{i}=k|\pi) &= \pi_{k}\\
+    \pi &\sim Dir(\frac{\alpha}{K}1_{K})\\
+    \phi_{k} & \sim H\\
+    G(\phi) &= \sum_{k} \pi_{k}\delta_{\phi_{k}}(\phi)\\
+\end{align}
+
+Si muestreamos a partir de este modelo, siempre (con probabilidad uno) obtendrémos exactamente $K$ \textit{clusters}. Nos gustaría tener un modelo más flexible, que pueda generar un número variable de \textit{clusters}. El camino para hacer esto es remplazar la distribución discreta $G$ con una medida aleatoria de probabilidad. Abajo mostraremos que el Dirichlet Process, denotado $G\sim DP(\alpha, H)$, es una manera de hacer esto.\\
+
+Un \textbf{Dirichlet Process} (DP) es una distribución sobre medidas de probabilidad $G: \Phi \rightarrow \mathbf{R}^{+}$, donde $G(\phi)\geq 0$ y $\int_{\Phi}G(\phi)d\phi=1$. Un DP se define implícitamente por cumplir 
+
+\begin{align}
+    (G(T_{1}), \ldots, G(T_{K})) \sim Dir(\alpha H(T_{1}), \ldots, \alpha H(T_{k}))
+\end{align}
+
+para cualquier partición finita $(T_{1}, \ldots, T_{k})$ de $\Phi$. En estecaso, decimos que $G\sim DP(\alpha, H)$, donde $\alpha$ es llamado el \textbf{parámetro de concentración} y $H: \Phi \rightarrow \mathbf{R}^{+}$ es llamado la \textbf{medida base}.
+
+\subsubsubsection{Stick breaking construction}
+En esta sección describiremos una construcción para el DP conocida como \textit{stick breaking construction}. Sea $\pi=\{\pi_{k}\}_{k=1}^{\infty}$ una secuencia de mezcla de pesos derivadas a partir del siguiente proceso:
+\begin{equation}
+    \beta_{k}\sim Beta(1, \alpha)
+\end{equation}
+\begin{equation}
+    \pi_{k} = \beta_{k}\prod_{l=1}^{k-1}(1-\beta_{l}) = \beta_{k}(1-\sum_{l=1}^{k-1}\pi_{l})
+\end{equation}
+
+Esto se suele denotar como $\pi \sim GEM(\alpha)$, donde GEM representa Griffiths, Engen y McCloskey. Algunos ejemplos de este proceso son mostrados en la Figura \ref{img:stick_breaking}.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\textwidth]{math/stick_breaking.png}
+    \caption{Ilustración de \textit{stick breaking construction}. (a) Tenemos una barra de largo 1, el cual se rompe en un punto aleatorio $\beta_{1}$, el largo de la pieza que conservamos es llamada $\pi_{1}$, luego recursivamente rompemos la barra restante, así generando $\pi_{2}, \pi_{3}, \ldots$. (b) Muestras de $\pi_{k}$ para $\alpha=2$ y $\alpha=5$.}
+    \label{img:stick_breaking}
+\end{figure}
+% citar ilustración
+
+Se puede demostrar que este proceso terminará con probabilidad 1 (convergencia casi segura), a pesar que el número de elementos que este genera incrementa con $\alpha$. Además, el tamaño del componente $\pi_{k}$ decrece en promedio.
+Ahora definamos
+
+\begin{equation}
+    G(\phi) = \sum_{k=1}^{\infty}\pi_{k}\delta_{\phi_{k}}(\phi)
+\end{equation}
+donde $\pi \sim GEM(\alpha)$ y $\phi_{k} \sim H$, se puede demostrar que $G \sim DP(\alpha, H)$. Como consecuencia de esta construcción, las muestras de un DP son discretas con probabilidad uno. En otras palabras, al ir muestreando se tendrán mas repeticiones de valores generados previamente, por lo que la mayoría de los datos vendrán de los $\phi_{k}$ con $\pi_{k}$ mayor.
+
+
+
+\section{Modelos de tópicos}
+
+En este capitulo se describe en detalle dos modelos de tópicos probabilísticos,  Latent Dirichlet Allocation (LDA) y Hierarchical Dirichlet Process (HDP), siendo este último la generalización no parámetrica de LDA, donde el número de tópicos a descubrir no está acotado y se infiere a partir del corpus.\\
+
+Ambos modelos se consideran modelos de clustering que involucran multiples grupos de datos. Como los modelos de tópicos se suelen aplicar al dominio del texto a la colección de grupos se le llama corpus y a cada grupo se le llama documento, siendo un documento una colección palabras u observaciones. 
+
+Los modelos de tópicos trabajan bajo el asumpción de \textit{bag of words}, es decir, las palabras son intercambibles, por lo que podemos aplicar un modelo de clustering probabilístico a nivel documento, esto significa asumir que lo que las realizaciones independientes de un \textit{mixture model}
+
+Motivar sharing parameter y luego LDA y HDP
+
+\subsection{Latent Dirichlet Allocation}
+
 % citar ilustración o crear
-\subsubsection{LDA}
+
 A continuación se describe el proceso generativo de Latent Dirichlet Allocation (LDA). Sean \textit{K} tópicos, $\phi_{1:K}$ distribuciones de probabilidad sobre un vocabulario fijo, dibujadas por una $Dir(\frac{\eta}{|V|}1_{|V|})$. Para cada documento $d$ del corpus $D$ se asume que es dibujado por el siguiente proceso generativo (ver representación gráfica del modelo en la Figura \ref{img:lda}):
 \begin{enumerate}
     \item Dibujar una mezcla de tópicos $\pi_{d}\sim Dir(\frac{\alpha}{K}1_{K})$
@@ -261,46 +359,15 @@ La distribución a posterior:
 
 La distribución posterior es computacionalmente intratable para inferencia exacta, debido a que para normalizar la distribución debemos marginalizar sobre todas las variables ocultas y escribir la constante de normalización en términos de los parámetros del modelo. Para poder computar la posterior es necesario utilizar algoritmos de inferencia aproximada, donde el enfoque habitual es Markov Chain Monte Carlo (MCMC), en \citep{griffiths2004finding} se propone un algoritmo basado en Gibbs Sampling para la inferencia. Los métodos basados en MCMC entregan una estimación empírica de la distribución posterior llamada (traza), es decir, representan la posterior a través de muestras que distribuyen como esta, luego para estimación puntual, como por ejemplo obtener el valor esperado de la posterior se utiliza integración de Monte Carlo para aproximar la esperanza, esto es promediar los valores de la traza.
 
-\subsection{Hierarchical Dirichlet Process}
-\subsubsection{Proceso Dirichlet}
-
-En los modelos probabilísticos de \textit{clustering} existen aquellos basados en mezcla finita de componentes que utilizan como \textit{prior} la distribución Dirichlet y aquellos basados en mezcla infinita de componentes que utilizan como \textit{prior} el proceso Dirichlet, un \textit{prior} no paramétrico que no impone una cota en el número de \textit{clusters} a encontrar ($K$).\\
 
 Una representación equivalente en LDA sería generar cada palabra de un documento $d$ a partir de una multinomial sobre un tópico dibujado por una distribución $G_{d}$, formalmente, $w_{d,n}\sim Mult(\phi_{d,n})$, donde $\phi_{d,n} \sim G_{d}$ con $\phi_{d,n} \in \{\phi_{k}\}_{k=1}^{K}$, y $G_{d}(\phi)=\sum_{k=1}^{K}\pi_{d, k}\delta_{\phi_{k}}(\phi)$, donde $\delta_{\phi_{k}}(\phi) = \begin{cases}
     1 & \text{si $\phi_{k}=\phi$}  \\
     0 & \text{si no}
   \end{cases}$.\\\\
 
-Un proceso Dirichlet (DP) es una distribución sobre medidas de probabilidad $G: \Theta \rightarrow \mathbf{R}^{+}$, donde $G(\theta)\geq 0$ y $\int_{\Theta}G(\theta)d\theta=1$. Un DP se define implícitamente por cumplir que para cualquier partición finita $(T_{1}, \ldots, T_{k})$ de $\Theta$, una medida base $H$ y un parámetro de concentración $\alpha$ se  tiene que $(G(T_{1}), \ldots, G(T_{K})) \sim Dir(\alpha H(T_{1}), \ldots, \alpha H(T_{k}))$.
+\subsection{Hierarchical Dirichlet Process}
 
-\subsubsubsection{Stick breaking construction}
-En esta sección describiremos una construcción para el DP conocida como \textit{stick breaking construction}. Sea $\pi=\{\pi_{k}\}_{k=1}^{\infty}$ una secuencia de mezcla de pesos derivadas a partir del siguiente proceso:
-\begin{equation}
-    \beta_{k}\sim Beta(1, \alpha)
-\end{equation}
-\begin{equation}
-    \pi_{k} = \beta_{k}\prod_{l=1}^{k-1}(1-\beta_{l}) = \beta_{k}(1-\sum_{l=1}^{k-1}\pi_{l})
-\end{equation}
 
-Esto se suele denotar como $\pi \sim GEM(\alpha)$, donde GEM representa Griffiths, Engen y McCloskey. Algunos ejemplos de este proceso son mostrados en la Figura \ref{img:stick_breaking}.
-
-\begin{figure}
-    \centering
-    \includegraphics[width=1\textwidth]{math/stick_breaking.png}
-    \caption{Ilustración de \textit{stick breaking construction}. (a) Tenemos una barra de largo 1, el cual se rompe en un punto aleatorio $\beta_{1}$, el largo de la pieza que conservamos es llamada $\pi_{1}$, luego recursivamente rompemos la barra restante, así generando $\pi_{2}, \pi_{3}, \ldots$. (b) Muestras de $\pi_{k}$ para $\alpha=2$ y $\alpha=5$.}
-    \label{img:stick_breaking}
-\end{figure}
-% citar ilustración
-
-Se puede demostrar que este proceso terminará con probabilidad 1 (convergencia casi segura), a pesar que el número de elementos que este genera incrementa con $\alpha$. Además, el tamaño del componente $\pi_{k}$ decrece en promedio.
-Ahora definamos
-
-\begin{equation}
-    G(\phi) = \sum_{k=1}^{\infty}\pi_{k}\delta_{\phi_{k}}(\phi)
-\end{equation}
-donde $\pi \sim GEM(\alpha)$ y $\phi_{k} \sim H$, se puede demostrar que $G \sim DP(\alpha, H)$. Como consecuencia de esta construcción, las muestras de un DP son discretas con probabilidad uno. En otras palabras, al ir muestreando se tendrán mas repeticiones de valores generados previamente, por lo que la mayoría de los datos vendrán de los $\phi_{k}$ con $\pi_{k}$ mayor.
-
-\subsubsection{HDP}
 
 Hierarchical Dirichlet Process (HDP) es una colección de DP que comparten una distribución base $G_{0}$, la cual además es dibujada a partir de un DP (ver representación gráfica del modelo en la Figura \ref{img:hdp}). Matemáticamente, a nivel corpus se tiene que la distribución base $H \sim Dir(\frac{1}{|V|}1_{|V|})$ y $G_{0} \sim DP(\gamma, H)$, luego, para cada documento $d$ del corpus $D$ se asume que es dibujado por el siguiente proceso generativo:
 \begin{enumerate}
@@ -336,23 +403,23 @@ Hierarchical Dirichlet Process (HDP) es una colección de DP que comparten una d
 La discretitud a nivel corpus de $G_{0}$ asegura que todos los documentos comparten el mismo conjunto de tópicos (\textit{mixture components}). A nivel documento $G_{d}$ hereda los tópicos de $G_{0}$, pero los pesos de cada tópico (\textit{mixture proportions}) es específica del documento.\\
 
 Aplicando \textit{stick breaking construction} se tiene que para el DP dibujado a nivel corpus la siguiente representación:
-\begin{equation}
-\begin{aligned}
+
+\begin{align}
     \beta_{k}^{'} \sim Beta(1, \gamma) \\
     \beta_{k} = \beta_{k}^{'}\prod_{l=1}^{k-1}(1-\beta_{l}^{'})\\
     \phi_{k} \sim H  \\
     G_{0}(\phi)=\sum_{k=1}^{\infty}\beta_{k}\delta_{\phi_{k}}(\phi)
-\end{aligned}
-\end{equation}
+\end{align}
+
 
 Así, $G_{0}$ es discreto y tiene soporte en los átomos $\phi = \{\phi\}_{k=1}^{\infty}$ con pesos $\beta=\{\beta_{k}\}_{k=1}^{\infty}$, siendo la distribución de $\beta$ escrita como $\beta \sim GEM(\gamma)$. La construcción a nivel documento de $G_{d}$ es:
-\begin{equation}
-\begin{aligned}
+
+\begin{align}
     \pi_{d,k}^{'}\sim Beta\big(\alpha_{0}\beta_{k}, \alpha_{0}\big(1-\sum_{l=1}^{k}\beta_{l}\big)\big)\\
     \pi_{d,k} = \pi_{d,k}^{'}\prod_{l=1}^{k-1}(1-\pi_{d,l}^{'})\\
     G_{d}(\phi)=\sum_{k=1}^{\infty}\pi_{d,k}\delta_{\phi_{k}}(\phi)
-\end{aligned}
-\end{equation}
+\end{align}
+
 Donde $\phi = \{\phi_{k}\}_{k=1}^{\infty}$ son los mismos átomos de $G_{0}$. En la Figura \ref{img:hdp_sbc} se muestra la representación gráfica de esta construcción.
 
 %stick breaking
@@ -385,6 +452,20 @@ Al igual que LDA la distribución posterior es intratable, por lo que en \citep{
 \subsubsection{LDA versus HDP}
 HDP es un modelo no paramétrico similar en estructura a LDA, la principal desventaja de LDA frente a HDP es que LDA requiere escoger el número de tópicos $K$ por adelantado, por otro lado, en HDP el número de tópicos no está acotado y es inferido a partir de los datos. En un enfoque tradicional, se requiere de entrenar múltiples veces LDA para diferentes valores de $K$ y se escoge el que tiene mejor la configuración con mejor desempeño en un conjunto de validación, por lo que LDA termina siendo computacionalmente más costoso que HDP, además este enfoque se vuelve impracticable cuando el conjunto de datos es grande. En el aspecto cualitativo ambos modelos entregan tópicos igual de consistentes, en cuanto a métricas de desempeño como $\textit{perplexity}$ HDP suele tener mejor desempeño \citep{teh2005sharing}.
 
+\subsection{Interpretación de tópicos}
+Los modelos de tópicos se caracterizan por tener un alto poder interpretativo, esto se debe a que la distribución de probabilidad de cada tópico sobre el vocabulario nos da una idea del tema al que pertenece, por otro lado la mezcla de tópicos de cada documento muestra que tan importante es cada tópico en la generación de estos, como también dentro del corpus. En este sentido, las visualizaciones nos ayudan a interpretar mejor los resultados de los modelos de tópicos, respondiendo a las siguientes preguntas, ¿Cuál es el significado de cada tópico?¿Cuán predonimnante es cada tópico?¿Cómo se relacionan los tópicos entre sí?\\
+
+En \citep{sievert2014ldavis} desarrollaron una herramienta de visualización web para responder a estas preguntas. Para responder la pregunta 1 se incorpora un gráfico de barras que muestra las palabras más relevantes del tópico seleccionado dado un parámetro $\lambda \in [0,1]$. A través de una visualización espacial responde la pregunta 2 y 3. La visualización espacial consiste en aplicar técnicas de reducción de dimensionalidad como TSNE \citep{maaten2008visualizing} o PCA \citep{wold1987principal} (en este caso se utilizó TSNE) a la matriz de distancia entre tópicos, usando Jensen-Shannon divergence \citep{endres2003new} como médida de distancia. Una vez cada tópico es mapeado a un punto en un espacio de dos dimensiones se dibuja un círculo con centro en este punto y con radio proporcional a la cantidad de tokens generados por el tópico.\\
+
+Para interpretar un tópico, uno típicamente examina una lista ordenada de los palabras más probables en el tópico, usando ya sea desde cinco a treinta términos. Un problema frecuente que se presenta en este caso es que los términos que son comunes al corpus frecuentemente aparecen en el top de las palabras más probables de un tópico, haciendo difícil discernir el significado de estos.
+Para esto en \citep{sievert2014ldavis} se define una métrica denominada \textit{relevance}, la cual define la relevancia de una palabra no solo por su probabilidad dentro del tópico sino también por su exclusivad dentro del corpus. La \textit{relevance} de una palabra $w$ en el tópico $k$ dado $\lambda$ está dada a través de la siguiente expresión:
+
+\begin{align}
+    r(w,k|\lambda) = \lambda log (\phi_{kw})+ (1-\lambda)\lambda log\bigg(\frac{\phi_{kw}}{p_{w}}\bigg)
+\end{align}
+
+, donde $\lambda$ determina el peso que se le da a la probabilidad de la palabra $w$ dentro del tópico $k$ ($\phi_{kw}$) relativo a su \textit{lift}, el cual se define por el ratio entre la probabilidad de la palabra dentro del tópico y su probabilidad marginal a lo largo del corpus ($p_w$). Fijando $\lambda=1$ se obtiene el ranking de términos decrecientes en orden de su probabilidad dentro del tópico, y fijando $\lambda=0$ el ranking se basa solo en el \textit{lift}.
+
 \section{Modelamiento de la evolución de los tópicos en el tiempo}
 
 Nuestro objetivo es modelar la evolución en el tiempo de los tópicos, para esto el corpus es divido en $T$ épocas, en cada época se entrena un modelo de tópicos estático, obteniéndose así $T$ conjuntos de tópicos $\phi=\{\phi_{1}, \ldots, \phi_{T}\}$, donde $\phi_{t}=\{\phi_{t,1}, \ldots, \phi_{t,K_{t}}\}$ es el conjunto de tópicos que describen la época $t$, y $K_{t}$ el número de tópicos inferido en esa época.
@@ -394,7 +475,7 @@ Para relacionar los tópicos de una época necesitamos una medida de similitud $
 
 \begin{figure}
     \centering
-    \includegraphics[width=1\textwidth]{math/similarity_graph.png}
+    \includegraphics[width=0.8\textwidth]{math/similarity_graph.png}
     \caption{Ilustración conceptual del grafo de similitud que modela la dinámica de los tópicos en el tiempo. Un nodo corresponde a un tópico en una época específica; el ancho de los arcos es proporcional a la similitud entre los tópicos, arcos ausentes fueron eliminados por presentar una similitud menor a un umbral.}
     \label{img:graph}
 \end{figure}
@@ -428,16 +509,15 @@ Para lidiar con el problema anterior en \citep{kusner2015word} se propone una me
 Matemáticamente, la WMD entre el tópico $i$ de la época $t$ y el tópico $j$ de la época $t+1$ viene dado por $WMD(\phi_{i,t}, \phi_{j,t+1})$:
 
 \begin{align}
-\nonumber
-\underset{T}{\text{minimize}}&\sum_{u \in V_{t}}\sum_{v \in V_{t+1}} c_{u,v}T_{u,v} \\ \nonumber
-\textrm{s.t.}\qquad &\sum_{v \in V_{t+1}}T_{u,v}= \phi_{i,t,u} \;, u \in V_{t}\\ \nonumber
-& \sum_{u \in V_{t}}T_{u,v}= \phi_{j,t+1,v} \;, v\in V_{t+1}\\ \nonumber
+\underset{T}{\text{minimize}}&\sum_{u \in V_{t}}\sum_{v \in V_{t+1}} c_{u,v}T_{u,v} \\ 
+\textrm{s.t.}\qquad &\sum_{v \in V_{t+1}}T_{u,v}= \phi_{i,t,u} \;, u \in V_{t}\\ 
+& \sum_{u \in V_{t}}T_{u,v}= \phi_{j,t+1,v} \;, v\in V_{t+1}\\
 & T_{u,v} \geq 0,\; u \in V_{t} \;, v \in V_{t+1}\\ \nonumber
 \end{align}
 
 Donde $T_{u,v}$ es el flujo que va de la palabra $u$ del tópico $i$ de la época $t$ a la palabra $v$ del tópico $j$ de la época $t+1$, $\phi_{i,t,u}$, es la probabilidad de la palabra $u$ en el tópico $i$ de la época $t$, $c_{u,v}$ es el costo de mover una unidad de flujo por el arco $(u,v)$, el costo entre palabras se mide como la distancia euclidiana entre los \textit{word embedding} de dichas palabras. La primera restricción indica que el flujo que se mueve de una palabra $u$ del tópico $i$ a todas las palabras del tópico $j$ debe sumar su peso ($\phi_{i,t,u}$), la segunda restricción significa que el flujo que se mueve de una palabra $v$ del tópico $j$ a todas las palabras del tópico $i$ debe sumar su peso ($\phi_{j,t+1,v}$). Esta médida de distancia se puede fácilmente transformar en una médida de similitud $\rho(\phi_{i,t}, \phi_{j,t+1}) = \frac{1}{1+WMD(\phi_{i,t}, \phi_{j,t+1})}$, notar que si la WMD es 0 la similitud es 1 y si es $\infty$ la similitud es 0. \\
 
-WMD es una medida de distancia intensiva en recursos computacionales, para entender mejor esto utilizaremos la representación poliedral del problema, sea $N$ el tamaño del vocabulario entre dos épocas adyacentes, luego la región factible del problema anterior se puede representar como $\{x| Ax=b, x\geq 0\}$, con $A\in \mathbb{R}^{2N\times N^{2}}$ la matriz de costos, $b\in \mathbb{R}^{2N}$ el flujo disponible y $x\in \mathbb{R}^{N}$ el flujo a enviar por cada uno de los arcos, la complejidad del mejor tiempo promedio de resolver este problema de optimización escala $\mathcal{O}(N^{2}log N)$ \citep{pele2009fast}, por lo que si se reduce el vocabulario a un décimo esto trae una reducción de al menos unas 200 veces (en el peor caso promedio). Como los tópicos siguen una distribución de ley de potencia sobre los palabras, donde una fracción de las palabras concentran la mayor parte de la masa de la distribución, además, en la práctica la interpretación de los tópicos se basa en los top $T$ palabras más probables, entonces, podemos aprovechar esto estructura para efectos de computar la WMD de un forma más eficiente, por ejemplo, utilizando los palabras que capturan un 95\% de la distribución acumulada del tópico.
+WMD es una medida de distancia intensiva en recursos computacionales, para entender mejor esto utilizaremos la representación poliedral del problema, sea $N$ el tamaño del vocabulario entre dos épocas adyacentes, luego la región factible del problema anterior se puede representar como $\{x| Ax=b, x\geq 0\}$, con $A\in \mathbb{R}^{2N\times N^{2}}$ la matriz de costos, $b\in \mathbb{R}^{2N}$ el flujo disponible y $x\in \mathbb{R}^{N}$ el flujo a enviar por cada uno de los arcos, la complejidad del mejor tiempo promedio de resolver este problema de optimización escala $\mathcal{O}(N^{2}log N)$ \citep{pele2009fast}, por lo que si se reduce el vocabulario a un décimo esto trae una reducción de al menos unas 200 veces (en el peor caso promedio). Los tópicos siguen una distribución de ley de potencia sobre el vocabulario, donde una fracción de las palabras concentran la mayor parte de la masa de la distribución. Además, en la práctica la interpretación de los tópicos se basa en los top $T$ palabras más probables (o relevantes) con $T \in [5, 30]$, entonces, podemos aprovechar esta estructura para efectos de computar la WMD de un forma más eficiente, por ejemplo, utilizando solo las palabras que capturan un 95\% de la distribución acumulada del tópico.
 
 \chapter{Experimento}
 
@@ -500,19 +580,22 @@ En la tabla \ref{table:innovation_rate} se muestra el detalle del vocabulario pa
 \begin{table}[h]
     \begin{tabular}{|r|r|r|r|r|}
     \hline
-    \textbf{época} & \textbf{old\_vocabulary} & \textbf{new\_vocabulary} & \textbf{\%old\_vocabulary} & \textbf{\%new\_vocabulary} \\ \hline
+    \textbf{época} & \textbf{old\_vocab} & \textbf{new\_vocab} & \textbf{\%old\_vocab} & \textbf{\%new\_vocab} \\ \hline
     2              & 1.919                     & 1.986                     & 23,35                 & 26.84                 \\ \hline
     3              & 1.986                     & 2.092                     & 22,61                 & 27.95                 \\ \hline 
     4              & 2.092                     & 2.414                     & 18,21                 & 33.60                 \\ \hline
     5              & 2.414                     & 2.629                     & 19,80                 & 28.71                 \\ \hline
     6              & 2.629                     & 2.666                     & 22,44                 & 23.85                 \\ \hline
     \end{tabular}
-    \caption{Evolución del vocabulario en el tiempo, \textbf{old\_vocabulary}: corresponde al vocabulario del período $t-1$, \textbf{new\_vocabulary}: corresponde al vocabulario del período $t$, \textbf{\%old\_vocabulary}: porcentaje de tokens del período $t-1$ que ya no están en el período $t$ y \textbf{\%new\_vocabulary}: porcentaje de tokens del período $t$ que no están en el período $t-1$.}
+    \caption{Evolución del vocabulario en el tiempo, \textbf{old\_vocab}: corresponde al vocabulario del período $t-1$, \textbf{new\_vocab}: corresponde al vocabulario del período $t$, \textbf{\%old\_vocab}: porcentaje de tokens del período $t-1$ que ya no están en el período $t$ y \textbf{\%new\_vocab}: porcentaje de tokens del período $t$ que no están en el período $t-1$.}
     \label{table:innovation_rate}.
 \end{table}
 
 \section{Análisis cuantitativo de resultados}
 
+Al aplicar HDP de forma independiente en cada una de los épocas se obtuvo el siguiente número de tópicos [8, 10, 9, 8, 8, 9].
+
+\subsubsection{Distribución acumulada de los tópicos}
 En la figura \ref{img:cum_dist3} se muestra la distribución acumulada promedio de los tópicos, se tiene que en promedio un 8.54\% y 21.42\% del vocabulario se puede capturar un 80\% y 95\% respectivamente de la distribución acumulada de los tópicos, además, para un 99\% de los tópicos basta con un 37\% del vocabulario para capturar el 95\% de su distribución acumulada, por tanto, una representación incompleta de los tópicos usando las palabras más probables que capturan el 80\% de la distribución acumulada trae consigo una disminución importante en el tamaño del vocabulario. 
 
 % tabla con tiempos de ejecución
@@ -524,6 +607,84 @@ En la figura \ref{img:cum_dist3} se muestra la distribución acumulada promedio 
     \label{img:cum_dist3}
 \end{figure}
 
+\subsubsection{Construicción del grafo temporal}
+
+El modelo propuesto considera tres hiperparámetros:
+\begin{itemize}
+    \item $q \in [0,1]$: para el cálculo de WMD se utilizan las palabras más probables del tópico que explican un 100q\% de la distribución acumulada del tópico. Este parámetro genera un nuevo tópico (se normaliza para sumar 1) con un vocabulario más reducido.
+    \item $\lambda \in [0,1]$: este parámetro pondera la probabilidad de la palabra dentro del tópico con su exclusividad. El nuevo tópico generado es normalizado para sumar 1.
+    \item $\zeta \in [0,1]$: punto operante de la cdf del grafo inicial, permite definir el cuantil que se usará como úmbral para eliminar arcos con similitud menor a este. 
+\end{itemize}
+
+Para entender de mejor manera la influencia de cada uno de estos parámetros se hizó un etiquetado de los arcos del grafo temporal, asignando un 1 a los arcos que deberían estar presente y 0 a los que no. Luego, se hizó una búsqueda a través de la siguiente grilla de parámetros, $\lambda \in \{0.2, 0.4, 0.6, 0.8, 1.0\}$, $q \in \{0.2, 0.4, 0.6, 0.8, 0.9, 0.95\}$ y $\zeta \in \{0.05, 0.10, ..., 0.90, 0.95\}$.\\
+
+Como métrica de evaluación se propone \textit{F-score}, definida por:
+\begin{align}
+    F-score = 2\times \frac{\text{precision}\cdot \text{recall}}{\text{precision}+\text{recall}}
+\end{align}
+, donde \textit{recall} es la tasas de acierto sobre la clase positiva (presencia de un arco) y \textit{precision} es la tasa de acierto de las predicciones sobre la clase positiva. Esta métrica permite balancear la acertividad con la precisión, así una configuración que no pode ningún arco tendra un \textit{recall}=1, pero un bajo \textit{precision} (notar que el númerador decrece más rápido que el denominador). \\
+
+De la figura \ref{img:f_score} se observa que \textit{F-score} tiende a ser creciente en función de $\zeta$, esto se debe a que menor $\zeta$ más falsos positivos (pues son más arcos los que sobreviven) empeorando así el \textit{precision} y por consecuencia el \textit{F-score}. Las configuraciones óptimas ocurren en su mayoría en $\zeta=0.95$ con excepción de tres configuraciones de las treinta posibles de $q\times \lambda$, las cuales se dan en $\zeta=0.9$ para los parámetros $q=0.2$ con $\lambda \in \{0.8, 1\}$ y $q=0.4$ con $\lambda=0.2$, sin embargo, el valor óptimo alcanzado es bastante cercano al obtenido con $\zeta=0.95$. En cuanto a $\lambda$ se observa que no existen muchas diferencias entre $\lambda\in\{0.6, 0.8, 1.0\}$ a diferencia de $\lambda \in \{0.2, 0.4\}$ que suele estar significativamente por debajo de las otras curvas, además se observa una dominancia débil en $\lambda$, es decir, en el $\zeta$ óptimo dado un $(q, \lambda)$ un $\lambda$ mayor no es peor. En el caso del parámetro $q$ se observa que para $q\geq 0.6$ el óptimo obtenido para $\lambda\geq 0.4$ es el mismo, en cambio para $q=0.4$ esto se cumple para todo $\lambda\geq 0.6$ y con $q=0.2$ para $\lambda \geq 0.8$. 
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\textwidth]{experiments/f_score.png}
+    \caption{F-score (eje vertical) para diferentes configuraciones de los hiperparámetros $q$, $\zeta$ (eje horizontal) y $\lambda$.}
+    \label{img:f_score}
+\end{figure}
+
+De la tabla \ref{table:f_score} se observa que la configuración óptima se alcanza con $q=0.2$ con $\zeta=0.9$, además esto ocurre tanto para $\lambda=0.8$ como $\lambda=1.0$, por lo que es escoje la configuración $(q, \zeta, \lambda) = (0.2, 0.9, 1.0)$ para construir el grafo temporal. En la figura \ref{img:cdf} se observa la distribución acumulada de la similitud para el grafo completamente conectado, por lo que el para $zeta=0.9$ el úmbral viene siendo 0.21.
+
+\begin{table}[H]
+    \begin{tabular}{|c|c|c|c|c|}
+    \hline
+    \textbf{q} & \textbf{zeta} & \textbf{recall} & \textbf{precision} & \textbf{f-score} \\ \hline
+    0.2        & 0.9           & 0.87            & 0.71               & 0.78             \\ \hline
+    0.4        & 0.95          & 0.61            & 1                  & 0.76             \\ \hline
+    0.6        & 0.95          & 0.61            & 1                  & 0.76             \\ \hline
+    0.8        & 0.95          & 0.61            & 1                  & 0.76             \\ \hline
+    0.9        & 0.95          & 0.61            & 1                  & 0.76             \\ \hline
+    0.95       & 0.95          & 0.61            & 1                  & 0.76             \\ \hline
+    \end{tabular}
+    \caption{Configuración de $\zeta$ para cada $q$ que máximiza el \textit{F-score}.}
+    \label{table:f_score}
+\end{table}
+
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\textwidth]{experiments/cdf.png}
+    \caption{Estimación empírica de la función de distribución acumulada (cdf) de la similitud entre tópicos correspondiente al grafo temporal completamente conectado para la configuración óptima $(q, \lambda)=(0.2, 1.0)$.}
+    \label{img:cdf}
+\end{figure}
+
+% tratar de computar el caso donde q=1.0 (estimación de tiempo =100h)
+En la figura \ref{img:speedup} se observa que la configuración óptima es en promedio 184 veces más eficiente que $q=0.95$, esto se debe a que $q=0.2$ es un 0.3\% del vocabulario (6 palabras en promedio) y $q=0.95$ alrededor de un 21\% (488 palabras en promedio).
+\begin{figure}
+    \centering
+    \includegraphics[width=1\textwidth]{experiments/speedup.png}
+    \caption{Speedup promedio de la construcción del grafo en función de $q$. El speedup 1 equivale al tiempo más lento el cual está asciado a $q=0.95$ que es el valor de $q$ más grande y por ende con menor reducción de vocabulario de los tópicos a la hora de computar WMD.}
+    \label{img:speedup}
+\end{figure}
+
+%\ref{img:ground_truth} y \ref{img:pruned_graph}
+%conteo de arcos y blabla
+%asociacion a tamaño de los topicos 
+%no hablar todavía del significado de los tópicos
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\textwidth]{experiments/ground_truth.png}
+    \caption{Grafo temporal etiquetado.}
+    \label{img:ground_truth}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\textwidth]{experiments/pruned_graph.png}
+    \caption{Grafo temporal obtenido a partir de la configuración óptima de parámetros $(q, \lambda, \zeta) = (0.2, 1.0, 0.9)$.}
+    \label{img:pruned_graph}
+\end{figure}
 \section{Análisis cualitativo de resultados}
 
 

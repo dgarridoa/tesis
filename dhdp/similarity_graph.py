@@ -6,7 +6,7 @@ import logging
 from time import time
 from gensim.corpora import Dictionary
 from gensim.models.fasttext import load_facebook_vectors
-from wmd import wmd
+from similarity_measures import compute_similarity
 from dotenv import load_dotenv
 
 # get logger
@@ -39,9 +39,11 @@ for slice in slices:
     # save data in a dict
     data[slice] = {"token2id": token2id, "topics_dists": topics_dists}
 
-logger.info("Loading Embeddings")
-
-embeddings = load_facebook_vectors(os.getenv("EMBEDDINGS"))
+if os.getenv("SIMILARITY") == "wmd":
+    logger.info("Loading Embeddings")
+    embeddings = load_facebook_vectors(os.getenv("EMBEDDINGS"))
+else:
+    embeddings = None
 
 logger.info("Computing Similarity Graph")
 ti = time()
@@ -55,21 +57,21 @@ for slice in slices[:-1]:
     topics_dists2 = data[slice+1]["topics_dists"]
     K1 = len(topics_dists1)
     K2 = len(topics_dists2)
-    similarity_edges = np.zeros((K1, K2))
+    similarity_matrix = np.zeros((K1, K2))
     for i in range(K1):
         topic_i = topics_dists1[i]
         for j in range(K2):
             topic_j = topics_dists2[j]
-            distance = wmd(embeddings, token2id1, token2id2, topic_i, topic_j, q = float(os.getenv("TOPIC_QUANTILE_THRESHOLD")))
-            similarity = 1/(1+distance)
-            similarity_edges[i,j] = similarity
-    similarity_graph.append(similarity_edges)
+            similarity_matrix[i,j] = compute_similarity(os.getenv("SIMILARITY"), embeddings, 
+            token2id1, token2id2, topic_i, topic_j, 
+            q = float(os.getenv("TOPIC_QUANTILE_THRESHOLD")))
+    similarity_graph.append(similarity_matrix)
     t2 = time()
     logger.info(f"Steps Completed: {slice}/{slices[-1]-1}, Time: {round(t2-t1)}")
 tf = time()
 logger.info(f"Total Time [s]: {round(tf-ti)}")
 
 logger.info(f"Saving Graph")
-graph_path = f'{os.getenv("RESULTS")}graph/graph_{os.getenv("SLICE_TYPE")}.pkl'
+graph_path = f'{os.getenv("RESULTS")}graph/graph_{os.getenv("SLICE_TYPE")}_{os.getenv("SIMILARITY")}.pkl'
 with open(graph_path, "wb") as f:
     pkl.dump(similarity_graph, f, pkl.HIGHEST_PROTOCOL)

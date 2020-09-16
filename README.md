@@ -25,6 +25,7 @@ Beykikhoshk, A., Arandjelović, O., Phung, D., & Venkatesh, S. (2018). Discoveri
 # Variables de entorno
 
 - `STOPWORDS`: ruta con archivo **.txt** con la lista de stopwords.
+- `VOCABULARY`: ruta con archivo **.txt** con vocabulario base.
 - `RAW_DATA`: ruta con **.csv** con los relatos.
 - `TARGET_DATA`:  ruta con **.pkl** con los relatos, a diferencia de RAW_DATA solo contiene relatos no nulos entre 2011-2016.
 - `LEMMATIZATION`: **true** si se desea aplicar lematización en el procesamiento, **false** sino.
@@ -32,9 +33,11 @@ Beykikhoshk, A., Arandjelović, O., Phung, D., & Venkatesh, S. (2018). Discoveri
 - `NO_BELOW`: float ([0,1]), cada palabra debe estar presente en al menos un x% de los documentos de una época. 
 - `NO_ABOVE`: float ([0,1]), cada palabra puede estar presente en a lo más un x% de los documentos de una época.
 - `CORPUS`: carpeta donde se guardan los relatos procesados en el formato que requiere HDP.
-- `SLICE_TYPE`: nivel de división del corpus en épocas. Admite los siguientes tres valores: "month", "quarter" y "year".
+- `EPOCH_TYPE`: nivel de división del corpus en épocas. Admite los siguientes tres valores: "month", "quarter" y "year".
 - `EMBEDDINGS`: nombre del archivo binario con los embeddings. Debe estar dentro de la carpeta **dhdp/**.
 - `RESULTS`: carpeta donde se guardan los resultados del modelo.
+- `SIMILARITY`: medida de similitud a utilizar, `wmd`: word mover similarity, 
+        `js`: jensen-shannon similarity, `cosine`: cosine similarity.
 - `TOPIC_QUANTILE_THRESHOLD`: float ([0,1]), cuantil de la distribución acumulada de un tópico. Se utiliza para reducir el tamaño del vocabulario asociado a un tópico, considerando solo las top N palabras más probables que explican un x% de la distribución acumulada.
 - `PRUNING_THRESHOLD`: float ([0,1]), cuantil de la distribución acumulada de la similitud. Se utiliza para podar el grafo, eliminando aquellos arcos con valor por debajo del quantil.
 

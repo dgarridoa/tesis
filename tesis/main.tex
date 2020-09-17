@@ -25,7 +25,7 @@
 \def\nombreuniversidad {Universidad de Chile}
 \def\nombrefacultad {Facultad de Ciencias Físicas y Matemáticas}
 \def\departamentouniversidad {Departamento de Ingeniería Industrial}
-\def\imagendepartamento {img/departments/uchile2.pdf}
+\def\imagendepartamento {img/dptos/uchile2.pdf}
 \def\imagendepartamentoescala {0.7}
 \def\localizacionuniversidad {Santiago, Chile}
 
@@ -115,18 +115,15 @@
     citecolor=Blue
 }
 % ======================= INICIO DEL DOCUMENTO =======================
-% \input{lib/etc/example} % Ejemplo, se puede borrar
-\chapter{Introducción}
-
-\chapter{Definición del problema y Objetivos}
+\chapter{Motivación}
 \section{Problema}
 %apoyar con fuentes los footnotes
 El robo de vehículos o accesorios de vehículos es un problema que afecta a toda la sociedad en Chile y en el mundo. Este problema se ha vuelto más relevante el último tiempo debido al crecimiento en el robo de vehículo motorizado y de los robos con violencia (ver Figura \ref{fig:antecedente}). Este fenómeno trae consigo un montón de costos para la sociedad, como incremento en la percepción de la seguridad, aumentos en la prima de los seguros de los asegurados, aumento en los costos de las aseguradoras \footnote{Considerando que el costo promedio incurrido en un auto asegurado robado y no recuperado es de \$ 5.000.000 de pesos, la pérdida total considerando solo los vehículos no recuperados para el año 2015 es de unos \$15.720 millones de pesos.} y el incremento de otros tipos de delitos \footnote{El destino de los vehículos robados es variado, se usan los autos para perpetrar otros delitos y huir, venderlos por piezas en talleres clandestinos o blanquear sus documentos para pasarlos por la frontera y venderlos o cambiarlos por droga en el extranjero.} 
 
 \begin{figure}[h]
 \begin{tabular}{p{0.45\textwidth}p{0.45\textwidth}}
-\includegraphics[width=0.45\textwidth]{business/cantidad_robos.png} &
-\includegraphics[width=0.40\textwidth]{business/tasa_robos_violencia.png}\\
+\includegraphics[width=0.45\textwidth]{ch1/cantidad_robos.png} &
+\includegraphics[width=0.40\textwidth]{ch1/tasa_robos_violencia.png}\\
 \centering{(a)} & \centering{(b)}\\
 \end{tabular}
 \caption{(a) Cantidad de robos de vehículos y robos de accesorios de vehículos anuales en Chile (2004-2014). Fuente: Informe anual Carabineros, 2004-2014, INE. (b) Tasa de robos con violencia del total de robo de autos de lujo 2011-2016.} %Fuente?
@@ -145,7 +142,7 @@ El resultado esperado es descubrir los \textit{modus operandi} ocultos en los re
 
 El presente trabajo tiene un propósito académico, puesto que no cuenta con un cliente particular y tiene por objetivo estudiar ténicas de \textit{clustering} dinámico para detectar patrones en el contexto de robo de vehículos, sin embargo, potenciales beneficiarios del trabajo podrían ser las aseguradoras, los asegurados, carabineros de Chile y la sociedad.
 
-\chapter{Revisión del estado del arte}
+\section{Revisión del estado del arte}
 
 El problema planteado consiste en un problema de \textit{clustering}, puesto que no se cuenta con una etiqueta del \textit{modus operandi} al que corresponde cada relato, siendo el propósito del trabajo descubrirla. Dentro de los métodos de \textit{clustering} que involucran texto el modelamiento de tópicos es el enfoque más prometedor.% Fuente/Justificación
 El modelamiento de tópicos es una herramienta estadística que busca encontrar los temas (tópicos) presentes en un conjunto de documentos (corpus), permitiendo organizar, buscar, indexar, explorar y comprender grandes colecciones de documentos. %Fuente
@@ -175,10 +172,9 @@ En este trabajo se utilizarán técnicas de modelado dinámico de tópicos como 
 \chapter{Marco teórico}
 % intro
 \section{Mixture Models}
-% referencia
+\label{sec:mixture_model}
 
-
-La básica asumpción en \textit{clustering} es asumir que cada observación $x_{i}$ pertenece a un solo \textit{cluster} $k$. Podemos expresar la asignación a un \textit{cluster} como una variable aleatoria $z_{i}$, donde $z_{i}=k$ significa que $x$ pertenece al \textit{cluster} $k$, esta variable no es observada en los datos y se considera una variable oculta. Podemos obtener la distribución que caracteriza a un solo \textit{cluster} $k$ condicionando en $z_{i}$
+El supuesto básico en \textit{clustering} es asumir que cada observación $x_{i}$ pertenece a un solo \textit{cluster} $k$. Podemos expresar la asignación a un \textit{cluster} como una variable aleatoria $z_{i}$, donde $z_{i}=k$ significa que $x$ pertenece al \textit{cluster} $k$, esta variable no es observada en los datos y se considera una variable oculta. Podemos obtener la distribución que caracteriza a un solo \textit{cluster} $k$ condicionando en $z_{i}$
 
 \begin{align}
     p(x_{i}|z=k_{i}, \phi) & = p(x_{i}|\phi_{k})\\
@@ -196,20 +192,26 @@ $\sum_{k}\pi_{k} = 1$, ya que $\pi_{k}$ son probabilidades de eventos mutuamente
     p(x_{i}) = \sum_{k}\pi_{k}p(x_{i}|\phi_{k})
 \end{align}
 
-Podemos escribir $p(x_{i}|\phi_{k})$ como $x \sim F(\phi_{z_{i}})$, donde $F$ es la distribución asociada a las observaciones. Similarmente, podemos asumir un prior sobre $\pi$ y $\phi_{k}$, a esta configuración se le conoce como \textbf{Bayesian mixture model}.\\
+Podemos escribir $p(x_{i}|\phi_{k})$ como $x_{i} \sim F(\phi_{z_{i}})$, donde $F$ es la distribución asociada a las observaciones. \\
 
 Una representación equivalente para este modelo viende de considerar que el parámetro $\bar{\phi_{i}}$ usado para generar la observación $x_{i}$ proviene de una distribucion discreta $G$, la cual tiene la forma
 
 \begin{align}
-    G(\phi) = \sum_{k} \pi_{k}\delta_{\phi_{k}}(\phi)
+    G(\phi) & = \sum_{k} \pi_{k}\delta_{\phi_{k}}(\phi)
 \end{align}
 
-Así, $G$ es una mezcla de funciones delta, donde la probabilidad que $\bar{\phi_{i}}$ es igual a $\phi_{k}$ es $\pi_{k}$.\\
+Así, $G$ es una mezcla de funciones delta, donde la probabilidad que $\bar{\phi_{i}}$ es igual a $\phi_{k}$ es $\pi_{k}$. Luego, un \textit{mixture model} podría representarse como sigue
 
-En la sección x.x se describe la distribución de Dirichlet, prior usado para construir \textbf{finite mixture model}, donde el número de componentes o \textit{clusters} a descubrir es finito, denotado por $K$. En la sección x.x se describe un prior no paramétrico denominado Dirichlet Process (DP), el cual permite construir \textbf{infinite mixture model}, donde el número de \textit{clusters} no está acotado. 
+\begin{align}
+\phi_{z_{i}} & \sim G\\
+x_{i} & \sim  F(\phi_{z_{i}})
+\end{align}
 
+Un \textbf{Bayesian mixture model} es un \textit{mixture model} con una medida aleatoria para las mezclas. En la sección \ref{sec:dirichlet}. y \ref{sec:dp} nos referimos a dos priors ampliamente usados para construir \textit{bayesian mixture model}: la distribución Dirichlet que noes permite construir un \textbf{finite mixture model}, donde el número de átomos o \textit{clusters} a descubrir es finito, denotado por $K$ y un prior no paramétrico denominado Dirichlet Process (DP), el cual permite construir un \textbf{infinite mixture model}, donde el número de \textit{clusters} no está acotado. 
 
 \subsection{Distribución Dirichlet}
+\label{sec:dirichlet}
+
 La distribución Dirichlet es una generalización multivariada de la distribución beta, la cual tiene soporte sobre un \textbraceleft{simplex}, definido por:
 \begin{equation}
     S_{K} = \{x: 0\leq x_{k} \leq 1, \sum_{k=1}^{K}x_{k}=1\}
@@ -226,83 +228,90 @@ donde $B(\alpha) = B(\alpha_{1}, \ldots, \alpha_{K})$ es la generalización de l
     B(\alpha) \triangleq \frac{\prod_{k=1}^{K}\Gamma(\alpha_{k})}{\Gamma(\alpha_{0})}
 \end{align}
 
-donde $\alpha_{0} \triangleq \sum_{k=1}^{K}\alpha_{k}$.
+donde $\alpha_{0} \triangleq \sum_{k=1}^{K}\alpha_{k}$.\\
 
-La distribución dirichlet permite generar distribuciones de probabilidad sobre variables aleatorias categóricas y dado que es conjuda con la distribución multinomial y multinoulli se suele utilizar como prior de estas.\\
-
-En la Figura \ref{img:dirichlet_distribution} se observa el efecto de los parámetros en la distribución Dirichlet para $K=3$, para $\alpha_{k}=1$ se tiene una distribución uniforme en el dominio $S_{K}$, $\alpha_{k}$ controla la \textit{sparsity}, mientras más se acerca a 0 los vectores generados tienen más componentes nulos y se concentra la masa en unas pocas coordenadas, mientras más grande $\alpha_{k}$ la masa más se concentra en el centro (1/3, 1/3, 1/3), por último, cuando $\alpha$ no es simétrico la masa se concentra proporcionalmente en los $\alpha_{k}$ más grandes.\\
-
-En general se asume simetría en los parámetros de la distribución Dirichlet de la forma $\alpha_{k}=\frac{\alpha}{K}$, de esta manera se tiene un $\alpha$ funciona como parámetro de concentración. En la Figura \ref{img:dirichlet_samples} se oberva una realización de una distribución Dirichlet para $\alpha \in \{0.1, 1, 10\}$ y $K\in\{2, 10, 100\}$, donde podemos observar que a mayor $alpha$ las componenetes del vector $x$ más similares se vuelven y esto es más notorio a mayor dimencionalidad debido a que hay más dimensiones donde distribuir la masa.\\
-
-Finalmente, la distribución Dirichlet puede ser utilizado como prior en un \textit{finite mixture model} asumiendo que $\pi\sim Dir(\frac{\alpha}{K}1_{K})$ y $\phi_{k} \sim H$.
+En la Figura \ref{img:dirichlet_distribution} se observa el efecto de los parámetros en la distribución Dirichlet para $K=3$, para $\alpha_{k}=1$ se tiene una distribución uniforme en el dominio $S_{K}$, $\alpha_{k}$ controla la \textit{sparsity}, mientras más se acerca a 0 los vectores generados tienen más átomos nulos y se concentra la masa en unas pocas coordenadas, mientras más grande $\alpha_{k}$ la masa más se concentra en el centro (1/3, 1/3, 1/3), por último, cuando $\alpha$ no es simétrico la masa se concentra proporcionalmente en los $\alpha_{k}$ más grandes.\\
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.65\textwidth]{math/dirichlet_simplex.png}
+    \includegraphics[width=\textwidth]{ch2/dirichlet_simplex.png}
     \caption{Densidad de la distribución Dirichlet para $K=3$ define una distribución sobre el \textit{simplex}, el cual puede ser representado por una superficie trinagular.}
     \label{img:dirichlet_distribution}
 \end{figure}
 
+En general se asume simetría en los parámetros de la distribución Dirichlet de la forma $\alpha_{k}=\frac{\alpha}{K}$, de esta manera se tiene un $\alpha$ funciona como parámetro de concentración. En la Figura \ref{img:dirichlet_samples} se oberva una realización de una distribución Dirichlet para $\alpha \in \{0.1, 1, 10\}$ y $K\in\{2, 10, 100\}$, donde podemos observar que a mayor $alpha$ las componenetes del vector $x$ más similares se vuelven y esto es más notorio a mayor dimencionalidad debido a que hay más dimensiones donde distribuir la masa.\\
+
+La distribución dirichlet es comúnmente usada en estadística Bayesiana, ya que es el prior conjugado de la distribución categórica (multinoulli) y de la distribución multinomial. Así, la distribución Dirichlet puede ser utilizado como prior en un \textit{finite mixture model} asumiendo que $\pi\sim Dir(\frac{\alpha}{K}1_{K})$ y $\phi_{k} \sim H$.
+
 \begin{figure}
     \centering
-    \includegraphics[width=0.7\textwidth]{math/dirichlet_samples.png}
-    \caption{Muestras de una distribución Dirichlet simétrica para $\alpha \in \{0.1, 1, 10\}$ y $K\in\{2, 10, 100\}$.}
+    \includegraphics[width=\textwidth]{ch2/dirichlet_samples.png}
+    \caption{Muestra de una distribución Dirichlet simétrica para $\alpha \in \{0.1, 1, 10\}$ y $K\in\{2, 10, 100\}$.}
     \label{img:dirichlet_samples}
 \end{figure}
 
-\subsection{Proceso Dirichlet}
 
-Un \textit{finite mixture model} puede representarse como 
-\begin{align}
-    p(x_{i}|z_{i}=j, \phi) &= p(x_{i}|\phi_{k})\\
-    p(z_{i}=k|\pi) &= \pi_{k}\\
-    \pi &\sim Dir(\frac{\alpha}{K}1_{K})\\
-    \phi_{k} & \sim H\\
-    G(\phi) &= \sum_{k} \pi_{k}\delta_{\phi_{k}}(\phi)\\
-\end{align}
 
-Si muestreamos a partir de este modelo, siempre (con probabilidad uno) obtendrémos exactamente $K$ \textit{clusters}. Nos gustaría tener un modelo más flexible, que pueda generar un número variable de \textit{clusters}. El camino para hacer esto es remplazar la distribución discreta $G$ con una medida aleatoria de probabilidad. Abajo mostraremos que el Dirichlet Process, denotado $G\sim DP(\alpha, H)$, es una manera de hacer esto.\\
 
-Un \textbf{Dirichlet Process} (DP) es una distribución sobre medidas de probabilidad $G: \Phi \rightarrow \mathbf{R}^{+}$, donde $G(\phi)\geq 0$ y $\int_{\Phi}G(\phi)d\phi=1$. Un DP se define implícitamente por cumplir 
+\subsection{Dirichlet Process}
+\label{sec:dp}
+
+En un \textit{finite mixture model} tenemos $G(\phi) = \sum_{k=1}^{K} \pi_{k}\delta_{\phi_{k}}(\phi)$, luego si muestreamos a partir de $G$, siempre (con probabilidad uno) obtendrémos exactamente $K$ \textit{clusters}. Nos gustaría tener un modelo más flexible, que pueda generar un número variable de \textit{clusters}. La forma de hacer esto es remplazar la distribución discreta $G$ por una medida aleatoria de probabilidad. El Dirichlet Process, denotado $G\sim DP(\alpha, H)$, es una manera de hacer esto.\\
+
+Un \textbf{Dirichlet Process} (DP) es una distribución sobre medidas de probabilidad $G: \Phi \rightarrow \mathbb{R}^{+}$, donde $G(\phi)\geq 0$ y $\int_{\Phi}G(\phi)d\phi=1$. Un DP se define implícitamente por cumplir 
 
 \begin{align}
     (G(T_{1}), \ldots, G(T_{K})) \sim Dir(\alpha H(T_{1}), \ldots, \alpha H(T_{k}))
 \end{align}
 
-para cualquier partición finita $(T_{1}, \ldots, T_{k})$ de $\Phi$. En estecaso, decimos que $G\sim DP(\alpha, H)$, donde $\alpha$ es llamado el \textbf{parámetro de concentración} y $H: \Phi \rightarrow \mathbf{R}^{+}$ es llamado la \textbf{medida base}.
+para cualquier partición finita $(T_{1}, \ldots, T_{k})$ de $\Phi$. En este caso, decimos que $G\sim DP(\alpha, H)$, donde $\alpha$ es llamado el \textbf{parámetro de concentración} y $H: \Phi \rightarrow \mathbb{R}^{+}$ es llamado la \textbf{medida base}.
 
------
+Existen diferentes perspectivas que ayudan a entender la propiedad de \textit{clustering} de un Dirichlet Process. En la sección \ref{sec:sbp}. y \ref{sec:crp}. nos referimos a dos: el Stick Breaking Process y Chinese Restaurant Process (CRP).
 
+\subsection{Stick Breaking Process}
+\label{sec:sbp}
 
+Ahora daremos una definición constructiva para el DP, conocida como \textit{stick breaking process}. Sea $\pi=\{\pi_{k}\}_{k=1}^{\infty}$ una secuencia infinita de mezcla de pesos derivadas a partir del siguiente proceso:
+\begin{align}
+    \beta_{k} & \sim Beta(1, \alpha)\\
+    \pi_{k} & = \beta_{k}\prod_{l=1}^{k-1}(1-\beta_{l}) = \beta_{k}(1-\sum_{l=1}^{k-1}\pi_{l})
+\end{align}
 
-\subsubsubsection{Stick breaking construction}
-En esta sección describiremos una construcción para el DP conocida como \textit{stick breaking construction}. Sea $\pi=\{\pi_{k}\}_{k=1}^{\infty}$ una secuencia de mezcla de pesos derivadas a partir del siguiente proceso:
-\begin{equation}
-    \beta_{k}\sim Beta(1, \alpha)
-\end{equation}
-\begin{equation}
-    \pi_{k} = \beta_{k}\prod_{l=1}^{k-1}(1-\beta_{l}) = \beta_{k}(1-\sum_{l=1}^{k-1}\pi_{l})
-\end{equation}
-
-Esto se suele denotar como $\pi \sim GEM(\alpha)$, donde GEM representa Griffiths, Engen y McCloskey. Algunos ejemplos de este proceso son mostrados en la Figura \ref{img:stick_breaking}.
+Esto se suele denotar como $\pi \sim GEM(\alpha)$, donde GEM representa Griffiths, Engen y McCloskey, ver Figura  \ref{img:stick_breaking} para una ilustración. 
 
 \begin{figure}
     \centering
-    \includegraphics[width=1\textwidth]{math/stick_breaking.png}
-    \caption{Ilustración de \textit{stick breaking construction}. (a) Tenemos una barra de largo 1, el cual se rompe en un punto aleatorio $\beta_{1}$, el largo de la pieza que conservamos es llamada $\pi_{1}$, luego recursivamente rompemos la barra restante, así generando $\pi_{2}, \pi_{3}, \ldots$. (b) Muestras de $\pi_{k}$ para $\alpha=2$ y $\alpha=5$.}
+    \includegraphics[width=0.6\textwidth]{ch2/stick_breaking.png}
+    \caption{Ilustración de \textit{stick breaking process}. Tenemos una barra de largo 1, la cual se rompe en un punto aleatorio $\beta_{1}$, el largo de la pieza que conservamos es llamada $\pi_{1}$, luego recursivamente rompemos la barra restante, así generando $\pi_{2}, \pi_{3}, \ldots$. Fuente: Figura 2.22 de \citep{sudderth2006graphical}.}
     \label{img:stick_breaking}
 \end{figure}
-% citar ilustración
 
-Se puede demostrar que este proceso terminará con probabilidad 1 (convergencia casi segura), a pesar que el número de elementos que este genera incrementa con $\alpha$. Además, el tamaño del componente $\pi_{k}$ decrece en promedio.
-Ahora definamos
+Algunos ejemplos de este proceso son mostrados en la Figura \ref{img:sbp_samples}. A mayor $\alpha$, menos varianza y mayor número de átomos, por el contrario, pequeños valores de $\alpha$ muestran una alta varianza y menor número de átomos, adicionalmente exhiben mayor varianza en el número de átomos.
 
-\begin{equation}
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{ch2/sbp_samples.png}
+    \caption{Muestra de una distribución GEM para diferentes parámetros de concentración $\alpha\in \{0.1, 0.6, 6\}$.}
+    \label{img:sbp_samples}
+\end{figure}
+
+Se puede demostrar que este proceso terminará con probabilidad uno, a pesar que el número de elementos que este genera incrementa con $\alpha$. Además, el tamaño del componente $\pi_{k}$ decrece en promedio. Ahora definamos 
+\begin{align}
     G(\phi) = \sum_{k=1}^{\infty}\pi_{k}\delta_{\phi_{k}}(\phi)
-\end{equation}
-donde $\pi \sim GEM(\alpha)$ y $\phi_{k} \sim H$, se puede demostrar que $G \sim DP(\alpha, H)$. Como consecuencia de esta construcción, las muestras de un DP son discretas con probabilidad uno. En otras palabras, al ir muestreando se tendrán mas repeticiones de valores generados previamente, por lo que la mayoría de los datos vendrán de los $\phi_{k}$ con $\pi_{k}$ mayor.
+\end{align}
 
-\subsubsubsection{Chinese Restaurant Process}
+donde $\pi \sim GEM(\alpha)$ y $\phi_{k} \sim H$. Entonces uno puede demostrar que $G \sim DP(\alpha, H)$. Como consecuencia de esta construcción, las muestras de un DP son \textbf{discretas con probabilidad uno}. En otras palabras, al ir muestreando $\bar{\phi_{i}}\sim G$ veremos valores repetidos, por lo que la mayoría de los datos vendrán de los $\phi_{k}$ con $\pi_{k}$ más largos. En la Figura \ref{img:dp_samples} muestra un par de medidas aleatorias generadas a partir de un DP con una medida base normal.\\
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{ch2/dp_samples.png}
+    \caption{Medidas aleatorias generadas a partir de un Dirichlet Process con medida base normal $\mathcal{N}(0,1)$ para diferentes parámetros de concentración $\alpha\in \{0.1, 0.6, 6\}$.}
+    \label{img:dp_samples}
+\end{figure}
+
+
+\subsection{Chinese Restaurant Process}
+\label{sec:crp}
 ....
 
 
@@ -480,7 +489,7 @@ Para relacionar los tópicos de una época necesitamos una medida de similitud $
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.8\textwidth]{math/similarity_graph.png}
+    \includegraphics[width=0.8\textwidth]{ch2/similarity_graph.png}
     \caption{Ilustración conceptual del grafo de similitud que modela la dinámica de los tópicos en el tiempo. Un nodo corresponde a un tópico en una época específica; el ancho de los arcos es proporcional a la similitud entre los tópicos, arcos ausentes fueron eliminados por presentar una similitud menor a un umbral.}
     \label{img:graph}
 \end{figure}
@@ -506,7 +515,7 @@ Para lidiar con el problema anterior en \citep{kusner2015word} se propone una me
 
 \begin{figure}
     \centering
-\includegraphics[width=1\textwidth]{math/wmd-obama.png}
+\includegraphics[width=1\textwidth]{ch2/wmd-obama.png}
     \caption{Espacio vectorial de los \textit{word embeddings} de las palabras de dos tópicos con un vocabulario de tamaño 4.}
     \label{img:wmd_obama}
 \end{figure}
@@ -547,7 +556,7 @@ Luego, en el primer nivel de procesamiento no interesa hacer distinción entre m
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.8\textwidth]{experiments/cum_dist_1.png}
+    \includegraphics[width=0.8\textwidth]{ch3/cum_dist_1.png}
     \caption{Frecuencia acumulada de los tokens únicos aplicando hasta el primer nivel de procesamiento. El eje horizontal es el acumulado de tokens únicos en orden decreciente de ocurrencia. Los puntos corresponden a los cuantiles 60\%, 80\%, 90\%, 95\% y 99\%.}
     \label{img:cum_dist1}
 \end{figure}
@@ -560,7 +569,7 @@ El cuarto y último nivel de procesamiento corresponde a eliminar tokens con baj
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.8\textwidth]{experiments/cum_dist_2.png}
+    \includegraphics[width=0.8\textwidth]{ch3/cum_dist_2.png}
     \caption{Frecuencia acumulada de los tokens únicos aplicando hasta el cuarto nivel de procesamiento. El eje horizontal es el acumulado de tokens únicos en orden decreciente de ocurrencia. Los puntos corresponden a los cuantiles 60\%, 80\%, 90\%, 95\% y 99\%.}
     \label{img:cum_dist2}
 \end{figure}
@@ -607,7 +616,7 @@ En la figura \ref{img:cum_dist3} se muestra la distribución acumulada promedio 
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.8\textwidth]{experiments/cum_dist_3.png}
+    \includegraphics[width=0.8\textwidth]{ch3/cum_dist_3.png}
     \caption{Distribución acumulada promedio de los tópicos en función del vocabulario. El punto (x,y) en el gráfico corresponde a la fracción x del vocabulario que explica la fracción y de la distribución acumulada del tópico. Los puntos corresponden a los cuantiles 60\%, 80\%, 90\%, 95\% y 99\%.}
     \label{img:cum_dist3}
 \end{figure}
@@ -633,7 +642,7 @@ De la figura \ref{img:f_score} se observa que \textit{F-score} tiende a ser crec
 
 \begin{figure}
     \centering
-    \includegraphics[width=1\textwidth]{experiments/f_score.png}
+    \includegraphics[width=1\textwidth]{ch3/f_score.png}
     \caption{F-score (eje vertical) para diferentes configuraciones de los hiperparámetros $q$, $\zeta$ (eje horizontal) y $\lambda$.}
     \label{img:f_score}
 \end{figure}
@@ -658,7 +667,7 @@ De la tabla \ref{table:f_score} se observa que la configuración óptima se alca
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.8\textwidth]{experiments/cdf.png}
+    \includegraphics[width=0.8\textwidth]{ch3/cdf.png}
     \caption{Estimación empírica de la función de distribución acumulada (cdf) de la similitud entre tópicos correspondiente al grafo temporal completamente conectado para la configuración óptima $(q, \lambda)=(0.2, 1.0)$.}
     \label{img:cdf}
 \end{figure}
@@ -667,7 +676,7 @@ De la tabla \ref{table:f_score} se observa que la configuración óptima se alca
 En la figura \ref{img:speedup} se observa que la configuración óptima es en promedio 184 veces más eficiente que $q=0.95$, esto se debe a que $q=0.2$ es un 0.3\% del vocabulario (6 palabras en promedio) y $q=0.95$ alrededor de un 21\% (488 palabras en promedio).
 \begin{figure}
     \centering
-    \includegraphics[width=1\textwidth]{experiments/speedup.png}
+    \includegraphics[width=1\textwidth]{ch3/speedup.png}
     \caption{Speedup promedio de la construcción del grafo en función de $q$. El speedup 1 equivale al tiempo más lento el cual está asciado a $q=0.95$ que es el valor de $q$ más grande y por ende con menor reducción de vocabulario de los tópicos a la hora de computar WMD.}
     \label{img:speedup}
 \end{figure}
@@ -679,14 +688,14 @@ En la figura \ref{img:speedup} se observa que la configuración óptima es en pr
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.8\textwidth]{experiments/ground_truth.png}
+    \includegraphics[width=0.8\textwidth]{ch3/ground_truth.png}
     \caption{Grafo temporal etiquetado.}
     \label{img:ground_truth}
 \end{figure}
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.8\textwidth]{experiments/pruned_graph.png}
+    \includegraphics[width=0.8\textwidth]{ch3/pruned_graph.png}
     \caption{Grafo temporal obtenido a partir de la configuración óptima de parámetros $(q, \lambda, \zeta) = (0.2, 1.0, 0.9)$.}
     \label{img:pruned_graph}
 \end{figure}

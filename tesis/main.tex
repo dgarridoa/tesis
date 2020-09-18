@@ -13,6 +13,7 @@
 % CREACIÓN DEL DOCUMENTO
 \documentclass[letterpaper,12pt,oneside]{book} % Libro, tamaño carta
 \usepackage[utf8]{inputenc} % Codificación UTF-8
+
 \bibliographystyle{unsrtnat}
 % INFORMACIÓN DEL DOCUMENTO
 \def\titulotesis {Modelamiento y seguimiento de tópicos para detección de modus operandi en robo de vehículos}
@@ -69,6 +70,7 @@
 % IMPORTACIÓN DE LIBRERÍAS
 \input{lib/env/imports}
 \graphicspath{img/} 
+
 % IMPORTACIÓN DE FUNCIONES Y ENTORNOS
 \input{lib/cmd/all}
 
@@ -77,6 +79,9 @@
 
 % CONFIGURACIÓN INICIAL DEL DOCUMENTO
 \input{lib/cfg/init}
+
+% TODONOTES
+\usepackage{todonotes}
 
 % INICIO DE LAS PÁGINAS
 \begin{document}
@@ -87,8 +92,6 @@
 % CONFIGURACIÓN DE PÁGINA Y ENCABEZADOS
 \input{lib/cfg/page}
 
-\newcommand{\quotes}[1]{``#1''}
-
 % DEDICATORIA
 \begin{dedicatoria}
 	Una frase de dedicatoria, \\
@@ -98,7 +101,7 @@
 
 % AGRADECIMIENTOS
 \begin{agradecimientos}
-	\lipsum[1]
+    \todosec[inline]{TODO}
 \end{agradecimientos}
 
 % TABLA DE CONTENIDOS - ÍNDICE
@@ -106,7 +109,7 @@
 
 % RESUMEN O ABSTRACT
 \begin{resumen}
-	\lipsum[1]
+    \todosec[inline]{TODO}
 \end{resumen}
 
 % CONFIGURACIONES FINALES
@@ -114,10 +117,22 @@
 \hypersetup{
     citecolor=Blue
 }
+
+% CONFIGURACIÓN TODONOTES 
+% \reversemarginpar
+% \setlength{\marginparwidth}{2.0cm}
 % ======================= INICIO DEL DOCUMENTO =======================
+\listoftodos
 \chapter{Motivación}
-\section{Problema}
-%apoyar con fuentes los footnotes
+\todosec[inline]{Rehacer Capítulo}
+
+\todo[inline]{Motivar problema de clustering dinámico a texto: por qué es interesante, aplicaciones, etc.}
+
+\todo[inline]{Motivar solución propuesta.}
+
+\section{Problema}\todoupdate{Motivar aplicación robo de vehículos.}
+
+% apoyar con fuentes los footnotes
 El robo de vehículos o accesorios de vehículos es un problema que afecta a toda la sociedad en Chile y en el mundo. Este problema se ha vuelto más relevante el último tiempo debido al crecimiento en el robo de vehículo motorizado y de los robos con violencia (ver Figura \ref{fig:antecedente}). Este fenómeno trae consigo un montón de costos para la sociedad, como incremento en la percepción de la seguridad, aumentos en la prima de los seguros de los asegurados, aumento en los costos de las aseguradoras \footnote{Considerando que el costo promedio incurrido en un auto asegurado robado y no recuperado es de \$ 5.000.000 de pesos, la pérdida total considerando solo los vehículos no recuperados para el año 2015 es de unos \$15.720 millones de pesos.} y el incremento de otros tipos de delitos \footnote{El destino de los vehículos robados es variado, se usan los autos para perpetrar otros delitos y huir, venderlos por piezas en talleres clandestinos o blanquear sus documentos para pasarlos por la frontera y venderlos o cambiarlos por droga en el extranjero.} 
 
 \begin{figure}[h]
@@ -142,7 +157,7 @@ El resultado esperado es descubrir los \textit{modus operandi} ocultos en los re
 
 El presente trabajo tiene un propósito académico, puesto que no cuenta con un cliente particular y tiene por objetivo estudiar ténicas de \textit{clustering} dinámico para detectar patrones en el contexto de robo de vehículos, sin embargo, potenciales beneficiarios del trabajo podrían ser las aseguradoras, los asegurados, carabineros de Chile y la sociedad.
 
-\section{Revisión del estado del arte}
+\section{Revisión del estado del arte}\todoupdate{Mejorar estilo de redacción.}
 
 El problema planteado consiste en un problema de \textit{clustering}, puesto que no se cuenta con una etiqueta del \textit{modus operandi} al que corresponde cada relato, siendo el propósito del trabajo descubrirla. Dentro de los métodos de \textit{clustering} que involucran texto el modelamiento de tópicos es el enfoque más prometedor.% Fuente/Justificación
 El modelamiento de tópicos es una herramienta estadística que busca encontrar los temas (tópicos) presentes en un conjunto de documentos (corpus), permitiendo organizar, buscar, indexar, explorar y comprender grandes colecciones de documentos. %Fuente
@@ -169,8 +184,11 @@ Dentro de los modelos de tópicos probabilísticos existen modelos estáticos y 
 En este trabajo se utilizarán técnicas de modelado dinámico de tópicos como las presentadas en \citep{wilson2011tracking,beykikhoshk2018discovering}, debido a que son capaces de modelar los tres puntos mencionados sobre dinamismo y se basan en tecnologías maduras.
 \end{enumerate}
 
+\todo[inline]{Describir organización del documento}
+
 \chapter{Marco teórico}
-% intro
+\todo[inline]{Añadir motivación}
+\todo[inline]{Describir organización del capítulo}
 \section{Mixture Models}
 \label{sec:mixture_model}
 
@@ -212,7 +230,7 @@ Un \textbf{Bayesian mixture model} es un \textit{mixture model} con una medida a
 \subsection{Distribución Dirichlet}
 \label{sec:dirichlet}
 
-La distribución Dirichlet es una generalización multivariada de la distribución beta, la cual tiene soporte sobre un \textbraceleft{simplex}, definido por:
+La distribución Dirichlet es una generalización multivariada de la distribución beta, la cual tiene soporte sobre un \textbf{simplex}, definido por:
 \begin{equation}
     S_{K} = \{x: 0\leq x_{k} \leq 1, \sum_{k=1}^{K}x_{k}=1\}
 \end{equation}
@@ -237,7 +255,7 @@ En la Figura \ref{img:dirichlet_distribution} se observa el efecto de los parám
     \includegraphics[width=\textwidth]{ch2/dirichlet_simplex.png}
     \caption{Densidad de la distribución Dirichlet para $K=3$ define una distribución sobre el \textit{simplex}, el cual puede ser representado por una superficie trinagular.}
     \label{img:dirichlet_distribution}
-\end{figure}
+\end{figure}\todoupdate{Actualizar figura, no se entiende la (e)}
 
 En general se asume simetría en los parámetros de la distribución Dirichlet de la forma $\alpha_{k}=\frac{\alpha}{K}$, de esta manera se tiene un $\alpha$ funciona como parámetro de concentración. En la Figura \ref{img:dirichlet_samples} se oberva una realización de una distribución Dirichlet para $\alpha \in \{0.1, 1, 10\}$ y $K\in\{2, 10, 100\}$, donde podemos observar que a mayor $alpha$ las componenetes del vector $x$ más similares se vuelven y esto es más notorio a mayor dimencionalidad debido a que hay más dimensiones donde distribuir la masa.\\
 
@@ -249,9 +267,6 @@ La distribución dirichlet es comúnmente usada en estadística Bayesiana, ya qu
     \caption{Muestra de una distribución Dirichlet simétrica para $\alpha \in \{0.1, 1, 10\}$ y $K\in\{2, 10, 100\}$.}
     \label{img:dirichlet_samples}
 \end{figure}
-
-
-
 
 \subsection{Dirichlet Process}
 \label{sec:dp}
@@ -309,25 +324,23 @@ donde $\pi \sim GEM(\alpha)$ y $\phi_{k} \sim H$. Entonces uno puede demostrar q
     \label{img:dp_samples}
 \end{figure}
 
-
 \subsection{Chinese Restaurant Process}
 \label{sec:crp}
-....
 
+\todo[inline]{Describir Chinese Restaurant Process}
 
 \section{Modelos de tópicos}
 
-En este capitulo se describe en detalle dos modelos de tópicos probabilísticos,  Latent Dirichlet Allocation (LDA) y Hierarchical Dirichlet Process (HDP), siendo este último la generalización no parámetrica de LDA, donde el número de tópicos a descubrir no está acotado y se infiere a partir del corpus.\\
+\todo[inline]{Motivar modelamiento de tópicos}
+\todo[inline]{Motivar clustering sharing parameter y luego LDA-HDP}
 
-Ambos modelos se consideran modelos de clustering que involucran multiples grupos de datos. Como los modelos de tópicos se suelen aplicar al dominio del texto a la colección de grupos se le llama corpus y a cada grupo se le llama documento, siendo un documento una colección palabras u observaciones. 
+% En este capitulo se describe en detalle dos modelos de tópicos probabilísticos,  Latent Dirichlet Allocation (LDA) y Hierarchical Dirichlet Process (HDP), siendo este último la generalización no parámetrica de LDA, donde el número de tópicos a descubrir no está acotado y se infiere a partir del corpus.\\
 
-Los modelos de tópicos trabajan bajo el asumpción de \textit{bag of words}, es decir, las palabras son intercambibles, por lo que podemos aplicar un modelo de clustering probabilístico a nivel documento, esto significa asumir que lo que las realizaciones independientes de un \textit{mixture model}
+% Ambos modelos se consideran modelos de clustering que involucran multiples grupos de datos. Como los modelos de tópicos se suelen aplicar al dominio del texto a la colección de grupos se le llama corpus y a cada grupo se le llama documento, siendo un documento una colección palabras u observaciones. 
 
-Motivar sharing parameter y luego LDA y HDP
+% Los modelos de tópicos trabajan bajo el asumpción de \textit{bag of words}, es decir, las palabras son intercambibles, por lo que podemos aplicar un modelo de clustering probabilístico a nivel documento, esto significa asumir que lo que las realizaciones independientes de un \textit{mixture model}
 
-\subsection{Latent Dirichlet Allocation}
-
-% citar ilustración o crear
+\subsection{Latent Dirichlet Allocation}\todoupdate{Mejorar estilo de redacción}
 
 A continuación se describe el proceso generativo de Latent Dirichlet Allocation (LDA). Sean \textit{K} tópicos, $\phi_{1:K}$ distribuciones de probabilidad sobre un vocabulario fijo, dibujadas por una $Dir(\frac{\eta}{|V|}1_{|V|})$. Para cada documento $d$ del corpus $D$ se asume que es dibujado por el siguiente proceso generativo (ver representación gráfica del modelo en la Figura \ref{img:lda}):
 \begin{enumerate}
@@ -373,15 +386,12 @@ La distribución a posterior:
 
 La distribución posterior es computacionalmente intratable para inferencia exacta, debido a que para normalizar la distribución debemos marginalizar sobre todas las variables ocultas y escribir la constante de normalización en términos de los parámetros del modelo. Para poder computar la posterior es necesario utilizar algoritmos de inferencia aproximada, donde el enfoque habitual es Markov Chain Monte Carlo (MCMC), en \citep{griffiths2004finding} se propone un algoritmo basado en Gibbs Sampling para la inferencia. Los métodos basados en MCMC entregan una estimación empírica de la distribución posterior llamada (traza), es decir, representan la posterior a través de muestras que distribuyen como esta, luego para estimación puntual, como por ejemplo obtener el valor esperado de la posterior se utiliza integración de Monte Carlo para aproximar la esperanza, esto es promediar los valores de la traza.
 
-
 Una representación equivalente en LDA sería generar cada palabra de un documento $d$ a partir de una multinomial sobre un tópico dibujado por una distribución $G_{d}$, formalmente, $w_{d,n}\sim Mult(\phi_{d,n})$, donde $\phi_{d,n} \sim G_{d}$ con $\phi_{d,n} \in \{\phi_{k}\}_{k=1}^{K}$, y $G_{d}(\phi)=\sum_{k=1}^{K}\pi_{d, k}\delta_{\phi_{k}}(\phi)$, donde $\delta_{\phi_{k}}(\phi) = \begin{cases}
     1 & \text{si $\phi_{k}=\phi$}  \\
     0 & \text{si no}
   \end{cases}$.\\\\
 
-\subsection{Hierarchical Dirichlet Process}
-
-
+\subsection{Hierarchical Dirichlet Process}\todoupdate{Mejorar estilo de redacción}
 
 Hierarchical Dirichlet Process (HDP) es una colección de DP que comparten una distribución base $G_{0}$, la cual además es dibujada a partir de un DP (ver representación gráfica del modelo en la Figura \ref{img:hdp}). Matemáticamente, a nivel corpus se tiene que la distribución base $H \sim Dir(\frac{1}{|V|}1_{|V|})$ y $G_{0} \sim DP(\gamma, H)$, luego, para cada documento $d$ del corpus $D$ se asume que es dibujado por el siguiente proceso generativo:
 \begin{enumerate}
@@ -425,7 +435,6 @@ Aplicando \textit{stick breaking construction} se tiene que para el DP dibujado 
     G_{0}(\phi)=\sum_{k=1}^{\infty}\beta_{k}\delta_{\phi_{k}}(\phi)
 \end{align}
 
-
 Así, $G_{0}$ es discreto y tiene soporte en los átomos $\phi = \{\phi\}_{k=1}^{\infty}$ con pesos $\beta=\{\beta_{k}\}_{k=1}^{\infty}$, siendo la distribución de $\beta$ escrita como $\beta \sim GEM(\gamma)$. La construcción a nivel documento de $G_{d}$ es:
 
 \begin{align}
@@ -463,10 +472,10 @@ Donde $\phi = \{\phi_{k}\}_{k=1}^{\infty}$ son los mismos átomos de $G_{0}$. En
 
 Al igual que LDA la distribución posterior es intratable, por lo que en \citep{teh2005sharing} se marginaliza $G_{0}$ y $G_{d}$'s afuera, obteniéndose así un nuevo proceso generativo denominado \textit{Chinese restaurant franchise process} (CRF), esta representación permite construir algoritmos eficientes basados en Gibbs Sampling, como en la implementación utilizada disponible en \citep{HDP}.
 
-\subsubsection{LDA versus HDP}
+\subsubsection{LDA versus HDP}\todoupdate{Mejorar estilo de redacción}
 HDP es un modelo no paramétrico similar en estructura a LDA, la principal desventaja de LDA frente a HDP es que LDA requiere escoger el número de tópicos $K$ por adelantado, por otro lado, en HDP el número de tópicos no está acotado y es inferido a partir de los datos. En un enfoque tradicional, se requiere de entrenar múltiples veces LDA para diferentes valores de $K$ y se escoge el que tiene mejor la configuración con mejor desempeño en un conjunto de validación, por lo que LDA termina siendo computacionalmente más costoso que HDP, además este enfoque se vuelve impracticable cuando el conjunto de datos es grande. En el aspecto cualitativo ambos modelos entregan tópicos igual de consistentes, en cuanto a métricas de desempeño como $\textit{perplexity}$ HDP suele tener mejor desempeño \citep{teh2005sharing}.
 
-\subsection{Interpretación de tópicos}
+\subsection{Interpretación de tópicos}\todoupdate{Mejorar estilo de redacción}
 Los modelos de tópicos se caracterizan por tener un alto poder interpretativo, esto se debe a que la distribución de probabilidad de cada tópico sobre el vocabulario nos da una idea del tema al que pertenece, por otro lado la mezcla de tópicos de cada documento muestra que tan importante es cada tópico en la generación de estos, como también dentro del corpus. En este sentido, las visualizaciones nos ayudan a interpretar mejor los resultados de los modelos de tópicos, respondiendo a las siguientes preguntas, ¿Cuál es el significado de cada tópico?¿Cuán predonimnante es cada tópico?¿Cómo se relacionan los tópicos entre sí?\\
 
 En \citep{sievert2014ldavis} desarrollaron una herramienta de visualización web para responder a estas preguntas. Para responder la pregunta 1 se incorpora un gráfico de barras que muestra las palabras más relevantes del tópico seleccionado dado un parámetro $\lambda \in [0,1]$. A través de una visualización espacial responde la pregunta 2 y 3. La visualización espacial consiste en aplicar técnicas de reducción de dimensionalidad como TSNE \citep{maaten2008visualizing} o PCA \citep{wold1987principal} (en este caso se utilizó TSNE) a la matriz de distancia entre tópicos, usando Jensen-Shannon divergence \citep{endres2003new} como médida de distancia. Una vez cada tópico es mapeado a un punto en un espacio de dos dimensiones se dibuja un círculo con centro en este punto y con radio proporcional a la cantidad de tokens generados por el tópico.\\
@@ -482,9 +491,12 @@ Para esto en \citep{sievert2014ldavis} se define una métrica denominada \textit
 
 \section{Modelamiento de la evolución de los tópicos en el tiempo}
 
+\todo[inline]{Motivar}
+
 Nuestro objetivo es modelar la evolución en el tiempo de los tópicos, para esto el corpus es divido en $T$ épocas, en cada época se entrena un modelo de tópicos estático, obteniéndose así $T$ conjuntos de tópicos $\phi=\{\phi_{1}, \ldots, \phi_{T}\}$, donde $\phi_{t}=\{\phi_{t,1}, \ldots, \phi_{t,K_{t}}\}$ es el conjunto de tópicos que describen la época $t$, y $K_{t}$ el número de tópicos inferido en esa época.
 
-\subsection{Gráfo de similitud temporal}
+\subsection{Gráfo de similitud temporal}\todoupdate{Mejorar estilo de redacción}
+
 Para relacionar los tópicos de una época necesitamos una medida de similitud $\rho \in [0,1]$, con esta médida de similitud se puede construir un gráfo, donde los nodos son los tópicos de una época y los arcos relacionan tópicos de una época con la siguiente, siendo el peso del arco la similitud entre los tópicos. Una vez construido el grafo se eliminan las conexiones débiles en base a un umbral $\zeta \in [0,1]$ a definir, reteniendo solo aquellas conexiones entre tópicos suficientemente similares entre épocas adyacentes, matemáticamente podamos el arco entre los tópicos $\phi_{t,i}$ y $\phi_{t+1,j}$ si $\rho(\phi_{t,i}, \phi_{t+1,j})\leq \zeta$. Una ilustración conceptual del grafo de similitud es mostrado en la Figura \ref{img:graph}, este muestra tres épocas consecutivas.
 
 \begin{figure}
@@ -506,7 +518,8 @@ Está metodología permite fácilmente detectar desaparición de un tópico, nac
 
 Un aspecto relevante de esta metodología es definir el úmbral de corte, el cual no es fácilmente interpretable, además el úmbral depende de la médida de similitud escogida, dificultando así la comparación entre médidas de similitud. En \cite{beykikhoshk2018discovering} proponen una alternativa más interpretable para definir el úmbral, para esto estiman la función de distribución acumulada (cdf) del grafo inicial, donde todos los nodos de una época están conectados con todos los nodos de la época adyacente, sea $F_{p}$ la cdf sobre las similitudes del grafo inicial, luego sea $\zeta \in [0,1]$ el punto operante de la cdf, luego eliminamos el arco entre los tópicos $\phi_{t,i}$ y $\phi_{t+1,j}$ si $\rho(\phi_{t,i}, \phi_{t+1,j})\leq F_{p}^{-1}(\zeta)$, donde  $F_{p}^{-1}(\zeta)$ es el cuantil $\zeta$ de $F_{p}$.
 
-\subsection{Medidas de similitud}
+\subsection{Medidas de similitud}\todoupdate{Mejorar estilo de redacción}
+
 Los tópicos son distribuciones de probabilidad sobre un vocabulario fijos de términos. La gran mayoría de medidas de similitud comparan vectores con el mismo dominio y dimensión, esto significa que los tópicos de épocas adyacentes deben compartir el mismo vocabulario, matemáticamente, sea $\phi_{t, i}$ un tópico de la época $t$ y $V_{t}$ su vocabulario, sea  $\phi_{t+1, j}$ un tópico de la época $t+1$ y $V_{t+1}$ su vocabulario, lo más probables es que existan palabras en $V_{t}$ que no existan en $V_{t+1}$ y viceversa, para poder comparar tópicos en estas épocas adyacentes se debe construir el vocabulario $V_{t+1}^{'}=V_{t}\cup V_{t+1}$, luego se aplica $padding$ a los vectores $\phi_{t, i}$ y $\phi_{t+1, j}$, es decir, se rellenan con ceros las posiciones de palabras que no están en el vocabulario de su dominio.\\
 
 La gran desventaja del enfoque anterior es que no captura similitud entre palabras, es decir, dos palabras diferentes que pueden llegar a ser sinónimos ocuparan una posición diferente dentro del vector, siendo no robusta a cuando una palabra esta presente en la época $t$ y no en $t-1$ por lo que no hay forma de compararla por ejemplo con la palabra de $t-1$ más símil, por lo que se compara la palabra consigo misma, donde en $t$ tiene un peso distinto de cero y en $t-1$ un peso nulo. El peor caso sería considerar los vocabularios $V_{t}$ y $V_{t+1}$, donde $V_{t}\cap V_{t+1} =  \emptyset$, a pesar de que cada palabra en $V_{t}$ tiene un sinónimo en $V_{t+1}$ la similitud entre tópicos entre las épocas $t$ y $t+1$ sería cero.\\
@@ -518,7 +531,7 @@ Para lidiar con el problema anterior en \citep{kusner2015word} se propone una me
 \includegraphics[width=1\textwidth]{ch2/wmd-obama.png}
     \caption{Espacio vectorial de los \textit{word embeddings} de las palabras de dos tópicos con un vocabulario de tamaño 4.}
     \label{img:wmd_obama}
-\end{figure}
+\end{figure}\todoref{Citar}
 
 Matemáticamente, la WMD entre el tópico $i$ de la época $t$ y el tópico $j$ de la época $t+1$ viene dado por $WMD(\phi_{i,t}, \phi_{j,t+1})$:
 
@@ -533,9 +546,19 @@ Donde $T_{u,v}$ es el flujo que va de la palabra $u$ del tópico $i$ de la époc
 
 WMD es una medida de distancia intensiva en recursos computacionales, para entender mejor esto utilizaremos la representación poliedral del problema, sea $N$ el tamaño del vocabulario entre dos épocas adyacentes, luego la región factible del problema anterior se puede representar como $\{x| Ax=b, x\geq 0\}$, con $A\in \mathbb{R}^{2N\times N^{2}}$ la matriz de costos, $b\in \mathbb{R}^{2N}$ el flujo disponible y $x\in \mathbb{R}^{N}$ el flujo a enviar por cada uno de los arcos, la complejidad del mejor tiempo promedio de resolver este problema de optimización escala $\mathcal{O}(N^{2}log N)$ \citep{pele2009fast}, por lo que si se reduce el vocabulario a un décimo esto trae una reducción de al menos unas 200 veces (en el peor caso promedio). Los tópicos siguen una distribución de ley de potencia sobre el vocabulario, donde una fracción de las palabras concentran la mayor parte de la masa de la distribución. Además, en la práctica la interpretación de los tópicos se basa en los top $T$ palabras más probables (o relevantes) con $T \in [5, 30]$, entonces, podemos aprovechar esta estructura para efectos de computar la WMD de un forma más eficiente, por ejemplo, utilizando solo las palabras que capturan un 95\% de la distribución acumulada del tópico.
 
-\chapter{Experimento}
+\todosec[inline]{Resumen Método propuesto}
 
-\section{Datos}
+\todosec[inline]{Métricas}
+
+\todosec[inline]{Procesamiento}
+
+\chapter{Experimento}
+\todo[inline]{Motivación}
+\todo[inline]{Describir organización del contenido}
+
+\todosec[inline]{Diseño del experimento}
+
+\section{Datos}\todosec{Descripción del dataset: mejorar estilo y añadir ejemplos}
 
 Para este experimento se cuenta con las fuentes de datos de la Asociación de Aseguradores de Chile (AACH), corresponde a los relatos que las víctimas del robo de sus vehículos dan a las aseguradoras, lo cual corresponde a 49.015 relatos entre el 2011 y 2016.\\
 
@@ -543,38 +566,37 @@ Para este experimento se cuenta con las fuentes de datos de la Asociación de As
 % gráficos del Informe_1_fondef?
 % hablar del nivel de granularidad, justificar en base facilidad de análisis de resultados, interpretación, largo del grafo, combinatoria, etc
 
-
 Para el uso de WMD es necesario contar con \textit{words embeddings}, para esto se utilizaron los \textit{embeddings} de \citep{fastextSBWC}, estos \textit{embeddings} fueron obtenidos utilizando el algoritmo FastText \citep{bojanowski2017enriching} sobre el corpus Spanish Billion Word Corpus (SBWC) \citep{cardellinoSBWCE}. FasText en comparación a otros enfoques para extraer \textit{embeddings} representa los \textit{tokens} a través de n-gramas de caracteres, de esta manera se pueden obtener \textit{embeddings} de \textit{tokens} no vistos durante el entrenamiento a partir de los \textit{embeddings} de los caracteres que lo componen.
 
-\section{Procesamiento}
+\section{Procesamiento}\todoredo{Rehacer}
 
-En minería de texto con el objetivo de extraer el core de palabras del corpus se recurre métodos para reducir el vocabulario, la reducción del vocabulario mejora la significancia estadística de los modelos, puesto que se obtiene un mejor balance entre cantidad de parámetros y cantidad de observaciones, por otro lado puede verse fácilitada la interpretación de los tópicos al remover palabras que aportan poca información. \\
+En minería de texto con el objetivo de extraer el core de palabras del corpus se recurre métodos para reducir el vocabulario, la reducción del vocabulario mejora la significancia estadística de los modelos, puesto que se obtiene un mejor balance entre cantidad de parámetros y cantidad de observaciones, por otro lado puede verse fácilitada la interpretación de los tópicos al remover palabras que aportan poca información.\todo{Mover a marco teórico} \\
 
-El paso cero en el procesamiento de textos es tokenizar, la tokenización es una operación sobre una cadena de carácteres (\textit{string}) que consiste en dividir el \textit{string} en un conjunto de términos, en este caso la división se hizo por el carácter espacio, como resultado de esto se obtiene una lista de elementos, a cada elemento de esta lista se le denomina \textit{token} que en términos simples puede considerarse como una palabra para el ejemplo mencionado. \\
+El paso cero en el procesamiento de textos es tokenizar, la tokenización es una operación sobre una cadena de carácteres (\textit{string}) que consiste en dividir el \textit{string} en un conjunto de términos, en este caso la división se hizo por el carácter espacio, como resultado de esto se obtiene una lista de elementos, a cada elemento de esta lista se le denomina \textit{token} que en términos simples puede considerarse como una palabra para el ejemplo mencionado\todo{Mover a marco teórico}. \\
 
-Luego, en el primer nivel de procesamiento no interesa hacer distinción entre mayúsculas o minúsculas\footnote{En análisis de sentimiento puede ser interesante ya que las personas suelen expresar mensajes de enfado con letras capitales, por lo que las letras capitales añaden información al análisis.}, por ende, los carácteres de cada token son llevados a minúscula, también se eliminaron carácteres y tokens que no aportan información, como símbolos de puntuación, correos electrónicos y tokens que contienen números. En la figura \ref{img:cum_dist1} se observa la distribución acumulada de los tokens del corpus a este nivel de procesamiento, adicionalmente se tiene que el 50\% de los \textit{tokens} del vocabulario ocurren una sola vez, el 80\% tiene una ocurrencia menor o igual a 5 y el 95\% de la distribución acumulada puede ser explicada con 4199 \textit{tokens} (9\%) del vocabulario, se concluye que la distribución es sumamente pesada y es necesario recurrir a métodos adicionales para su reducción.\\
+Luego, en el primer nivel de procesamiento no interesa hacer distinción entre mayúsculas o minúsculas\footnote{En análisis de sentimiento puede ser interesante ya que las personas suelen expresar mensajes de enfado con letras capitales, por lo que las letras capitales añaden información al análisis.}, por ende, los carácteres de cada token son llevados a minúscula, también se eliminaron carácteres y tokens que no aportan información, como símbolos de puntuación, correos electrónicos y tokens que contienen números. En la figura \ref{img:cum_dist1} se observa la distribución acumulada de los tokens del corpus a este nivel de procesamiento, adicionalmente se tiene que el 50\% de los \textit{tokens} del vocabulario ocurren una sola vez, el 80\% tiene una ocurrencia menor o igual a 5 y el 95\% de la distribución acumulada puede ser explicada con 4199 \textit{tokens} (9\%) del vocabulario, se concluye que la distribución es sumamente pesada y es necesario recurrir a métodos adicionales para su reducción. \todo{Mover a marco teórico}\\
 
 \begin{figure}
     \centering
     \includegraphics[width=0.8\textwidth]{ch3/cum_dist_1.png}
     \caption{Frecuencia acumulada de los tokens únicos aplicando hasta el primer nivel de procesamiento. El eje horizontal es el acumulado de tokens únicos en orden decreciente de ocurrencia. Los puntos corresponden a los cuantiles 60\%, 80\%, 90\%, 95\% y 99\%.}
     \label{img:cum_dist1}
-\end{figure}
+\end{figure}\todoredo{Rehacer}
 
-En el segundo nivel de procesamiento se eliminaron las \texit{stopwords}, palabras que aportan poca información, como artículos, preposiciones y conectores, para esto se utilizó la lista de \textit{stopwords} disponible en el paquete NLTK de Python \citep{bird2009natural} la cual cuenta con 313 palabras. Además, esta lista de \textit{stopwords} se alimentó con \textit{stopwords} contextuales, palabras específicas del corpus que aportan poca información, para esto se hizó un etiquetado de las 1000 palabras más frecuentes del corpus incorporando 417 nuevas palabras, algunos ejemplos son palabras que hacen referencia a vehículo y robo, puesto que todos los documentos corresponden a robos de vehículos.\\
+En el segundo nivel de procesamiento se eliminaron las \texit{stopwords}, palabras que aportan poca información, como artículos, preposiciones y conectores, para esto se utilizó la lista de \textit{stopwords} disponible en el paquete NLTK de Python \citep{bird2009natural} la cual cuenta con 313 palabras. Además, esta lista de \textit{stopwords} se alimentó con \textit{stopwords} contextuales, palabras específicas del corpus que aportan poca información, para esto se hizó un etiquetado de las 1000 palabras más frecuentes del corpus incorporando 417 nuevas palabras, algunos ejemplos son palabras que hacen referencia a vehículo y robo, puesto que todos los documentos corresponden a robos de vehículos.\todo{Mover a marco teórico}\\
 
-El tercer nivel de procesamiento consiste en normalizar los tokens para reducir aún más el vocabulario, como métodos de normalización los más utilizados son \textit{stemming}  y lematización. \textit{Stemming} es el proceso de llevar una palabra a su raíz (\textit{stem}), en la práctica \textit{stemming} consiste en aplicar un algoritmo basado en ciertas reglas gramáticales para extraer sufijos \citep{porter1980algorithm}, como desventaja es que stemming no tiene en cuenta el contexto de la palabra por lo que la raíz obtenida puede no corresponder a la raíz verdadera de la palabra, además, para el caso de modelamiento de tópicos los tópicos se vuelve más difícil de interpretar, ya que palabras con significado completamente distinto terminan con la misma raíz o bien la raíz encontrada no tiene un significado claro. Por otro lado, lematización es el proceso de agrupar juntas las formas flexionadas de una palabra para que puedan analizarse como un elemento, identificado como lema, su diferencia principal con \textit{stemming} es que opera con conocimiento del contexto de la palabra para discriminar entre palabras que tienen significado diferente dependiendo del \textit{part of speech tagging} (POST) y de una tabla de búsqueda (\textit{lookup table}). Como método de normalización se decidió utilizar lematización en vez de \texit{stemming} debido a que tiene menos impacto en la interpretación de los tópicos, sin embargo es una operación más intensiva debido a que \texit{stemming} es un algoritmo basado en reglas simples mientras que en lematización se suele usar redes neuronales recurrentes (RNNs) para el POST y una vez determinadas las etiquetas gramaticales de las palabras en un documento se utiliza una \textit{lookup table} para encontrar el lema correspondiente. La implementación de lematización utilizada es la implementación de lematización en español del paquete spaCy de Python \citep{spacy2}.\\
+El tercer nivel de procesamiento consiste en normalizar los tokens para reducir aún más el vocabulario, como métodos de normalización los más utilizados son \textit{stemming}  y lematización. \textit{Stemming} es el proceso de llevar una palabra a su raíz (\textit{stem}), en la práctica \textit{stemming} consiste en aplicar un algoritmo basado en ciertas reglas gramáticales para extraer sufijos \citep{porter1980algorithm}, como desventaja es que stemming no tiene en cuenta el contexto de la palabra por lo que la raíz obtenida puede no corresponder a la raíz verdadera de la palabra, además, para el caso de modelamiento de tópicos los tópicos se vuelve más difícil de interpretar, ya que palabras con significado completamente distinto terminan con la misma raíz o bien la raíz encontrada no tiene un significado claro. Por otro lado, lematización es el proceso de agrupar juntas las formas flexionadas de una palabra para que puedan analizarse como un elemento, identificado como lema, su diferencia principal con \textit{stemming} es que opera con conocimiento del contexto de la palabra para discriminar entre palabras que tienen significado diferente dependiendo del \textit{part of speech tagging} (POST) y de una tabla de búsqueda (\textit{lookup table}). Como método de normalización se decidió utilizar lematización en vez de \texit{stemming} debido a que tiene menos impacto en la interpretación de los tópicos, sin embargo es una operación más intensiva debido a que \texit{stemming} es un algoritmo basado en reglas simples mientras que en lematización se suele usar redes neuronales recurrentes (RNNs) para el POST y una vez determinadas las etiquetas gramaticales de las palabras en un documento se utiliza una \textit{lookup table} para encontrar el lema correspondiente. La implementación de lematización utilizada es la implementación de lematización en español del paquete spaCy de Python \citep{spacy2}.\todo{Mover a marco teórico}\\
 
-El cuarto y último nivel de procesamiento corresponde a eliminar tokens con baja frecuencia, puesto que el modelo no será capaz de levantar patrones en tokens que aparecen una única vez o con una ocurrencia poco significativa, luego, como el corpus está particionado en épocas, se eliminaron aquellos tokens que aparecen en menos de 5 documentos dentro de una época.
+El cuarto y último nivel de procesamiento corresponde a eliminar tokens con baja frecuencia, puesto que el modelo no será capaz de levantar patrones en tokens que aparecen una única vez o con una ocurrencia poco significativa, luego, como el corpus está particionado en épocas, se eliminaron aquellos tokens que aparecen en menos de 5 documentos dentro de una época.\todo{Mover a marco teórico}
 
 \begin{figure}
     \centering
     \includegraphics[width=0.8\textwidth]{ch3/cum_dist_2.png}
     \caption{Frecuencia acumulada de los tokens únicos aplicando hasta el cuarto nivel de procesamiento. El eje horizontal es el acumulado de tokens únicos en orden decreciente de ocurrencia. Los puntos corresponden a los cuantiles 60\%, 80\%, 90\%, 95\% y 99\%.}
     \label{img:cum_dist2}
-\end{figure}
+\end{figure}\todoredo{Rehacer}
 
-En la figura \ref{img:cum_dist2} se presenta la distribución acumulada del vocabulario hasta el cuarto nivel de procesamiento, en donde se observa que la cola de distribución es bastante menos pesada que bajo el primer nivel de procesamiento, además, como se observa en la tabla \ref{table:processing_stats} el tamaño del vocabulario se redujo a menos de un décimo del vocabulario obtenido bajo el primer nivel de procesamiento y es menos de un décimo del tamaño del corpus, por lo que bajo este nivel de procesamiento es posible desarrollar modelos con mayor fuerza estadística.
+En la figura \ref{img:cum_dist2} se presenta la distribución acumulada del vocabulario hasta el cuarto nivel de procesamiento, en donde se observa que la cola de distribución es bastante menos pesada que bajo el primer nivel de procesamiento, además, como se observa en la tabla \ref{table:processing_stats} el tamaño del vocabulario se redujo a menos de un décimo del vocabulario obtenido bajo el primer nivel de procesamiento y es menos de un décimo del tamaño del corpus, por lo que bajo este nivel de procesamiento es posible desarrollar modelos con mayor fuerza estadística.\todoredo{Rehacer}
 
 \begin{table}[H]
     \begin{tabular}{|c|r|r|r|}
@@ -586,10 +608,9 @@ En la figura \ref{img:cum_dist2} se presenta la distribución acumulada del voca
         \end{tabular}
     \caption{Estadísticas del corpus bajo distintos niveles de procesamientos, \textbf{raw}: sin procesamiento, \textbf{ch}: eliminación de símbolos de puntuación, correos electrónicos y tokens con números, \textbf{ch+s+l+f}: además incluye eliminación de stopwords (s), lemmatización (l) y eliminación de tokens con baja ocurrencia (f).}
     \label{table:processing_stats}
-\end{table}
+\end{table}\todoredo{Rehacer}
 
-
-En la tabla \ref{table:innovation_rate} se muestra el detalle del vocabulario para cada una de las épocas tras procesar el corpus, de aquí se extrae que en promedio un 21.28\% del vocabulario se olvida de una época a otra y un 28.19\% es nuevo, es otras palabras, en promedio alrededor de un 50\% del vocabulario no es común entre tópicos de épocas adyacentes, esto justifica la necesidad de utilizar médidas de similitud que capturen la similitud entre palabras de épocas adyacentes ante la renovación que sufre el vocabulario en el tiempo.
+En la tabla \ref{table:innovation_rate} se muestra el detalle del vocabulario para cada una de las épocas tras procesar el corpus, de aquí se extrae que en promedio un 21.28\% del vocabulario se olvida de una época a otra y un 28.19\% es nuevo, es otras palabras, en promedio alrededor de un 50\% del vocabulario no es común entre tópicos de épocas adyacentes, esto justifica la necesidad de utilizar médidas de similitud que capturen la similitud entre palabras de épocas adyacentes ante la renovación que sufre el vocabulario en el tiempo.\todoredo{Rehacer}
 
 \begin{table}[h]
     \begin{tabular}{|r|r|r|r|r|}
@@ -603,51 +624,50 @@ En la tabla \ref{table:innovation_rate} se muestra el detalle del vocabulario pa
     \end{tabular}
     \caption{Evolución del vocabulario en el tiempo, \textbf{old\_vocab}: corresponde al vocabulario del período $t-1$, \textbf{new\_vocab}: corresponde al vocabulario del período $t$, \textbf{\%old\_vocab}: porcentaje de tokens del período $t-1$ que ya no están en el período $t$ y \textbf{\%new\_vocab}: porcentaje de tokens del período $t$ que no están en el período $t-1$.}
     \label{table:innovation_rate}.
-\end{table}
+\end{table}\todoredo{Rehacer}
 
-\section{Análisis cuantitativo de resultados}
+\section{Análisis cuantitativo de resultados}\todoredo{Rehacer}
 
 Al aplicar HDP de forma independiente en cada una de los épocas se obtuvo el siguiente número de tópicos [8, 10, 9, 8, 8, 9].
 
 \subsubsection{Distribución acumulada de los tópicos}
-En la figura \ref{img:cum_dist3} se muestra la distribución acumulada promedio de los tópicos, se tiene que en promedio un 8.54\% y 21.42\% del vocabulario se puede capturar un 80\% y 95\% respectivamente de la distribución acumulada de los tópicos, además, para un 99\% de los tópicos basta con un 37\% del vocabulario para capturar el 95\% de su distribución acumulada, por tanto, una representación incompleta de los tópicos usando las palabras más probables que capturan el 80\% de la distribución acumulada trae consigo una disminución importante en el tamaño del vocabulario. 
-
-% tabla con tiempos de ejecución
+En la figura \ref{img:cum_dist3} se muestra la distribución acumulada promedio de los tópicos, se tiene que en promedio un 8.54\% y 21.42\% del vocabulario se puede capturar un 80\% y 95\% respectivamente de la distribución acumulada de los tópicos, además, para un 99\% de los tópicos basta con un 37\% del vocabulario para capturar el 95\% de su distribución acumulada, por tanto, una representación incompleta de los tópicos usando las palabras más probables que capturan el 80\% de la distribución acumulada trae consigo una disminución importante en el tamaño del vocabulario\todoredo{Rehacer}. 
 
 \begin{figure}
     \centering
     \includegraphics[width=0.8\textwidth]{ch3/cum_dist_3.png}
     \caption{Distribución acumulada promedio de los tópicos en función del vocabulario. El punto (x,y) en el gráfico corresponde a la fracción x del vocabulario que explica la fracción y de la distribución acumulada del tópico. Los puntos corresponden a los cuantiles 60\%, 80\%, 90\%, 95\% y 99\%.}
     \label{img:cum_dist3}
-\end{figure}
+\end{figure}\todoredo{Rehacer}
 
-\subsubsection{Construicción del grafo temporal}
+\subsubsection{Construcción del grafo temporal}
 
 El modelo propuesto considera tres hiperparámetros:
 \begin{itemize}
     \item $q \in [0,1]$: para el cálculo de WMD se utilizan las palabras más probables del tópico que explican un 100q\% de la distribución acumulada del tópico. Este parámetro genera un nuevo tópico (se normaliza para sumar 1) con un vocabulario más reducido.
     \item $\lambda \in [0,1]$: este parámetro pondera la probabilidad de la palabra dentro del tópico con su exclusividad. El nuevo tópico generado es normalizado para sumar 1.
     \item $\zeta \in [0,1]$: punto operante de la cdf del grafo inicial, permite definir el cuantil que se usará como úmbral para eliminar arcos con similitud menor a este. 
-\end{itemize}
+\end{itemize}\todo{Marco teórico}
 
-Para entender de mejor manera la influencia de cada uno de estos parámetros se hizó un etiquetado de los arcos del grafo temporal, asignando un 1 a los arcos que deberían estar presente y 0 a los que no. Luego, se hizó una búsqueda a través de la siguiente grilla de parámetros, $\lambda \in \{0.2, 0.4, 0.6, 0.8, 1.0\}$, $q \in \{0.2, 0.4, 0.6, 0.8, 0.9, 0.95\}$ y $\zeta \in \{0.05, 0.10, ..., 0.90, 0.95\}$.\\
+Para entender de mejor manera la influencia de cada uno de estos parámetros se hizó un etiquetado de los arcos del grafo temporal, asignando un 1 a los arcos que deberían estar presente y 0 a los que no. Luego, se hizó una búsqueda a través de la siguiente grilla de parámetros, $\lambda \in \{0.2, 0.4, 0.6, 0.8, 1.0\}$, $q \in \{0.2, 0.4, 0.6, 0.8, 0.9, 0.95\}$ y $\zeta \in \{0.05, 0.10, ..., 0.90, 0.95\}$. \todo{Marco teórico y diseño de experimento}\\
 
 Como métrica de evaluación se propone \textit{F-score}, definida por:
 \begin{align}
     F-score = 2\times \frac{\text{precision}\cdot \text{recall}}{\text{precision}+\text{recall}}
 \end{align}
+\todoredo{Usar métrica acorde al marco teórico}
 , donde \textit{recall} es la tasas de acierto sobre la clase positiva (presencia de un arco) y \textit{precision} es la tasa de acierto de las predicciones sobre la clase positiva. Esta métrica permite balancear la acertividad con la precisión, así una configuración que no pode ningún arco tendra un \textit{recall}=1, pero un bajo \textit{precision} (notar que el númerador decrece más rápido que el denominador). \\
 
-De la figura \ref{img:f_score} se observa que \textit{F-score} tiende a ser creciente en función de $\zeta$, esto se debe a que menor $\zeta$ más falsos positivos (pues son más arcos los que sobreviven) empeorando así el \textit{precision} y por consecuencia el \textit{F-score}. Las configuraciones óptimas ocurren en su mayoría en $\zeta=0.95$ con excepción de tres configuraciones de las treinta posibles de $q\times \lambda$, las cuales se dan en $\zeta=0.9$ para los parámetros $q=0.2$ con $\lambda \in \{0.8, 1\}$ y $q=0.4$ con $\lambda=0.2$, sin embargo, el valor óptimo alcanzado es bastante cercano al obtenido con $\zeta=0.95$. En cuanto a $\lambda$ se observa que no existen muchas diferencias entre $\lambda\in\{0.6, 0.8, 1.0\}$ a diferencia de $\lambda \in \{0.2, 0.4\}$ que suele estar significativamente por debajo de las otras curvas, además se observa una dominancia débil en $\lambda$, es decir, en el $\zeta$ óptimo dado un $(q, \lambda)$ un $\lambda$ mayor no es peor. En el caso del parámetro $q$ se observa que para $q\geq 0.6$ el óptimo obtenido para $\lambda\geq 0.4$ es el mismo, en cambio para $q=0.4$ esto se cumple para todo $\lambda\geq 0.6$ y con $q=0.2$ para $\lambda \geq 0.8$. 
+De la figura \ref{img:f_score} se observa que \textit{F-score} tiende a ser creciente en función de $\zeta$, esto se debe a que menor $\zeta$ más falsos positivos (pues son más arcos los que sobreviven) empeorando así el \textit{precision} y por consecuencia el \textit{F-score}. Las configuraciones óptimas ocurren en su mayoría en $\zeta=0.95$ con excepción de tres configuraciones de las treinta posibles de $q\times \lambda$, las cuales se dan en $\zeta=0.9$ para los parámetros $q=0.2$ con $\lambda \in \{0.8, 1\}$ y $q=0.4$ con $\lambda=0.2$, sin embargo, el valor óptimo alcanzado es bastante cercano al obtenido con $\zeta=0.95$. En cuanto a $\lambda$ se observa que no existen muchas diferencias entre $\lambda\in\{0.6, 0.8, 1.0\}$ a diferencia de $\lambda \in \{0.2, 0.4\}$ que suele estar significativamente por debajo de las otras curvas, además se observa una dominancia débil en $\lambda$, es decir, en el $\zeta$ óptimo dado un $(q, \lambda)$ un $\lambda$ mayor no es peor. En el caso del parámetro $q$ se observa que para $q\geq 0.6$ el óptimo obtenido para $\lambda\geq 0.4$ es el mismo, en cambio para $q=0.4$ esto se cumple para todo $\lambda\geq 0.6$ y con $q=0.2$ para $\lambda \geq 0.8$.\todoredo{Rehacer} 
 
 \begin{figure}
     \centering
     \includegraphics[width=1\textwidth]{ch3/f_score.png}
     \caption{F-score (eje vertical) para diferentes configuraciones de los hiperparámetros $q$, $\zeta$ (eje horizontal) y $\lambda$.}
     \label{img:f_score}
-\end{figure}
+\end{figure}\todoredo{Rehacer}
 
-De la tabla \ref{table:f_score} se observa que la configuración óptima se alcanza con $q=0.2$ con $\zeta=0.9$, además esto ocurre tanto para $\lambda=0.8$ como $\lambda=1.0$, por lo que es escoje la configuración $(q, \zeta, \lambda) = (0.2, 0.9, 1.0)$ para construir el grafo temporal. En la figura \ref{img:cdf} se observa la distribución acumulada de la similitud para el grafo completamente conectado, por lo que el para $zeta=0.9$ el úmbral viene siendo 0.21.
+De la tabla \ref{table:f_score} se observa que la configuración óptima se alcanza con $q=0.2$ con $\zeta=0.9$, además esto ocurre tanto para $\lambda=0.8$ como $\lambda=1.0$, por lo que es escoje la configuración $(q, \zeta, \lambda) = (0.2, 0.9, 1.0)$ para construir el grafo temporal. En la figura \ref{img:cdf} se observa la distribución acumulada de la similitud para el grafo completamente conectado, por lo que el para $zeta=0.9$ el úmbral viene siendo 0.21.\todoredo{Rehacer}
 
 \begin{table}[H]
     \begin{tabular}{|c|c|c|c|c|}
@@ -662,24 +682,24 @@ De la tabla \ref{table:f_score} se observa que la configuración óptima se alca
     \end{tabular}
     \caption{Configuración de $\zeta$ para cada $q$ que máximiza el \textit{F-score}.}
     \label{table:f_score}
-\end{table}
-
+\end{table}\todoredo{Rehacer}
 
 \begin{figure}
     \centering
     \includegraphics[width=0.8\textwidth]{ch3/cdf.png}
     \caption{Estimación empírica de la función de distribución acumulada (cdf) de la similitud entre tópicos correspondiente al grafo temporal completamente conectado para la configuración óptima $(q, \lambda)=(0.2, 1.0)$.}
     \label{img:cdf}
-\end{figure}
+\end{figure}\todoredo{Rehacer}
 
-% tratar de computar el caso donde q=1.0 (estimación de tiempo =100h)
-En la figura \ref{img:speedup} se observa que la configuración óptima es en promedio 184 veces más eficiente que $q=0.95$, esto se debe a que $q=0.2$ es un 0.3\% del vocabulario (6 palabras en promedio) y $q=0.95$ alrededor de un 21\% (488 palabras en promedio).
+En la figura \ref{img:speedup} se observa que la configuración óptima es en promedio 184 veces más eficiente que $q=0.95$, esto se debe a que $q=0.2$ es un 0.3\% del vocabulario (6 palabras en promedio) y $q=0.95$ alrededor de un 21\% (488 palabras en promedio).\todoredo{Rehacer}
+
+
 \begin{figure}
     \centering
     \includegraphics[width=1\textwidth]{ch3/speedup.png}
     \caption{Speedup promedio de la construcción del grafo en función de $q$. El speedup 1 equivale al tiempo más lento el cual está asciado a $q=0.95$ que es el valor de $q$ más grande y por ende con menor reducción de vocabulario de los tópicos a la hora de computar WMD.}
     \label{img:speedup}
-\end{figure}
+\end{figure}\todoredo{Rehacer}
 
 %\ref{img:ground_truth} y \ref{img:pruned_graph}
 %conteo de arcos y blabla
@@ -691,19 +711,24 @@ En la figura \ref{img:speedup} se observa que la configuración óptima es en pr
     \includegraphics[width=0.8\textwidth]{ch3/ground_truth.png}
     \caption{Grafo temporal etiquetado.}
     \label{img:ground_truth}
-\end{figure}
+\end{figure}\todoredo{Rehacer}
 
 \begin{figure}
     \centering
     \includegraphics[width=0.8\textwidth]{ch3/pruned_graph.png}
     \caption{Grafo temporal obtenido a partir de la configuración óptima de parámetros $(q, \lambda, \zeta) = (0.2, 1.0, 0.9)$.}
     \label{img:pruned_graph}
-\end{figure}
+\end{figure}\todoredo{Rehacer}
+
 \section{Análisis cualitativo de resultados}
+\todosec[inline]{Análisis cualitativo de tópicos}
 
+\chapter{Conclusiones y trabajo futuro}
+\todosec[inline]{Conclusiones}
 
-\chapter{Conclusiones}
+\todosec[inline]{Otras aplicaciones}
 
+\todosec[inline]{Trabajo futuro}
 
 \bibliography{main}
 

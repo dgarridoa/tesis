@@ -17,8 +17,7 @@ dtm.js
 *.log
 *.vec
 .history
-!stopwords.txt
-!stopwords.xlsx
+
 *.aux
 *.bbl
 *.fdb_latexmk
@@ -31,4 +30,5 @@ dtm.js
 setting.json
 .metals
 backlog.md
+!stopwords.txt
 !ground_truth.pkl

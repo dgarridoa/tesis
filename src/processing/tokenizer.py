@@ -68,10 +68,13 @@ def tokenizer(doc, sep=None, stopwords=None, vocabulary=None, homol_dict=None, l
     if lemmatization:
         doc = " ".join(tokens)
         if vocabulary:
-             tokens = [unidecode.unidecode(token.lemma_) if unidecode.unidecode(token.lemma_) in vocabulary else token.text for token in lemmatizer(doc)]
+             tokens = [unidecode.unidecode(word.lemma_) if unidecode.unidecode(word.lemma_) in vocabulary else word.text for word in lemmatizer(doc)]
         else:
-            tokens = [unidecode.unidecode(token.lemma_) for token in lemmatizer(doc)]
+            tokens = [unidecode.unidecode(word.lemma_) for word in lemmatizer(doc)]
     # take the words to their stem
     if stemming:
-        tokens = [stemmer.stem(word) for word in tokens]
+        if vocabulary:
+            tokens = [stemmer.stem(word) if stemmer.stem(word) in vocabulary else word for word in tokens ]
+        else:
+            tokens = [stemmer.stem(word) for word in tokens]
     return tokens

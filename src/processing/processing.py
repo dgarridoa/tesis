@@ -3,14 +3,13 @@ import os
 import shutil
 import logging
 from dotenv import load_dotenv
-from sklearn.feature_extraction.text import CountVectorizer
-from tokenizer import tokenizer, split_corpus
+from tokenizer import tokenizer
 from gensim.corpora import Dictionary
 from gensim.corpora.bleicorpus import BleiCorpus
 from time import time
 
 # get logger
-logging.basicConfig(level = os.environ.get("LOGLEVEL", "INFO"))
+logging.basicConfig(format='%(asctime)s : %(message)s', level = os.environ.get("LOGLEVEL", "INFO"))
 logger = logging.getLogger("processing-data")
 
 logger.info("Loading Data")
@@ -19,7 +18,7 @@ logger.info("Loading Data")
 load_dotenv()
 
 # load documents, columns = ["text", "epoch"]
-df = pd.read_csv(os.getenv("DATA"), sep="|")
+df = pd.read_pickle(os.getenv("DATA"))
 
 # load stopwords
 if os.getenv("STOPWORDS")!="":
@@ -35,8 +34,13 @@ if os.getenv("VOCABULARY")!="":
 else:
     vocabulary = None
 
-# dictionary with homologations between words.
-homol_dict = {"armas": "arma"}
+# load dictionary with homologations between words.
+if os.getenv("HOMOL_DICT")!="":
+    with open(os.getenv("HOMOL_DICT"), "r") as f:
+        homol_dict = [line.strip() for line in f]
+else:
+    homol_dict = None
+
 # stemming and lemmatization
 if os.getenv("STEMMING") == "true":
     stemming = True
@@ -58,11 +62,11 @@ logger.info("Data Processing")
 ti = time()
 epochs = df["epoch"].unique()
 for epoch in epochs:
-    logger.info(f"Epochs Completed: {epoch-1}/{epochs[-1]}")
+    logger.info(f"Epochs Completed: {epoch}/{epochs[-1]}")
     logger.info(f"Processing docs in epoch: {epoch}")
     
     # docs from actual epoch
-    docs = df[df["epoch"] == epoch]["sin_relato"]
+    docs = df[df["epoch"] == epoch]["text"]
     logger.info(f"Corpus size: {len(docs)}")
 
     # processing docs from actual epoch

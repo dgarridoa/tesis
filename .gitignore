@@ -17,7 +17,6 @@ dtm.js
 *.log
 *.vec
 .history
-
 *.aux
 *.bbl
 *.fdb_latexmk

@@ -252,7 +252,7 @@ En la Figura \ref{img:dirichlet_distribution} se observa el efecto de los parám
 
 \begin{figure}
     \centering
-    \includegraphics[width=\textwidth]{ch2/dirichlet_simplex.png}
+    \includegraphics[width=\textwidth]{ch2/dirichlet_simplex.eps}
     \caption{Densidad de la distribución Dirichlet para $K=3$ define una distribución sobre el \textit{simplex}, el cual puede ser representado por una superficie trinagular.}
     \label{img:dirichlet_distribution}
 \end{figure}
@@ -263,7 +263,7 @@ La distribución dirichlet es comúnmente usada en estadística Bayesiana, ya qu
 
 \begin{figure}
     \centering
-    \includegraphics[width=\textwidth]{ch2/dirichlet_samples.png}
+    \includegraphics[width=\textwidth]{ch2/dirichlet_samples.eps}
     \caption{Muestra de una distribución Dirichlet simétrica para $\alpha \in \{0.1, 1, 10\}$ y $K\in\{2, 10, 100\}$.}
     \label{img:dirichlet_samples}
 \end{figure}
@@ -279,7 +279,7 @@ Un \textbf{Dirichlet Process} (DP) es una distribución sobre medidas de probabi
     (G(T_{1}), \ldots, G(T_{K})) \sim Dir(\alpha H(T_{1}), \ldots, \alpha H(T_{k}))
 \end{align}
 
-para cualquier partición finita $(T_{1}, \ldots, T_{k})$ de $\Phi$. En este caso, decimos que $G\sim DP(\alpha, H)$, donde $\alpha$ es llamado el \textbf{parámetro de concentración} y $H: \Phi \rightarrow \mathbb{R}^{+}$ es llamado la \textbf{medida base}.
+para cualquier partición finita $(T_{1}, \ldots, T_{k})$ de $\Phi$. En este caso, decimos que $G\sim DP(\alpha, H)$, donde $\alpha$ es llamado el \textbf{parámetro de concentración} y $H: \Phi \rightarrow \mathbb{R}^{+}$ es llamado la \textbf{medida base}.\\
 
 Existen diferentes perspectivas que ayudan a entender la propiedad de \textit{clustering} de un Dirichlet Process. En la sección \ref{sec:sbp}. y \ref{sec:crp}. nos referimos a dos: el Stick Breaking Process y Chinese Restaurant Process (CRP).
 
@@ -301,13 +301,13 @@ Esto se suele denotar como $\pi \sim GEM(\alpha)$, donde GEM representa Griffith
     \label{img:stick_breaking}
 \end{figure}
 
-Algunos ejemplos de este proceso son mostrados en la Figura \ref{img:sbp_samples}. A mayor $\alpha$, menos varianza y mayor número de átomos, por el contrario, pequeños valores de $\alpha$ muestran una alta varianza y menor número de átomos, adicionalmente exhiben mayor varianza en el número de átomos.
+Algunos ejemplos de este proceso son mostrados en la Figura \ref{img:dp_samples}. A mayor $\alpha$, menos varianza y mayor número de átomos, por el contrario, pequeños valores de $\alpha$ muestran una alta varianza y menor número de átomos, adicionalmente exhiben mayor varianza en el número de átomos.
 
 \begin{figure}
     \centering
-    \includegraphics[width=\textwidth]{ch2/sbp_samples.png}
-    \caption{Muestra de una distribución GEM para diferentes parámetros de concentración $\alpha\in \{0.1, 0.6, 6\}$.}
-    \label{img:sbp_samples}
+    \includegraphics[width=\textwidth]{ch2/dp_samples.eps}
+    \caption{(a) Muestra de una distribución GEM para diferentes parámetros de concentración $\alpha\in \{0.1, 0.6, 6\}$. (b) Medidas aleatorias generadas a partir de un Dirichlet Process con medida base normal $\mathcal{N}(0,1)$ para diferentes parámetros de concentración $\alpha\in \{0.1, 0.6, 6\}$}
+    \label{img:dp_samples}
 \end{figure}
 
 Se puede demostrar que este proceso terminará con probabilidad uno, a pesar que el número de elementos que este genera incrementa con $\alpha$. Además, el tamaño del componente $\pi_{k}$ decrece en promedio. Ahora definamos 
@@ -317,12 +317,6 @@ Se puede demostrar que este proceso terminará con probabilidad uno, a pesar que
 
 donde $\pi \sim GEM(\alpha)$ y $\phi_{k} \sim H$. Entonces uno puede demostrar que $G \sim DP(\alpha, H)$. Como consecuencia de esta construcción, las muestras de un DP son \textbf{discretas con probabilidad uno}. En otras palabras, al ir muestreando $\bar{\phi_{i}}\sim G$ veremos valores repetidos, por lo que la mayoría de los datos vendrán de los $\phi_{k}$ con $\pi_{k}$ más largos. En la Figura \ref{img:dp_samples} muestra un par de medidas aleatorias generadas a partir de un DP con una medida base normal.\\
 
-\begin{figure}
-    \centering
-    \includegraphics[width=\textwidth]{ch2/dp_samples.png}
-    \caption{Medidas aleatorias generadas a partir de un Dirichlet Process con medida base normal $\mathcal{N}(0,1)$ para diferentes parámetros de concentración $\alpha\in \{0.1, 0.6, 6\}$.}
-    \label{img:dp_samples}
-\end{figure}
 
 \subsection{Chinese Restaurant Process}
 \label{sec:crp}

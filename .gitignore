@@ -2,6 +2,7 @@
 /bib
 *.xlsx
 *.csv
+*.txt
 *.pkl
 *.mm
 *.dict
@@ -30,4 +31,5 @@ setting.json
 .metals
 backlog.md
 !stopwords.txt
+!vocabulary.txt
 !ground_truth.pkl

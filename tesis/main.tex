@@ -130,6 +130,7 @@
 
 \todo[inline]{Motivar solución propuesta.}
 
+
 \section{Problema}\todoupdate{Motivar aplicación robo de vehículos.}
 
 % apoyar con fuentes los footnotes
@@ -192,10 +193,14 @@ En este trabajo se utilizarán técnicas de modelado dinámico de tópicos como 
 \section{Mixture Models}
 \label{sec:mixture_model}
 
+\todo{Descripción del capitulo y libro de referencia}
+
+En esta sección ..., \citep{orbanz2012lecture}...
+
 El supuesto básico en \textit{clustering} es asumir que cada observación $x_{i}$ pertenece a un solo \textit{cluster} $k$. Podemos expresar la asignación a un \textit{cluster} como una variable aleatoria $z_{i}$, donde $z_{i}=k$ significa que $x$ pertenece al \textit{cluster} $k$, esta variable no es observada en los datos y se considera una variable oculta. Podemos obtener la distribución que caracteriza a un solo \textit{cluster} $k$ condicionando en $z_{i}$
 
 \begin{align}
-    p(x_{i}|z=k_{i}, \phi) & = p(x_{i}|\phi_{k})\\
+    p(x_{i}|z_{i}=k, \phi) & = p(x_{i}|\phi_{k})\\
 \end{align}
 
 Además, podemos definir la probabilidad de que una nueva observación pertenezca al \textit{cluster} $k$ 
@@ -230,7 +235,7 @@ Un \textbf{Bayesian mixture model} es un \textit{mixture model} con una medida a
 \subsection{Distribución Dirichlet}
 \label{sec:dirichlet}
 
-La distribución Dirichlet es una generalización multivariada de la distribución beta, la cual tiene soporte sobre un \textbf{simplex}, definido por:
+La distribución Dirichlet \citep{minka2000estimating} es una generalización multivariada de la distribución beta, la cual tiene soporte sobre un \textbf{simplex}, definido por:
 \begin{equation}
     S_{K} = \{x: 0\leq x_{k} \leq 1, \sum_{k=1}^{K}x_{k}=1\}
 \end{equation}
@@ -271,7 +276,7 @@ La distribución dirichlet es comúnmente usada en estadística Bayesiana, ya qu
 \subsection{Dirichlet Process}
 \label{sec:dp}
 
-En un \textit{finite mixture model} tenemos $G(\phi) = \sum_{k=1}^{K} \pi_{k}\delta_{\phi_{k}}(\phi)$, luego si muestreamos a partir de $G$, siempre (con probabilidad uno) obtendrémos exactamente $K$ \textit{clusters}. Nos gustaría tener un modelo más flexible, que pueda generar un número variable de \textit{clusters}. La forma de hacer esto es remplazar la distribución discreta $G$ por una medida aleatoria de probabilidad. El Dirichlet Process, denotado $G\sim DP(\alpha, H)$, es una manera de hacer esto.\\
+En un \textit{finite mixture model} tenemos $G(\phi) = \sum_{k=1}^{K} \pi_{k}\delta_{\phi_{k}}(\phi)$, luego si muestreamos a partir de $G$, siempre (con probabilidad uno) obtendrémos exactamente $K$ \textit{clusters}. Nos gustaría tener un modelo más flexible, que pueda generar un número variable de \textit{clusters}. La forma de hacer esto es remplazar la distribución discreta $G$ por una medida aleatoria de probabilidad. El Dirichlet Process \citep{ferguson1973bayesian}, denotado $G\sim DP(\alpha, H)$, es una manera de hacer esto.\\
 
 Un \textbf{Dirichlet Process} (DP) es una distribución sobre medidas de probabilidad $G: \Phi \rightarrow \mathbb{R}^{+}$, donde $G(\phi)\geq 0$ y $\int_{\Phi}G(\phi)d\phi=1$. Un DP se define implícitamente por cumplir 
 
@@ -286,7 +291,7 @@ Existen diferentes perspectivas que ayudan a entender la propiedad de \textit{cl
 \subsection{Stick Breaking Process}
 \label{sec:sbp}
 
-Ahora daremos una definición constructiva para el DP, conocida como \textit{stick breaking process}. Sea $\pi=\{\pi_{k}\}_{k=1}^{\infty}$ una secuencia infinita de mezcla de pesos derivadas a partir del siguiente proceso:
+Ahora daremos una definición constructiva para el DP, conocida como \textit{stick breaking process} \citep{sethuraman1994constructive}. Sea $\pi=\{\pi_{k}\}_{k=1}^{\infty}$ una secuencia infinita de mezcla de pesos derivadas a partir del siguiente proceso:
 \begin{align}
     \beta_{k} & \sim Beta(1, \alpha)\\
     \pi_{k} & = \beta_{k}\prod_{l=1}^{k-1}(1-\beta_{l}) = \beta_{k}(1-\sum_{l=1}^{k-1}\pi_{l})
@@ -301,7 +306,7 @@ Esto se suele denotar como $\pi \sim GEM(\alpha)$, donde GEM representa Griffith
     \label{img:stick_breaking}
 \end{figure}
 
-Algunos ejemplos de este proceso son mostrados en la Figura \ref{img:dp_samples}. A mayor $\alpha$, menos varianza y mayor número de átomos, por el contrario, pequeños valores de $\alpha$ muestran una alta varianza y menor número de átomos, adicionalmente exhiben mayor varianza en el número de átomos.
+Algunos ejemplos de este proceso son mostrados en la Figura \ref{img:dp_samples} (a). A mayor $\alpha$, menos varianza y mayor número de átomos, por el contrario, pequeños valores de $\alpha$ muestran una alta varianza y menor número de átomos, adicionalmente exhiben mayor varianza en el número de átomos.
 
 \begin{figure}
     \centering
@@ -315,28 +320,41 @@ Se puede demostrar que este proceso terminará con probabilidad uno, a pesar que
     G(\phi) = \sum_{k=1}^{\infty}\pi_{k}\delta_{\phi_{k}}(\phi)
 \end{align}
 
-donde $\pi \sim GEM(\alpha)$ y $\phi_{k} \sim H$. Entonces uno puede demostrar que $G \sim DP(\alpha, H)$. Como consecuencia de esta construcción, las muestras de un DP son \textbf{discretas con probabilidad uno}. En otras palabras, al ir muestreando $\bar{\phi_{i}}\sim G$ veremos valores repetidos, por lo que la mayoría de los datos vendrán de los $\phi_{k}$ con $\pi_{k}$ más largos. En la Figura \ref{img:dp_samples} muestra un par de medidas aleatorias generadas a partir de un DP con una medida base normal.\\
+donde $\pi \sim GEM(\alpha)$ y $\phi_{k} \sim H$. Entonces uno puede demostrar que $G \sim DP(\alpha, H)$. Como consecuencia de esta construcción, las muestras de un DP son \textbf{discretas con probabilidad uno}. En otras palabras, al ir muestreando $\bar{\phi_{i}}\sim G$ veremos valores repetidos, por lo que la mayoría de los datos vendrán de los $\phi_{k}$ con $\pi_{k}$ más largos. En la Figura \ref{img:dp_samples} (b) muestra un par de medidas aleatorias generadas a partir de un DP con una medida base normal.\\
 
 
 \subsection{Chinese Restaurant Process}
 \label{sec:crp}
+\citep{aldous1985exchangeability}
 
 \todo[inline]{Describir Chinese Restaurant Process}
 
 \section{Modelos de tópicos}
 
-\todo[inline]{Motivar modelamiento de tópicos}
-\todo[inline]{Motivar clustering sharing parameter y luego LDA-HDP}
+%motivación d.blei
+\todo{Añadir motivación humo con cifras}
 
-% En este capitulo se describe en detalle dos modelos de tópicos probabilísticos,  Latent Dirichlet Allocation (LDA) y Hierarchical Dirichlet Process (HDP), siendo este último la generalización no parámetrica de LDA, donde el número de tópicos a descubrir no está acotado y se infiere a partir del corpus.\\
+En procesamiento de lenguaje natural, un modelo de tópicos es un tipo de modelo estadístico para descubrir los tópicos (\textit{clusters}) ocultos en una colección de documentos. El modelamiento de tópicos sirve para organizar, buscar, indexar, explorar y resumir grandes colecciones de documentos.\\
 
-% Ambos modelos se consideran modelos de clustering que involucran multiples grupos de datos. Como los modelos de tópicos se suelen aplicar al dominio del texto a la colección de grupos se le llama corpus y a cada grupo se le llama documento, siendo un documento una colección palabras u observaciones. 
+Los modelos probabilísticos tratan un tópico como una distribución de probabilidad discreta sobre el vocabulario del corpus, siendo un práctica habitual interpretar un tópico a partir de sus $N$ palabras más probables. Por ejemplo, un tópico para $N=5$ las palabras más probables son: \quotes{llaves}, \quotes{domicilio}, \quotes{individuos}, \quotes{casa} y \quotes{porton}, por lo que una etiqueta valida para este tópico podría ser \quotes{portonazo}.\\ 
 
-% Los modelos de tópicos trabajan bajo el asumpción de \textit{bag of words}, es decir, las palabras son intercambibles, por lo que podemos aplicar un modelo de clustering probabilístico a nivel documento, esto significa asumir que lo que las realizaciones independientes de un \textit{mixture model}
+En general en modelamiento de tópicos probabilístico se trabaja bajo la asumpción de \textbf{bag of words} (bolsa de palabras), es decir, tanto los documentos como las palabras son tratadas como intercambiables. Es importante hacer notar que itercambiabilidad no es equivalente a que las variables aleatorias son independientes e identicamente distribuidas. Más bien, intercambiabilidad esencialmente puede ser interpretado como condicionalmente independientes e identicamente distribuidas, donde el condicionamiento es con respecto a los parámetros de una distribución de probabilidad. Por lo tanto, el supuesto de intercambiabilidad es claramente un supuesto de simplificación cuya principal justificación es la construcción de algoritmos computacionalmente más eficientes.\\
+
+Un \textit{mixture model} aplicado a texto bien conocido es \textit{mixture of unigrams} \citep{nigam2000text}, el cual asume que todos los documentos provienen de un solo \textit{cluster} dentro de un conjunto finito $K$ \textit{clusters}. Los documentos de un \textit{cluster} discuten solo un tópico particular $z$, y cada tópico $z$ está asociado a una distribución multinomial. Así, la verosimilitud de observar un documento $d$ es
+
+\begin{align}
+    w|z &\sim Mult(\theta_{z})\\
+    p(w_{1}, \ldots, w_{N_{d}}) &= \sum_{z=1}^{K}p(z)\prod_{i=1}^{N_{d}}p(w_{i}|z)
+\end{align}
+
+En las secciones \ref{sec:lda}-\ref{sec:hdp} se describe en detalle dos modelos de tópicos probabilísticos,  Latent Dirichlet Allocation (LDA) y Hierarchical Dirichlet Process (HDP), siendo este último la generalización no parámetrica de LDA, donde el número de tópicos a descubrir no está acotado y se infiere a partir del corpus.\\
+
+En comparación a \textit{mixture of unigrams}, tanto LDA como HDP suponen que las palabras de un documento provienen de un mismo \textit{mixture model}. A nivel corpus los \textit{mixture models} comparten parámetros, que vienen siendo los tópicos, pero las \textit{mixtures of topics} son específicas de cada documento. Esto permite relajar la asumpción de que cada documento es generado por un solo tópico, permitiendo que un documento pueda tener presencia de más de un tema debido a que cada palabra proviene de algún tópico.
 
 \subsection{Latent Dirichlet Allocation}\todoupdate{Mejorar estilo de redacción}
-
-A continuación se describe el proceso generativo de Latent Dirichlet Allocation (LDA). Sean \textit{K} tópicos, $\phi_{1:K}$ distribuciones de probabilidad sobre un vocabulario fijo, dibujadas por una $Dir(\frac{\eta}{|V|}1_{|V|})$. Para cada documento $d$ del corpus $D$ se asume que es dibujado por el siguiente proceso generativo (ver representación gráfica del modelo en la Figura \ref{img:lda}):
+\label{sec:lda}
+A continuación se describe el proceso generativo de Latent Dirichlet Allocation (LDA) \citep{blei2003latent}. 
+Sean \textit{K} tópicos, $\phi_{1:K}$ distribuciones de probabilidad sobre un vocabulario fijo, dibujadas por una $Dir(\frac{\eta}{|V|}1_{|V|})$. Para cada documento $d$ del corpus $D$ se asume que es dibujado por el siguiente proceso generativo (ver representación gráfica del modelo en la Figura \ref{img:lda}):
 \begin{enumerate}
     \item Dibujar una mezcla de tópicos $\pi_{d}\sim Dir(\frac{\alpha}{K}1_{K})$
     \item Para cada palabra:
@@ -386,8 +404,8 @@ Una representación equivalente en LDA sería generar cada palabra de un documen
   \end{cases}$.\\\\
 
 \subsection{Hierarchical Dirichlet Process}\todoupdate{Mejorar estilo de redacción}
-
-Hierarchical Dirichlet Process (HDP) es una colección de DP que comparten una distribución base $G_{0}$, la cual además es dibujada a partir de un DP (ver representación gráfica del modelo en la Figura \ref{img:hdp}). Matemáticamente, a nivel corpus se tiene que la distribución base $H \sim Dir(\frac{1}{|V|}1_{|V|})$ y $G_{0} \sim DP(\gamma, H)$, luego, para cada documento $d$ del corpus $D$ se asume que es dibujado por el siguiente proceso generativo:
+\label{sec:hdp}
+Hierarchical Dirichlet Process (HDP)\citep{teh2005sharing} es una colección de DP que comparten una distribución base $G_{0}$, la cual además es dibujada a partir de un DP (ver representación gráfica del modelo en la Figura \ref{img:hdp}). Matemáticamente, a nivel corpus se tiene que la distribución base $H \sim Dir(\frac{1}{|V|}1_{|V|})$ y $G_{0} \sim DP(\gamma, H)$, luego, para cada documento $d$ del corpus $D$ se asume que es dibujado por el siguiente proceso generativo:
 \begin{enumerate}
     \item Dibujar un DP $G_{d} \sim DP(\alpha_{0}, G_{0})$
     \item Para cada palabra:

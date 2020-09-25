@@ -23,7 +23,7 @@ hdp(){
     path_to_save="${dir_to_save}/model_${epoch}"
     mkdir $path_to_save
     # run hdp
-    $hdp --algorithm train --data $file --directory $path_to_save --save_lag -1 --random_seed 123 --max_iter $MAX_ITER 
+    $hdp --algorithm train --data $file --directory $path_to_save --save_lag -1 --random_seed 123 --max_iter $MAX_ITER --gamma_a 0.001 --alpha_a 0.001 
 }
 
 # initialize a semaphore with a given number of tokens

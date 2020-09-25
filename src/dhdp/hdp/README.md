@@ -61,7 +61,7 @@ The following shows an example of performing posterior inference on a set of doc
 ```bash
 hdp --algorithm train --data data --directory train_dir
 
-hdp --algorithm train --data ../../../data/corpus.mm --directory ../results/ --save_lag -1 --random_seed 123 --max_iter 5000 --split_merge yes
+hdp --algorithm train --data ../../../data/corpus.mm --directory ../results/ --random_seed 123 --max_iter 5000
 ```
 
 Data format
@@ -147,4 +147,3 @@ print.topics.R mode-topics.dat vocab.dat topics.dat 10
 will produce a topic list with top 10 words selected. For help, run,
 
 `print.topics.R`
-

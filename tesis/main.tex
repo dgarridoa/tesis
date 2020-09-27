@@ -186,10 +186,7 @@ En \citep{wilson2011tracking} y \citep{beykikhoshk2018discovering} se propone un
 \todo[inline]{Describir organización del capítulo}
 \section{Mixture Models}
 \label{sec:mixture_model}
-
-\todo{Descripción del capitulo y libro de referencia}
-
-En esta sección ..., \citep{orbanz2012lecture}...
+%\citep{orbanz2012lecture
 
 El supuesto básico en \textit{clustering} es asumir que cada observación $x_{i}$ pertenece a un solo \textit{cluster} $k$. Podemos expresar la asignación a un \textit{cluster} como una variable aleatoria $z_{i}$, donde $z_{i}=k$ significa que $x$ pertenece al \textit{cluster} $k$, esta variable no es observada en los datos y se considera una variable oculta. Podemos obtener la distribución que caracteriza a un solo \textit{cluster} $k$ condicionando en $z_{i}$
 
@@ -258,7 +255,7 @@ En la Figura \ref{img:dirichlet_distribution} se observa el efecto de los parám
 
 En general se asume simetría en los parámetros de la distribución Dirichlet de la forma $\alpha_{k}=\frac{\alpha}{K}$, de esta manera se tiene un $\alpha$ funciona como parámetro de concentración. En la Figura \ref{img:dirichlet_samples} se oberva una realización de una distribución Dirichlet para $\alpha \in \{0.1, 1, 10\}$ y $K\in\{2, 10, 100\}$, donde podemos observar que a mayor $alpha$ las componenetes del vector $x$ más similares se vuelven y esto es más notorio a mayor dimencionalidad debido a que hay más dimensiones donde distribuir la masa.\\
 
-La distribución dirichlet es comúnmente usada en estadística Bayesiana, ya que es el prior conjugado de la distribución categórica (multinoulli) y de la distribución multinomial. Así, la distribución Dirichlet puede ser utilizado como prior en un \textit{finite mixture model} asumiendo que $\pi\sim Dir(\frac{\alpha}{K}1_{K})$ y $\phi_{k} \sim H$.
+La distribución Dirichlet es comúnmente usada en estadística Bayesiana, ya que es el prior conjugado de la distribución categórica (multinoulli) y de la distribución multinomial. Así, la distribución Dirichlet puede ser utilizado como prior en un \textit{finite mixture model} asumiendo que $\pi\sim Dir(\frac{\alpha}{K}1_{K})$ y $\phi_{k} \sim H$.
 
 \begin{figure}
     \centering
@@ -275,10 +272,35 @@ En un \textit{finite mixture model} tenemos $G(\phi) = \sum_{k=1}^{K} \pi_{k}\de
 Un \textbf{Dirichlet Process} (DP) es una distribución sobre medidas de probabilidad $G: \Phi \rightarrow \mathbb{R}^{+}$, donde $G(\phi)\geq 0$ y $\int_{\Phi}G(\phi)d\phi=1$. Un DP se define implícitamente por cumplir 
 
 \begin{align}
-    (G(T_{1}), \ldots, G(T_{K})) \sim Dir(\alpha H(T_{1}), \ldots, \alpha H(T_{k}))
+    (G(A_{1}), \ldots, G(A_{K})) \sim Dir(\alpha H(A_{1}), \ldots, \alpha H(A_{K}))
 \end{align}
 
-para cualquier partición finita $(T_{1}, \ldots, T_{k})$ de $\Phi$. En este caso, decimos que $G\sim DP(\alpha, H)$, donde $\alpha$ es llamado el \textbf{parámetro de concentración} y $H: \Phi \rightarrow \mathbb{R}^{+}$ es llamado la \textbf{medida base}.\\
+para cualquier partición finita $(A_{1}, \ldots, A_{k})$ de $\Phi$. En este caso, decimos que $G\sim DP(\alpha, H)$, donde $\alpha$ es llamado el \textbf{parámetro de concentración} y $H: \Phi \rightarrow \mathbb{R}^{+}$ es llamado la \textbf{medida base}.\\
+
+Como $p(G(A_{1}, \ldots, G(A_{K})))$ es Dirichlet, la distribución marginal en cada partición distribuye beta $Beta(\alpha H(A_{i}), \alpha \sum_{j\neq i}H(A_{j}))$. El DP es considerado consistentemente definido, en el sentido de que si particionamos $\bar{A}_{1}$ en $A_{1}$ y $A_{2}$, entonces $G(\bar{A}_{1})$ y $G(A_{1})+G(A_{2})$ siguen la misma distribución beta. \\
+
+Sea $\phi \sim Dir(\alpha)$, y $z|\phi  \sim Cat(\pi)$, si integramos $\pi$ afuera obtenemos la distribución predictiva del modelo Dirichlet-multinoulli:
+\begin{align}
+    z\sim Cat(\alpha_{1}/\alpha_{0}, \ldots, \alpha_{K}/\alpha_{0})
+\end{align}
+donde $\alpha_{0} = \sum_{k}\alpha_{k}$. Es decir, $p(z=k|\alpha)=\alpha_{k}/\alpha_{0}$. Ademas, la posterior de $\pi$ dada una observación viene dada por
+\begin{align}
+    \pi|z \sim Dir(\alpha_{1}+\mathbb{I}(z=1), \ldots, \alpha_{K}+\mathbb{I}(z=K))
+\end{align}
+
+El DP generaliza el resultado anterior a particiones arbitrarias. Si $G\sim DP(\alpha, H)$, luego $p(\phi \in A_{i})=H(A_{i})$ y la posterior es
+
+\begin{align}
+    p(G(A_{1}), \ldots, G(A_{K})|\phi, \alpha, H) = Dir(\alpha H(A_{1})+\mathbb{I}(\phi \in A_{1}), \ldots, \alpha H(A_{K})+\mathbb{I}(\phi \in A_{K}))
+\end{align}
+
+Esto se mantiene para cualquier conjunto de particiones. Por lo tanto, si observamos multiples muestras $\bar{\phi}_{1:N}\sim G$, la nueva posterior está dada por 
+
+\begin{align}
+G|\bar{\phi}_{1:N}, \alpha, H \sim DP\bigg(\alpha+N, \frac{1}{\alpha+N}\bigg(\alpha H+\sum_{i=1}^{N}\delta_{\phi_{i}}\bigg)\bigg)
+\end{align}
+
+Por ende el DP define un prior conjugado para cualquier espacio medible, donde el parámetro de concentración $\alpha$ es como el tamaño de muestro efectivo de la medida base $H$.\\
 
 Existen diferentes perspectivas que ayudan a entender la propiedad de \textit{clustering} de un Dirichlet Process. En la sección \ref{sec:sbp}. y \ref{sec:crp}. nos referimos a dos: el Stick Breaking Process y Chinese Restaurant Process (CRP).
 
@@ -319,9 +341,22 @@ donde $\pi \sim GEM(\alpha)$ y $\phi_{k} \sim H$. Entonces uno puede demostrar q
 
 \subsection{Chinese Restaurant Process}
 \label{sec:crp}
-\citep{aldous1985exchangeability}
 
-\todo[inline]{Describir Chinese Restaurant Process}
+Trabajar con infinitos átomos puede ser bastante problemático. Para sortear esta dificultad podemos explotar la propiedad de \textit{clustering} de un DP. Sea $\bar{\phi}_{1:N}\sim G$ observaciones generadas a partir de $G\sim DP(\alpha, H)$, sea $K$ los distintos valores de $\bar{\phi}_{1:N}$, luego la distribución predictiva condicionada en las $N$ observaciones está dada por
+
+\begin{align}
+p(\bar{\phi}_{N+1}=\phi|\bar{\phi}_{1:N}, \alpha, H) = \frac{1}{\alpha+N}\bigg(\alpha H(\phi)+\sum_{k=1}^{K}N_{k}\delta_{\bar{\phi}_{k}}(\phi)\bigg)
+\end{align}
+
+donde $N_{k}$ es el número de observaciones previas iguales a $\phi_{k}$. Esto esquema de muestreo es llamado \textit{Polya urn} o \textit{Blackwell-MacQueen}. Esta construcción provee una forma constructiva para muestrear de un DP. Es más conveniente trabajar con variables discretas $z_{i}$ que especifican cual valor de $\phi_{k}$ usar, así, definimos $\bar{\phi}_{i}=\phi_{z_{i}}$. Basado en esta expresión Tenemos
+
+\begin{align}
+p(z_{N+1}=z|z_{1:N}, \alpha) = \frac{1}{\alpha+N}\bigg(\alpha\mathbb{I}(z=k^{*})+\sum_{k=1}^{K}N_{k}\mathbb{I}(z=k)\bigg)
+\end{align}
+
+donde $k^{*}$ representa un nuevo \textit{cluster} que no ha sido usado aún. Este proceso es llamado Chinese Restaurant Process (CRP) \citep{aldous1985exchangeability}, basado en la oferta aparentemente infinito de mesas en ciertos restaurantes Chinos. La analogía es la siguiente: Las tablas del restaurante son los \textit{clusters}  y los clientes son las observaciones. Cuando una persona entra al restaurante, esta puede escoger sentarse en una tabla existente con probabilidad proporcional al número de personas ya sentadas en esa tabla ($N_{k}$), en otro caso, con una probabilidad decreciente a medida que más personas entran al restaurante (debido a $1/(\alpha +N))$ escogerá sentarse en una nueva tabla $k^{*}$. El resultado de este proceso es una distribución sobre particiones de los naturales, la cual es como una distribución de clientes a tablas.\\
+
+Al hecho de que las tablas actualmente ocupadas son más probables de obtener nuevos clientes se le suele llamar el fenómeno del \textit{rich get richer}. En efecto, se puede demostrar que la dsitribución del número de \textit{clusters} que oinduce este prior es básicamente una ley de potencia, donde el número de tablas $K$ con probabilidad 1 se aproxima a $\alpha log(N)$ cuando $N\rightarrow \infty$, mostrnado que la complejidad del modelo crece logaritmicamente con el tamaño de loos datos.
 
 \section{Modelos de tópicos}
 
@@ -331,10 +366,10 @@ Los modelos probabilísticos tratan un tópico como una distribución de probabi
 
 En \textit{text mining} se suele trabajar bajo la asumpción de \textbf{bag of words} (bolsa de palabras), es decir, tanto los documentos como las palabras son tratadas como intercambiables. Es importante hacer notar que itercambiabilidad no es equivalente a que las variables aleatorias son independientes e identicamente distribuidas. Más bien, intercambiabilidad esencialmente puede ser interpretado como condicionalmente independientes e identicamente distribuidas, donde el condicionamiento es con respecto a los parámetros de una distribución de probabilidad. Por lo tanto, el supuesto de intercambiabilidad es claramente un supuesto de simplificación cuya principal justificación es la construcción de algoritmos computacionalmente más eficientes.\\
 
-Un \textit{mixture model} bien conocido que trabaja bajo la asupción de \textit{bag of words} es \textit{mixture of unigrams} \citep{nigam2000text}, el cual asume que todos los documentos provienen de un solo \textit{cluster} dentro de un conjunto finito $K$ \textit{clusters}. Los documentos de un \textit{cluster} discuten solo un tópico particular $z$, y cada tópico $z$ está asociado a una distribución multinomial. Así, la verosimilitud de observar un documento $d$ es
+Un \textit{mixture model} bien conocido que trabaja bajo la asupción de \textit{bag of words} es \textit{mixture of unigrams} \citep{nigam2000text}, el cual asume que todos los documentos provienen de un solo \textit{cluster} dentro de un conjunto finito $K$ \textit{clusters}. Los documentos de un \textit{cluster} discuten solo un tópico particular $z$, y cada tópico $z$ está asociado a una distribución categórica. Así, la verosimilitud de observar un documento $d$ es
 
 \begin{align}
-    w|z &\sim Mult(\theta_{z})\\
+    w|z &\sim Cat(\theta_{z})\\
     p(w_{1}, \ldots, w_{N_{d}}) &= \sum_{z=1}^{K}p(z)\prod_{i=1}^{N_{d}}p(w_{i}|z)
 \end{align}
 
@@ -342,19 +377,20 @@ En comparación a \textit{mixture of unigrams}, LDA y HDP suponen que las palabr
 
 En las secciones \ref{sec:lda}-\ref{sec:hdp} se describe en detalle dos modelos de tópicos probabilísticos, Latent Dirichlet Allocation (LDA) y Hierarchical Dirichlet Process (HDP), siendo este último la generalización no parámetrica de LDA, donde el número de tópicos a descubrir no está acotado y se infiere a partir del corpus.\\
 
-\subsection{Latent Dirichlet Allocation}\todoupdate{Mejorar estilo de redacción}
+\subsection{Latent Dirichlet Allocation}
 \label{sec:lda}
-A continuación se describe el proceso generativo de Latent Dirichlet Allocation (LDA) \citep{blei2003latent}. 
-Sean \textit{K} tópicos, $\phi_{1:K}$ distribuciones de probabilidad sobre un vocabulario fijo, dibujadas por una $Dir(\frac{\eta}{|V|}1_{|V|})$. Para cada documento $d$ del corpus $D$ se asume que es dibujado por el siguiente proceso generativo (ver representación gráfica del modelo en la Figura \ref{img:lda}):
-\begin{enumerate}
-    \item Dibujar una mezcla de tópicos $\pi_{d}\sim Dir(\frac{\alpha}{K}1_{K})$
-    \item Para cada palabra:
-    \begin{enumerate}
-        \item Escoger un tópico $z_{d,n}\sim Mult(\pi_{d})$
-        \item Escoger una palabra $w_{d,n}\sim Mult(\phi_{z_{d,n}})$
-    \end{enumerate}
-\end{enumerate}
+En este saección se describe el proceso generativo de Latent Dirichlet Allocation (LDA) \citep{blei2003latent}. \\
 
+En LDA, cada palabra es asignada a su propio tópico, $z_{d,n}\in\{1, \ldots, K\}$ es el tópico del que proviene la palabra $n$ del documento $d$. Esta asignación a su vez es dibujada de una distribución específica del documento $\theta_{d}$. Cada tópico es una distribución de probabilidad sobre un vocabulario fijo $V$. El modelo completo es como sigue
+
+\begin{align}
+    \phi_{k}|\eta & \sim Dir(\frac{\eta}{|V|}1_{|V|})\\
+    \pi_{d}|\alpha & \sim Dir(\frac{\alpha}{K}1_{K})\\
+    z_{d,n}|\pi_{d} & \sim Cat(\pi_{d})\\
+    w_{d,n}|z_{d,n}, \phi_{1:K} & \sim Cat(\phi_{z_{d,n}})
+\end{align}
+
+Esto es ilustrado en la Figura \ref{img:lda}.
 \begin{figure}
   \centering
   \tikz{ %
@@ -387,24 +423,32 @@ La distribución a posterior:
     p(\phi, \pi, z|w, \alpha, \eta) = \frac{p(\phi, \pi, z, w|\alpha, \eta)}{p(w|\alpha, \eta)}
 \end{equation}
 
-La distribución posterior es computacionalmente intratable para inferencia exacta, debido a que para normalizar la distribución debemos marginalizar sobre todas las variables ocultas y escribir la constante de normalización en términos de los parámetros del modelo. Para poder computar la posterior es necesario utilizar algoritmos de inferencia aproximada, donde el enfoque habitual es Markov Chain Monte Carlo (MCMC), en \citep{griffiths2004finding} se propone un algoritmo basado en Gibbs Sampling para la inferencia. Los métodos basados en MCMC entregan una estimación empírica de la distribución posterior llamada (traza), es decir, representan la posterior a través de muestras que distribuyen como esta, luego para estimación puntual, como por ejemplo obtener el valor esperado de la posterior se utiliza integración de Monte Carlo para aproximar la esperanza, esto es promediar los valores de la traza.
+La distribución posterior es computacionalmente intratable para inferencia exacta, debido a que para normalizar la distribución debemos marginalizar sobre todas las variables ocultas y escribir la constante de normalización en términos de los parámetros del modelo. Para poder computar la posterior es necesario utilizar algoritmos de inferencia aproximada, donde el enfoque habitual es Markov Chain Monte Carlo (MCMC) e Inferencia Variacional (VI).\\
 
-Una representación equivalente en LDA sería generar cada palabra de un documento $d$ a partir de una multinomial sobre un tópico dibujado por una distribución $G_{d}$, formalmente, $w_{d,n}\sim Mult(\phi_{d,n})$, donde $\phi_{d,n} \sim G_{d}$ con $\phi_{d,n} \in \{\phi_{k}\}_{k=1}^{K}$, y $G_{d}(\phi)=\sum_{k=1}^{K}\pi_{d, k}\delta_{\phi_{k}}(\phi)$, donde $\delta_{\phi_{k}}(\phi) = \begin{cases}
-    1 & \text{si $\phi_{k}=\phi$}  \\
-    0 & \text{si no}
-  \end{cases}$.\\\\
+Una representación equivalente en LDA sería generar cada palabra de un documento $d$ a partir de un tópico dibujado por una distribución $G_{d}$,
 
-\subsection{Hierarchical Dirichlet Process}\todoupdate{Mejorar estilo de redacción}
+\begin{align}
+    \phi_{k}|\eta & \sim Dir(\frac{\eta}{|V|}1_{|V|})\\
+    \pi_{d}|\alpha & \sim Dir(\frac{\alpha}{K}1_{K})\\
+    G_{d}(\phi)& =\sum_{k=1}^{K}\pi_{d, k}\delta_{\phi_{k}}(\phi)\\
+    \phi_{d,n}|\pi_{d}, \phi_{1:K} & \sim G_{d}\\
+    w_{d,n}|\phi_{d,n} & \sim Cat(\phi_{d,n})
+\end{align}
+
+\subsection{Hierarchical Dirichlet Process}
 \label{sec:hdp}
-Hierarchical Dirichlet Process (HDP)\citep{teh2005sharing} es una colección de DP que comparten una distribución base $G_{0}$, la cual además es dibujada a partir de un DP (ver representación gráfica del modelo en la Figura \ref{img:hdp}). Matemáticamente, a nivel corpus se tiene que la distribución base $H \sim Dir(\frac{1}{|V|}1_{|V|})$ y $G_{0} \sim DP(\gamma, H)$, luego, para cada documento $d$ del corpus $D$ se asume que es dibujado por el siguiente proceso generativo:
-\begin{enumerate}
-    \item Dibujar un DP $G_{d} \sim DP(\alpha_{0}, G_{0})$
-    \item Para cada palabra:
-    \begin{enumerate}
-        \item Dibujar un tópico $\phi_{d,n}\sim G_{d}$
-        \item Escoger una palabra $w_{d,n} \sim Mult(\phi_{d,n})$
-    \end{enumerate}
-\end{enumerate}
+
+Hierarchical Dirichlet Process (HDP)\citep{teh2005sharing} es un prior no paramétrico, donde la medida base $G_{0}$ de un conjunto de DPs es dibujada a partir de un DP. En el caso de modelamiento de tópicos, temenos un medida global a nivel corpus que es dibujada a partir de un DP con medida base Dirichlet y una medida para cada documento que es dibujada a partir de un DP cuya medida base es $G_{0}$. El modelo completo es como sigue
+
+\begin{align}
+   H &= Dir(\frac{\eta}{|V|}1_{|V|})\\
+   G_{0}|\gamma, H &\sim DP(\gamma, H)\\
+   G_{d}|\alpha, G_{0} &\sim DP(\alpha_{0}, G_{0})\\
+   \phi_{d,n}|G_{d} &\sim G_{d}\\
+   w_{d,n}|\phi_{d,n} &\sim Cat(\phi_{d,n})
+\end{align}
+
+Esto es ilustrado en la Figura \ref{img:hdp}.
 
 \begin{figure}
   \centering
@@ -432,21 +476,22 @@ La discretitud a nivel corpus de $G_{0}$ asegura que todos los documentos compar
 Aplicando \textit{stick breaking construction} se tiene que para el DP dibujado a nivel corpus la siguiente representación:
 
 \begin{align}
-    \beta_{k}^{'} \sim Beta(1, \gamma) \\
-    \beta_{k} = \beta_{k}^{'}\prod_{l=1}^{k-1}(1-\beta_{l}^{'})\\
-    \phi_{k} \sim H  \\
-    G_{0}(\phi)=\sum_{k=1}^{\infty}\beta_{k}\delta_{\phi_{k}}(\phi)
+    \beta_{k}^{'} &\sim Beta(1, \gamma) \\
+    \beta_{k} &= \beta_{k}^{'}\prod_{l=1}^{k-1}(1-\beta_{l}^{'})\\
+    \phi_{k} &\sim H  \\
+    G_{0}(\phi) &=\sum_{k=1}^{\infty}\beta_{k}\delta_{\phi_{k}}(\phi)
 \end{align}
 
 Así, $G_{0}$ es discreto y tiene soporte en los átomos $\phi = \{\phi\}_{k=1}^{\infty}$ con pesos $\beta=\{\beta_{k}\}_{k=1}^{\infty}$, siendo la distribución de $\beta$ escrita como $\beta \sim GEM(\gamma)$. La construcción a nivel documento de $G_{d}$ es:
 
 \begin{align}
-    \pi_{d,k}^{'}\sim Beta\big(\alpha_{0}\beta_{k}, \alpha_{0}\big(1-\sum_{l=1}^{k}\beta_{l}\big)\big)\\
-    \pi_{d,k} = \pi_{d,k}^{'}\prod_{l=1}^{k-1}(1-\pi_{d,l}^{'})\\
-    G_{d}(\phi)=\sum_{k=1}^{\infty}\pi_{d,k}\delta_{\phi_{k}}(\phi)
+    \pi_{d,k}^{'} &\sim Beta\big(\alpha_{0}\beta_{k}, \alpha_{0}\big(1-\sum_{l=1}^{k}\beta_{l}\big)\big)\\
+    \pi_{d,k} &= \pi_{d,k}^{'}\prod_{l=1}^{k-1}(1-\pi_{d,l}^{'})\\
+    G_{d}(\phi) &=\sum_{k=1}^{\infty}\pi_{d,k}\delta_{\phi_{k}}(\phi)\\
+    \phi_{d,n}|\pi_{d}, \phi_{1:\infty} &\sim G_{d}
 \end{align}
 
-Donde $\phi = \{\phi_{k}\}_{k=1}^{\infty}$ son los mismos átomos de $G_{0}$. En la Figura \ref{img:hdp_sbc} se muestra la representación gráfica de esta construcción.
+Donde $\phi = \{\phi_{k}\}_{k=1}^{\infty}$ son los mismos átomos de $G_{0}$. Esto es ilustrado en la Figura \ref{img:hdp_sbc}.
 
 %stick breaking
 \begin{figure}
@@ -473,17 +518,20 @@ Donde $\phi = \{\phi_{k}\}_{k=1}^{\infty}$ son los mismos átomos de $G_{0}$. En
 \label{img:hdp_sbc}
 \end{figure}
 
-Al igual que LDA la distribución posterior es intratable, por lo que en \citep{teh2005sharing} se marginaliza $G_{0}$ y $G_{d}$'s afuera, obteniéndose así un nuevo proceso generativo denominado \textit{Chinese restaurant franchise process} (CRF), esta representación permite construir algoritmos eficientes basados en Gibbs Sampling, como en la implementación utilizada disponible en \citep{HDP}.
+Al igual que LDA la distribución posterior es intratable, por lo que en \citep{teh2005sharing} se marginaliza $G_{0}$ y $G_{d}$'s, obteniéndose así un nuevo proceso generativo denominado \textit{Chinese restaurant franchise process} (CRF), esta representación permite construir algoritmos eficientes basados en Gibbs Sampling, como en la implementación en C++ utilizada \citep{HDP}.
 
-\subsubsection{LDA versus HDP}\todoupdate{Mejorar estilo de redacción}
+\subsection{LDA versus HDP}
+
 HDP es un modelo no paramétrico similar en estructura a LDA, la principal desventaja de LDA frente a HDP es que LDA requiere escoger el número de tópicos $K$ por adelantado, por otro lado, en HDP el número de tópicos no está acotado y es inferido a partir de los datos. En un enfoque tradicional, se requiere de entrenar múltiples veces LDA para diferentes valores de $K$ y se escoge el que tiene mejor la configuración con mejor desempeño en un conjunto de validación, por lo que LDA termina siendo computacionalmente más costoso que HDP, además este enfoque se vuelve impracticable cuando el conjunto de datos es grande. En el aspecto cualitativo ambos modelos entregan tópicos igual de consistentes, en cuanto a métricas de desempeño como $\textit{perplexity}$ HDP suele tener mejor desempeño \citep{teh2005sharing}.
 
-\subsection{Interpretación de tópicos}\todoupdate{Mejorar estilo de redacción}
-Los modelos de tópicos se caracterizan por tener un alto poder interpretativo, esto se debe a que la distribución de probabilidad de cada tópico sobre el vocabulario nos da una idea del tema al que pertenece, por otro lado la mezcla de tópicos de cada documento muestra que tan importante es cada tópico en la generación de estos, como también dentro del corpus. En este sentido, las visualizaciones nos ayudan a interpretar mejor los resultados de los modelos de tópicos, respondiendo a las siguientes preguntas, ¿Cuál es el significado de cada tópico?¿Cuán predonimnante es cada tópico?¿Cómo se relacionan los tópicos entre sí?\\
+\subsection{Interpretación de tópicos}
+
+Los modelos de tópicos se caracterizan por tener un alto poder interpretativo, esto se debe a que la distribución de probabilidad de cada tópico sobre el vocabulario nos da una idea del tema al que pertenece, por otro lado la mezcla de tópicos de cada documento muestra que tan importante es cada tópico en la generación de estos, como también dentro del corpus. En este sentido, las visualizaciones nos ayudan a interpretar mejor los resultados de los modelos de tópicos, respondiendo a las siguientes preguntas, ¿Cuál es el significado de cada tópico?¿Cuán predominante es cada tópico?¿Cómo se relacionan los tópicos entre sí?\\
 
 En \citep{sievert2014ldavis} desarrollaron una herramienta de visualización web para responder a estas preguntas. Para responder la pregunta 1 se incorpora un gráfico de barras que muestra las palabras más relevantes del tópico seleccionado dado un parámetro $\lambda \in [0,1]$. A través de una visualización espacial responde la pregunta 2 y 3. La visualización espacial consiste en aplicar técnicas de reducción de dimensionalidad como TSNE \citep{maaten2008visualizing} o PCA \citep{wold1987principal} (en este caso se utilizó TSNE) a la matriz de distancia entre tópicos, usando Jensen-Shannon divergence \citep{endres2003new} como médida de distancia. Una vez cada tópico es mapeado a un punto en un espacio de dos dimensiones se dibuja un círculo con centro en este punto y con radio proporcional a la cantidad de tokens generados por el tópico.\\
+% se podría meter mano para reemplazar por WMD
 
-Para interpretar un tópico, uno típicamente examina una lista ordenada de los palabras más probables en el tópico, usando ya sea desde cinco a treinta términos. Un problema frecuente que se presenta en este caso es que los términos que son comunes al corpus frecuentemente aparecen en el top de las palabras más probables de un tópico, haciendo difícil discernir el significado de estos.
+Para interpretar un tópico, lo usual es examinar una lista ordenada de las palabras más probables del tópico, usando ya sea desde cinco a treinta términos. Un problema frecuente que se presenta en este caso es que los términos que son comunes al corpus frecuentemente aparecen en el top de las palabras más probables de un tópico, haciendo difícil discernir el significado de estos.
 Para esto en \citep{sievert2014ldavis} se define una métrica denominada \textit{relevance}, la cual define la relevancia de una palabra no solo por su probabilidad dentro del tópico sino también por su exclusivad dentro del corpus. La \textit{relevance} de una palabra $w$ en el tópico $k$ dado $\lambda$ está dada a través de la siguiente expresión:
 
 \begin{align}
@@ -494,20 +542,15 @@ Para esto en \citep{sievert2014ldavis} se define una métrica denominada \textit
 
 \section{Modelamiento de la evolución de los tópicos en el tiempo}
 
-\todo[inline]{Motivar}
+Nuestro objetivo no es solo descubrir los tópicos en el tiempo sino también modelar sus interacciones en el tiempo, como nacimiento, muerte, evolución, divisón y fusión.\\ 
 
-Nuestro objetivo es modelar la evolución en el tiempo de los tópicos, para esto el corpus es divido en $T$ épocas, en cada época se entrena un modelo de tópicos estático, obteniéndose así $T$ conjuntos de tópicos $\phi=\{\phi_{1}, \ldots, \phi_{T}\}$, donde $\phi_{t}=\{\phi_{t,1}, \ldots, \phi_{t,K_{t}}\}$ es el conjunto de tópicos que describen la época $t$, y $K_{t}$ el número de tópicos inferido en esa época.
+En \citep{wilson2011tracking} y \citep{beykikhoshk2018discovering} se propone una metodología que permite capturar los dinámismos mencionados usando LDA y HDP respectivamente. En estas se propone dividir el corpus en $T$ épocas, en cada época se entrena un modelo de tópicos estático, obteniéndose así $T$ conjuntos de tópicos $\phi=\{\phi_{1}, \ldots, \phi_{T}\}$, donde $\phi_{t}=\{\phi_{t,1}, \ldots, \phi_{t,K_{t}}\}$ es el conjunto de tópicos que describen la época $t$, y $K_{t}$ el número de tópicos inferido en esa época. Una vez descubiertos los tópicos se hace uso de medidas de distancia o similitud para relacionar tópicos de épocas adyacentes \\
 
-\subsection{Gráfo de similitud temporal}\todoupdate{Mejorar estilo de redacción}
+En la sección \label{ref:similarity_graph} se describe la metodología propuesta en \citep{beykikhoshk2018discovering} para relacionar los tópicos descubiertos de épocas adyacentes.
 
-Para relacionar los tópicos de una época necesitamos una medida de similitud $\rho \in [0,1]$, con esta médida de similitud se puede construir un gráfo, donde los nodos son los tópicos de una época y los arcos relacionan tópicos de una época con la siguiente, siendo el peso del arco la similitud entre los tópicos. Una vez construido el grafo se eliminan las conexiones débiles en base a un umbral $\zeta \in [0,1]$ a definir, reteniendo solo aquellas conexiones entre tópicos suficientemente similares entre épocas adyacentes, matemáticamente podamos el arco entre los tópicos $\phi_{t,i}$ y $\phi_{t+1,j}$ si $\rho(\phi_{t,i}, \phi_{t+1,j})\leq \zeta$. Una ilustración conceptual del grafo de similitud es mostrado en la Figura \ref{img:graph}, este muestra tres épocas consecutivas.
-
-\begin{figure}
-    \centering
-    \includegraphics[width=0.8\textwidth]{ch2/similarity_graph.png}
-    \caption{Ilustración conceptual del grafo de similitud que modela la dinámica de los tópicos en el tiempo. Un nodo corresponde a un tópico en una época específica; el ancho de los arcos es proporcional a la similitud entre los tópicos, arcos ausentes fueron eliminados por presentar una similitud menor a un umbral.}
-    \label{img:graph}
-\end{figure}
+\subsection{Gráfo de similitud temporal}
+\label{ref:similarity_graph}
+Para relacionar los tópicos de una época necesitamos una medida de similitud $\rho \in [0,1]$, con esta médida de similitud se puede construir un gráfo, donde los nodos son los tópicos de una época y los arcos relacionan tópicos de una época con la siguiente, siendo el peso del arco la similitud entre los tópicos. Una vez construido el grafo se eliminan las conexiones débiles en base a un umbral $\zeta \in [0,1]$ a definir, reteniendo solo aquellas conexiones entre tópicos suficientemente similares entre épocas adyacentes, matemáticamente podamos el arco entre los tópicos $\phi_{t,i}$ y $\phi_{t+1,j}$ si $\rho(\phi_{t,i}, \phi_{t+1,j})\leq \zeta$.\\
 
 Está metodología permite fácilmente detectar desaparición de un tópico, nacimiento de un nuevo tópico, como también dividir o fusionar diferentes tópicos, a continuación se define en detalle cada uno de estos dinamismos:
 
@@ -519,39 +562,59 @@ Está metodología permite fácilmente detectar desaparición de un tópico, nac
     \item \textbf{Fusión de un tópico:} Cuando un tópico tiene más de un arco entrante, este tipo de tópicos también pueden ser entendidos como un nuevo tópico, por ejemplo, en la Figura \ref{img:graph} los tópicos $\phi_{i}$ y $\phi_{i+1}$ de $t-1$ forman al tópico $\phi_{j+1}$ en $t$.
 \end{itemize}
 
-Un aspecto relevante de esta metodología es definir el úmbral de corte, el cual no es fácilmente interpretable, además el úmbral depende de la médida de similitud escogida, dificultando así la comparación entre médidas de similitud. En \cite{beykikhoshk2018discovering} proponen una alternativa más interpretable para definir el úmbral, para esto estiman la función de distribución acumulada (cdf) del grafo inicial, donde todos los nodos de una época están conectados con todos los nodos de la época adyacente, sea $F_{p}$ la cdf sobre las similitudes del grafo inicial, luego sea $\zeta \in [0,1]$ el punto operante de la cdf, luego eliminamos el arco entre los tópicos $\phi_{t,i}$ y $\phi_{t+1,j}$ si $\rho(\phi_{t,i}, \phi_{t+1,j})\leq F_{p}^{-1}(\zeta)$, donde  $F_{p}^{-1}(\zeta)$ es el cuantil $\zeta$ de $F_{p}$.
+Una ilustración conceptual del grafo de similitud es mostrado en la Figura \ref{img:graph}, este muestra tres épocas consecutivas.
 
-\subsection{Medidas de similitud}\todoupdate{Mejorar estilo de redacción}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\textwidth]{ch2/similarity_graph.png}
+    \caption{Ilustración conceptual del grafo de similitud que modela la dinámica de los tópicos en el tiempo. Un nodo corresponde a un tópico en una época específica; el ancho de los arcos es proporcional a la similitud entre los tópicos, arcos ausentes fueron eliminados por presentar una similitud menor a un umbral. Fuente:  Figura 3 de \citep{beykikhoshk2018discovering}}
+    \label{img:graph}
+\end{figure}
 
-Los tópicos son distribuciones de probabilidad sobre un vocabulario fijos de términos. La gran mayoría de medidas de similitud comparan vectores con el mismo dominio y dimensión, esto significa que los tópicos de épocas adyacentes deben compartir el mismo vocabulario, matemáticamente, sea $\phi_{t, i}$ un tópico de la época $t$ y $V_{t}$ su vocabulario, sea  $\phi_{t+1, j}$ un tópico de la época $t+1$ y $V_{t+1}$ su vocabulario, lo más probables es que existan palabras en $V_{t}$ que no existan en $V_{t+1}$ y viceversa, para poder comparar tópicos en estas épocas adyacentes se debe construir el vocabulario $V_{t+1}^{'}=V_{t}\cup V_{t+1}$, luego se aplica $padding$ a los vectores $\phi_{t, i}$ y $\phi_{t+1, j}$, es decir, se rellenan con ceros las posiciones de palabras que no están en el vocabulario de su dominio.\\
+Un aspecto relevante de esta metodología es definir el úmbral de corte, el cual no es fácilmente interpretable, además el úmbral depende de la médida de similitud escogida, dificultando así la comparación entre médidas de similitud. En \citep{beykikhoshk2018discovering} proponen una alternativa más interpretable para definir el úmbral, para esto estiman la función de distribución acumulada (cdf) del grafo inicial, donde todos los nodos de una época están conectados con todos los nodos de la época adyacente. Sea $F_{p}$ la cdf sobre las similitudes del grafo inicial, luego sea $\zeta \in [0,1]$ el punto operante de la cdf, luego eliminamos el arco entre los tópicos $\phi_{t,i}$ y $\phi_{t+1,j}$ si $\rho(\phi_{t,i}, \phi_{t+1,j})\leq F_{p}^{-1}(\zeta)$, donde  $F_{p}^{-1}(\zeta)$ es el cuantil $\zeta$ de $F_{p}$.
 
-La gran desventaja del enfoque anterior es que no captura similitud entre palabras, es decir, dos palabras diferentes que pueden llegar a ser sinónimos ocuparan una posición diferente dentro del vector, siendo no robusta a cuando una palabra esta presente en la época $t$ y no en $t-1$ por lo que no hay forma de compararla por ejemplo con la palabra de $t-1$ más símil, por lo que se compara la palabra consigo misma, donde en $t$ tiene un peso distinto de cero y en $t-1$ un peso nulo. El peor caso sería considerar los vocabularios $V_{t}$ y $V_{t+1}$, donde $V_{t}\cap V_{t+1} =  \emptyset$, a pesar de que cada palabra en $V_{t}$ tiene un sinónimo en $V_{t+1}$ la similitud entre tópicos entre las épocas $t$ y $t+1$ sería cero.\\
+%ejemplo de esto del paper
 
-Para lidiar con el problema anterior en \citep{kusner2015word} se propone una medida de distancia llamada Word Mover's Distance (WMD) para comparar dos documento bajo una representación \textit{bag of words}, donde $i$ y $j$ son los documentos, $V_{i}$ y $V_{j}$ los vocabularios, y el peso asociado a cada palabra de un documento  es igual a la frecuencia normalizada. Generalizar al caso de tópicos es bastante sencillo, puesto a que estos se construyen bajo una representación bag of words, por ejemplo, para comparar el tópico $i$ de la época $t$ con el tópico $j$ de la época $t+1$, se usan los pesos $\phi_{t,i}$ y $\phi_{t+1,j}$ sobre el vocabulario $V_{t}$ y $V_{t+1}$ respectivamente. WMD calcula el costo mínimo de transformar un documento en otro, en esto caso particular sería el costo mínimo de llevar un tópico a otro, para esto se resuelve el problema de transporte, donde los flujos son los pesos $\phi_{t,i}$ y $\phi_{t+1,j}$ y la matriz de costos es una matriz de distancia euclidiana entre los \textit{word embedding} (\cite{mikolov2013distributed}) de todas las palabras de $V_{t}$ con $V_{t+1}$. Para resolver este problema se utilizó la implementación de \citep{PyEMD}. En la Figura \ref{img:wmd_obama} se ilustra el espacio en el que viven las palabras de dos tópicos.
+\subsection{Medidas de similitud}
+
+Los tópicos son distribuciones de probabilidad sobre un vocabulario fijos de términos. La gran general las medidas de similitud o distancia comparan vectores con el mismo dominio y dimensión, esto significa que los tópicos de épocas adyacentes deben compartir el mismo vocabulario. Matemáticamente, sea $\phi_{t, i}$ un tópico de la época $t$ y $V_{t}$ su vocabulario, sea  $\phi_{t+1, j}$ un tópico de la época $t+1$ y $V_{t+1}$ su vocabulario, lo más probables es que existan palabras en $V_{t}$ que no existan en $V_{t+1}$ y viceversa, para poder comparar tópicos en estas épocas adyacentes se debe construir el vocabulario $V_{t+1}^{'}=V_{t}\cup V_{t+1}$, luego aplicar $padding$ a los vectores $\phi_{t, i}$ y $\phi_{t+1, j}$, es decir, se rellenan con ceros las posiciones de palabras que no están en el vocabulario de su dominio.\\
+
+La gran desventaja del enfoque anterior es que no captura similitud entre palabras, es decir, dos palabras diferentes que pueden llegar a ser sinónimos ocuparan una posición diferente dentro del vector, siendo no robusta a palabras que estan presentes en la época $t$ y no en $t-1$ por lo que no hay forma de compararla. El peor caso sería considerar los vocabularios $V_{t}$ y $V_{t+1}$, donde $V_{t}\cap V_{t+1} =  \emptyset$, a pesar de que cada palabra en $V_{t}$ tiene un sinónimo en $V_{t+1}$ la similitud entre tópicos entre las épocas $t$ y $t+1$ sería cero.\\
+
+Para lidiar con el problema anterior en \citep{kusner2015word} se propone una medida de distancia llamada Word Mover's Distance (WMD) para comparar dos documento bajo una representación \textit{bag of words} a través de sus \textit{word embeddings} (\cite{mikolov2013distributed}).\\
+
+WMD calcula el costo mínimo de transformar un documento en otro, en esto caso particular sería el costo mínimo de llevar un tópico a otro. Para esto se resuelve el problema de transporte, donde los flujos son los pesos $\phi_{t,i}$ y $\phi_{t+1,j}$ y la matriz de costos es una matriz de distancia euclidiana entre los \textit{word embedding} de todas las palabras deS $V_{t}$ con $V_{t+1}$. En la Figura \ref{img:wmd_obama} se ilustra el espacio en el que viven las palabras de dos tópicos.
 
 \begin{figure}
     \centering
 \includegraphics[width=1\textwidth]{ch2/wmd-obama.png}
-    \caption{Espacio vectorial de los \textit{word embeddings} de las palabras de dos tópicos con un vocabulario de tamaño 4.}
+    \caption{Espacio vectorial de los \textit{word embeddings} de las palabras de dos tópicos con un vocabulario de tamaño 4. Fuente: Figura de \citep{WMDPy}.}
     \label{img:wmd_obama}
-\end{figure}\todoref{Citar}
+\end{figure}
 
-Matemáticamente, la WMD entre el tópico $i$ de la época $t$ y el tópico $j$ de la época $t+1$ viene dado por $WMD(\phi_{i,t}, \phi_{j,t+1})$:
+
+Sea  $V_{i}$ y $V_{j}$ los vocabularios del tópico $i$ y $j$ respectivamente, luego su WMD viene dado por $WMD(\phi_{i}, \phi_{j})$:
 
 \begin{align}
-\underset{T}{\text{minimize}}&\sum_{u \in V_{t}}\sum_{v \in V_{t+1}} c_{u,v}T_{u,v} \\ 
-\textrm{s.t.}\qquad &\sum_{v \in V_{t+1}}T_{u,v}= \phi_{i,t,u} \;, u \in V_{t}\\ 
-& \sum_{u \in V_{t}}T_{u,v}= \phi_{j,t+1,v} \;, v\in V_{t+1}\\
-& T_{u,v} \geq 0,\; u \in V_{t} \;, v \in V_{t+1}\\ \nonumber
+\underset{x}{\text{minimize}}&\sum_{u \in V_{i}}\sum_{v \in V_{j}} c_{u,v}x_{u,v} \\ 
+\textrm{s.t.}\qquad &\sum_{v \in V_{j}}x_{u,v}= \phi_{i,u}, \; u \in V_{i}\\ 
+& \sum_{u \in V_{i}}x_{u,v}= \phi_{j,v}, \; v\in V_{j}\\
+& x_{u,v} \geq 0,\; u \in V_{i} \;, v \in V_{j}\\ \nonumber
 \end{align}
 
-Donde $T_{u,v}$ es el flujo que va de la palabra $u$ del tópico $i$ de la época $t$ a la palabra $v$ del tópico $j$ de la época $t+1$, $\phi_{i,t,u}$, es la probabilidad de la palabra $u$ en el tópico $i$ de la época $t$, $c_{u,v}$ es el costo de mover una unidad de flujo por el arco $(u,v)$, el costo entre palabras se mide como la distancia euclidiana entre los \textit{word embedding} de dichas palabras. La primera restricción indica que el flujo que se mueve de una palabra $u$ del tópico $i$ a todas las palabras del tópico $j$ debe sumar su peso ($\phi_{i,t,u}$), la segunda restricción significa que el flujo que se mueve de una palabra $v$ del tópico $j$ a todas las palabras del tópico $i$ debe sumar su peso ($\phi_{j,t+1,v}$). Esta médida de distancia se puede fácilmente transformar en una médida de similitud $\rho(\phi_{i,t}, \phi_{j,t+1}) = \frac{1}{1+WMD(\phi_{i,t}, \phi_{j,t+1})}$, notar que si la WMD es 0 la similitud es 1 y si es $\infty$ la similitud es 0. \\
+Donde $x_{u,v}$ es el flujo que va de la palabra $u$ del tópico $i$ a la palabra $v$ del tópico $j$, $\phi_{i,u}$ es la probabilidad de la palabra $u$ en el tópico $i$, $c_{u,v}$ es el costo de mover una unidad de flujo por el arco $(u,v)$, el costo entre palabras se mide como la distancia euclidiana entre los \textit{word embedding} de dichas palabras.\\
 
-WMD es una medida de distancia intensiva en recursos computacionales, para entender mejor esto utilizaremos la representación poliedral del problema, sea $N$ el tamaño del vocabulario entre dos épocas adyacentes, luego la región factible del problema anterior se puede representar como $\{x| Ax=b, x\geq 0\}$, con $A\in \mathbb{R}^{2N\times N^{2}}$ la matriz de costos, $b\in \mathbb{R}^{2N}$ el flujo disponible y $x\in \mathbb{R}^{N}$ el flujo a enviar por cada uno de los arcos, la complejidad del mejor tiempo promedio de resolver este problema de optimización escala $\mathcal{O}(N^{2}log N)$ \citep{pele2009fast}, por lo que si se reduce el vocabulario a un décimo esto trae una reducción de al menos unas 200 veces (en el peor caso promedio). Los tópicos siguen una distribución de ley de potencia sobre el vocabulario, donde una fracción de las palabras concentran la mayor parte de la masa de la distribución. Además, en la práctica la interpretación de los tópicos se basa en los top $T$ palabras más probables (o relevantes) con $T \in [5, 30]$, entonces, podemos aprovechar esta estructura para efectos de computar la WMD de un forma más eficiente, por ejemplo, utilizando solo las palabras que capturan un 95\% de la distribución acumulada del tópico.
+La primera restricción indica que el flujo que se mueve de una palabra $u$ del tópico $i$ a todas las palabras del tópico $j$ debe sumar su peso ($\phi_{i,u}$), la segunda restricción significa que el flujo que se mueve de una palabra $v$ del tópico $j$ a todas las palabras del tópico $i$ debe sumar su peso ($\phi_{j,v}$). Lo anterior implica que esta medida de distancia es simétrica, es decir, $WMD(\phi_{i}, \phi_{j}) = WMD(\phi_{j}, \phi_{i})$.\\
 
-\todosec[inline]{Resumen Método propuesto}
+WMD se puede fácilmente transformar en una médida de similitud, $\rho(\phi_{i}, \phi_{j}) = \frac{1}{1+WMD(\phi_{i}, \phi_{j})}$, notar que si la WMD es 0 la similitud es 1 y si es $\infty$ la similitud es 0. \\
+
+WMD es una medida de distancia intensiva en recursos computacionales. Para entender mejor esto utilizaremos la representación poliedral del problema, sea $N$ el tamaño del vocabulario entre dos épocas adyacentes, luego la región factible del problema anterior se puede representar como $\{x| Ax=b, x\geq 0\}$, con $A\in \mathbb{R}^{2N\times N^{2}}$ la matriz de costos, $b\in \mathbb{R}^{2N}$ el flujo disponible y $x\in \mathbb{R}^{N}$ el flujo a enviar por cada uno de los arcos. Para resolver este problema se utilizó \citep{PyEMD}, la cual está basada en el algoritmo \citep{pele2009fast}, cuya complejidad del mejor tiempo promedio escala $\mathcal{O}(N^{2}log N)$, por lo si se reduce el vocabulario a un décimo esto traera en el peor caso promedio un \textit{speed up}de  de 200.\\
+
+Los tópicos siguen una distribución de ley de potencia sobre el vocabulario, donde una pequeña fracción de las palabras concentran la mayor parte de la masa de la distribución. Además, en la práctica la interpretación de los tópicos se basa en los top $N$ palabras más probables (o relevantes) con $N \in [5, 30]$, entonces, podemos aprovechar esta estructura para efectos de computar la WMD de un forma más eficiente, por ejemplo, utilizando solo las palabras que capturan un X\% de la distribución acumulada del tópico.\\
 
 \todosec[inline]{Métricas}
+% parámetros
+% asdasldkj
 
 \todosec[inline]{Procesamiento}
 

@@ -573,7 +573,7 @@ Una ilustración conceptual del grafo de similitud es mostrado en la Figura \ref
 
 Un aspecto relevante de esta metodología es definir el úmbral de corte, el cual no es fácilmente interpretable, además el úmbral depende de la médida de similitud escogida, dificultando así la comparación entre médidas de similitud. En \citep{beykikhoshk2018discovering} proponen una alternativa más interpretable para definir el úmbral, para esto estiman la función de distribución acumulada (cdf) del grafo inicial, donde todos los nodos de una época están conectados con todos los nodos de la época adyacente. Sea $F_{p}$ la cdf sobre las similitudes del grafo inicial, luego sea $\zeta \in [0,1]$ el punto operante de la cdf, luego eliminamos el arco entre los tópicos $\phi_{t,i}$ y $\phi_{t+1,j}$ si $\rho(\phi_{t,i}, \phi_{t+1,j})\leq F_{p}^{-1}(\zeta)$, donde  $F_{p}^{-1}(\zeta)$ es el cuantil $\zeta$ de $F_{p}$.
 
-%ejemplo de esto del paper
+\todo[inline]{Ejemplo}
 
 \subsection{Medidas de similitud}
 
@@ -612,11 +612,26 @@ WMD es una medida de distancia intensiva en recursos computacionales. Para enten
 
 Los tópicos siguen una distribución de ley de potencia sobre el vocabulario, donde una pequeña fracción de las palabras concentran la mayor parte de la masa de la distribución. Además, en la práctica la interpretación de los tópicos se basa en los top $N$ palabras más probables (o relevantes) con $N \in [5, 30]$, entonces, podemos aprovechar esta estructura para efectos de computar la WMD de un forma más eficiente, por ejemplo, utilizando solo las palabras que capturan un X\% de la distribución acumulada del tópico.\\
 
+Computar WMD requiere contar con \textit{words embeddings}. Para estó se utilizó una de las más grandes colección de \textit{words embeddings} en español \citep{fastextSUC}, que cuenta con 1.313.423 \textit{embeddings}, colección obtenida utilizando el algoritmo FasText \citep{bojanowski2017enriching} sobre el corpus Spanish Unannotated Corpora (SUC) \citep{josecanneteSUC}, uno de los más grandes corpus de texto en español. FasText en comparación a otros enfoques para extraer \textit{embeddings} representa los \textit{tokens} a través de n-gramas de caracteres, de esta manera se pueden obtener \textit{embeddings} de \textit{tokens} no vistos durante el entrenamiento a partir de los \textit{embeddings} de los caracteres que lo componen.
+
+\subsection{Métricas}
 \todosec[inline]{Métricas}
 % parámetros
 % asdasldkj
 
-\todosec[inline]{Procesamiento}
+\section{Procesamiento}
+
+El proposito del procesamiento en \textit{text mining} es simplificar los datos lo más posible tal que se mantiene el \textit{core} de palabras del corpus. En el caso de modelamiento de tópicos, esta etapa puede reducir significativamente el vocabulario. Como consecuencia, esto puee traer una mejora en la significancia estadística de los modelos, puesto que se puede obtener un mejor balance entre cantidad de parámetros y observaciones. Adicionalmente, puede facilitar la interpretación de los tópicos, removiendo palabras que aportan poca información.\\
+
+En este experimento se aplicaron cinco etapas:
+\begin{enumerate}
+\item \textbf{Tokenización}: La tokenización es una operación sobre una cadena de caracteres (\textit{string}) que consiste en dividir el \textit{string} (ej: por el caracter espacio) en un conjunto de términos, obteniéndose así una lista elementos llamados \textit{tokens}, que en términos simples pueden considerarse como una palabra.
+\item \textbf{Procesamiento de caracteres}: En esta etapa se suelen aplicar algunas operaciones básicas de procesamiento. En este proceso se llevan los tokens a unicode y minúsculas. Luego, se eliminan patrones de caracteres que dificilmente pueden tener algún significado, como correos electrónicos, símbolos de puntuación, tokens con números y letras o solo números. 
+\item \textbf{Eliminación de stopwords}: Las \textit{stopwords} son palabras que aportan poca información (ej: artículos, preposiciones y conectores), usualmente tienen un alta frecuencia dentro del corpus. Para esto se utilizó una lista de palabras de \textit{stopwords} disponible en el paquete NLTK de Python de 313 palabras \citep{bird2009natural}. Además, esta lista se alimentó con 951 \textit{stopwords} contextuales, palabras especificas del corpus que aportan poca información, en el caso de robo de vehículos palabras relacionas a \quotes{robo} o \quotes{vehículo} no aportan ninguna información, puesto a que todos los relatos habalan del robo de un vehículo. 
+\item \textbf{Filtro por vocabulario}: Con el proposito de mantener las palabras que son \quotes{humanamente legibles} se utiliza un vocabulario. Para esto se utilizó el vocabulario del corpus SUC descrito en la sección anterior. Al ser este gran vocabulario el dominio de los \texit{embeddings}, se garatiza que al computar WMD se tengan los \textit{embeddings} de las palabras.
+\item \textbf{Filtro por frecuencia}: El último nivel de procesamiendo corresponde a eliminar \textit{tokens} con baja frecuencia. Esta etapa viene motivada del hecho de que un modelo difícilmente aprenderá algún patrón de un evento que tiene muy pocas realizaciones, menos si tiene una realización única. Esta etapa se aplicó a nivel epoca, eliminando aquellos tokens que aparecen en menos del 0.1\% de los documentos de su época.
+\end{enumerate}
+
 
 \chapter{Experimento}
 \todo[inline]{Motivación}

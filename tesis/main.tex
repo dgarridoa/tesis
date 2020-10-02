@@ -473,6 +473,8 @@ Esto es ilustrado en la Figura \ref{img:hdp}.
 
 La discretitud a nivel corpus de $G_{0}$ asegura que todos los documentos comparten el mismo conjunto de tópicos (\textit{mixture components}). A nivel documento $G_{d}$ hereda los tópicos de $G_{0}$, pero los pesos de cada tópico (\textit{mixture proportions}) es específica del documento.\\
 
+
+\subsubsection{Stick Breaking Construction}
 Aplicando \textit{stick breaking construction} se tiene que para el DP dibujado a nivel corpus la siguiente representación:
 
 \begin{align}
@@ -518,7 +520,27 @@ Donde $\phi = \{\phi_{k}\}_{k=1}^{\infty}$ son los mismos átomos de $G_{0}$. Es
 \label{img:hdp_sbc}
 \end{figure}
 
-Al igual que LDA la distribución posterior es intratable, por lo que en \citep{teh2005sharing} se marginaliza $G_{0}$ y $G_{d}$'s, obteniéndose así un nuevo proceso generativo denominado \textit{Chinese restaurant franchise process} (CRF), esta representación permite construir algoritmos eficientes basados en Gibbs Sampling, como en la implementación en C++ utilizada \citep{HDP}.
+\subsubsection{Chinese Restaurant Franchise Process}
+
+Una construcción alternativa de HDP es conocida bajo el nombre de \textit{Chinese Restaurant Franchise Process} (CRF), una extensión del CRP, que permite compartir un conjunto de platos a través de una cadena de restaurantes Chinos. La analogía es la siguiente, tenemos $D$ restaurantes (documentos), cada uno con $N_{d}$ clientes $\phi_{d,i}$ (palabras), que se sientan en tablas $t_{d,i}$, en cada tabla es servido un único plato $\phi_{k}\sim H$ (tópico) a partir de un menú común para todos los restaurantes. \\
+
+Sea $m_{dk}$ el número de tablas sirviendo el plato $k$ en el restaurante $d$, así $m_{d.}$ representa el número de tablas en el restaurante $d$, $m_{.k}$ representa el número de tablas sirviendo el plato $k$, y $m_{..}$ el número total de tablas ocupadas. Primero, procedemos a integrar afuera $G_{d}$, siendo la distribución condicional del cliente $i$ en la tabla $d$ es:
+
+\begin{align}
+p(t_{di}=t|t_{d1}, \ldots, t_{j,i-1}, \alpha_{0}, G_{0}) = \frac{1}{\alpha_{0}+i-1}\bigg(\alpha_{0}\mathbb{I}(t=t^{*})+\sum_{t^{'}=1}^{m_{d.}}N_{dt^{'}}\mathbb{I}(t=t^{'})\bigg)
+\end{align}
+
+donde $N_{dt^{'}}$ representa los clientes del restaurante $d$ que están sentados en la tabla $t^{'}$. Con probabilidad proporcional a los clientes sentados en la tabla $t$ los clientes del restaurante se sentarán en esta y con probabilidad proporcional a $\alpha_{0}$ en una nueva. Una vez todos los clientes estan sentados tenemos una partición sobre $\phi_{d1}, \ldots, \phi_{dN_{d}}$. Luego, procedemos a integrar afuera $G_{0}$, obteniéndose:
+
+\begin{align}
+    p(z_{dt}=z|z_{11}, z_{12}, \ldots, z_{d1}, \ldots, z_{d, t-1}|\gamma, H) = \frac{1}{\gamma+m_{..}}\bigg(\gamma\mathbb{I}(z=k^{*})+\sum_{k=1}^{K}m_{.k}\mathbb{I}(z=k)\bigg)
+\end{align}
+
+en este caso se tiene que la tabla $t$ del restaurante $d$ con probabilidad proporcional al número de tablas que sirven el plato $k$ ($m_{.k}$) servirá el plato $k$ y con probabilidad proporcional a $\gamma$ servirá un nuevo plato.\\
+
+Al igual que LDA la distribución posterior es intratable, en  \citep{teh2005sharing} se propone un algoritmo basado en Gibbs Sampling bajo la construcción CRF de un HDP. En este trabajo se utiliza la implementación en C++ \citep{HDP} de este algoritmo.
+
+%\todo[inline][Hiperparámetros]
 
 %Si bien el modelo posee hiperparámetros estos no se calibraron en base alguna métrica. Los parámetros de concentración fueron marginalizados por un prior vague gamma (empirical bayes), distribución que tiene gran parte de su masa en cero y una cola pesada. Como consecuencia de esto la distribución le dara más peso a la ver a los datos que al prior(?). Adicionalmente el modelo tendrá a tener menos tópicos y a clasificar nuevas palabras en tópicos previamente generados (Chinese Restaurant Process). En el caso de la dirichlet se usa n=0.5 /V simétrica, en general se prefiere eta menor que 1 para generar tópicos con distribución sparse, muy distintos, y que la semántica este compacta en pocas palabras para facilitar la interpretabilidad.
 

@@ -134,7 +134,7 @@ Los modelos de tópicos probabilísticos nos ayudan a descubrir los temas latent
 
 Los modelos probabilísticos tratan un tópico como una distribución de probabilidad discreta sobre el vocabulario del corpus, siendo un práctica habitual interpretar un tópico a partir de sus $N$ palabras más probables. Por ejemplo, para $N=5$ las palabras más probables de un tópico son: \quotes{llaves}, \quotes{domicilio}, \quotes{individuos}, \quotes{casa} y \quotes{porton}, por lo que una etiqueta valida para este tópico podría ser \quotes{portonazo}.\\ 
 
-En este trabajo se propone una metodología para el descubrimiento de tópicos en el tiempo. Esta metodología consisten en la discretización del corpus en épocas, el descubrimiento de tópicos en cada época mediante Hierarchical Dirichlet Process (HDP), la construcción de un grafo de similitud entre tópicos de épocas adyacentes, el cual permite modelar cambios entre los tópicos como: nacimiento, muerte, evolución, división y fusión. En contraste a trabajos anteriores, la metodología propuesta utiliza Word Mover's Distance (WMD) como medida de similitud entre tópicos, permitiendo así una comparación más justa entre tópicos que no poseen un vocabulario común mediante sus \textit{word embeddings}.\\
+En este trabajo se propone una metodología para el descubrimiento de tópicos en el tiempo. Esta metodología consiste en la discretización del corpus en épocas, el descubrimiento de tópicos en cada época mediante Hierarchical Dirichlet Process (HDP), la construcción de un grafo de similitud entre tópicos de épocas adyacentes, el cual permite modelar cambios entre los tópicos como: nacimiento, muerte, evolución, división y fusión. En contraste a trabajos anteriores, la metodología propuesta utiliza Word Mover's Distance (WMD) como medida de similitud entre tópicos, permitiendo así una comparación más justa entre tópicos que no poseen un vocabulario común mediante sus \textit{word embeddings}.\\
 
 \section{Caso de estudio}
 
@@ -151,8 +151,6 @@ En el contexto de robo de vehículos, los tópicos vendrían siendo los \quotes{
 El robo de vehículos o accesorios de vehículos es un problema que afecta a toda la sociedad en Chile y en el mundo. Este problema se ha vuelto más relevante el último tiempo debido al crecimiento en el robo de vehículo motorizado y de los robos con violencia (ver Figura \ref{fig:antecedente}).\\ 
 
 Este fenómeno trae consigo un montón de costos para la sociedad, como incremento en la percepción de la seguridad, aumentos en la prima de los seguros de los asegurados, aumento en los costos de las aseguradoras \footnote{Considerando que el costo promedio incurrido en un auto asegurado robado y no recuperado es de \$ 5.000.000 de pesos, la pérdida total considerando solo los vehículos no recuperados para el año 2015 es de unos \$15.720 millones de pesos.} y el incremento de otros tipos de delitos \footnote{El destino de los vehículos robados es variado, se usan los autos para perpetrar otros delitos y huir, venderlos por piezas en talleres clandestinos o blanquear sus documentos para pasarlos por la frontera y venderlos o cambiarlos por droga en el extranjero.}
-
-
 
 \section{Revisión del estado del arte}
 
@@ -420,8 +418,7 @@ La distribución a posterior:
     p(\phi, \pi, z|w, \alpha, \eta) = \frac{p(\phi, \pi, z, w|\alpha, \eta)}{p(w|\alpha, \eta)}
 \end{equation}
 
-La distribución posterior es computacionalmente intratable para inferencia exacta, debido a que para normalizar la distribución debemos marginalizar sobre todas las variables ocultas y escribir la constante de normalización en términos de los parámetros del modelo. Para poder computar la posterior es necesario utilizar algoritmos de inferencia aproximada, donde el enfoque habitual es Markov Chain Monte Carlo (MCMC) e Inferencia Variacional (VI).\\
-%citas
+La distribución posterior es computacionalmente intratable para inferencia exacta, debido a que para normalizar la distribución debemos marginalizar sobre todas las variables ocultas y escribir la constante de normalización en términos de los parámetros del modelo. Para poder computar la posterior es necesario utilizar algoritmos de inferencia aproximada, donde el enfoque habitual es Markov Chain Monte Carlo (MCMC) \citep{andrieu2003introduction} e Inferencia Variacional (VI) \citep{blei2017variational}. En \citep{blei2003latent} se propone un algoritmo basado en VI y en \citep{griffiths2004finding} en MCMC.\\
 
 Una representación equivalente en LDA sería generar cada palabra de un documento $d$ a partir de un tópico dibujado por una distribución $G_{d}$,
 
@@ -536,11 +533,21 @@ donde $N_{dt^{'}}$ representa los clientes del restaurante $d$ que están sentad
 
 en este caso se tiene que la tabla $t$ del restaurante $d$ con probabilidad proporcional al número de tablas que sirven el plato $k$ ($m_{.k}$) servirá el plato $k$ y con probabilidad proporcional a $\gamma$ servirá un nuevo plato.\\
 % mejorar
-Al igual que LDA la distribución posterior es intratable, en  \citep{teh2005sharing} se propone un algoritmo basado en Gibbs Sampling bajo la construcción CRF de un HDP. En este trabajo se utiliza la implementación en C++ \citep{HDP} de este algoritmo.
+Al igual que LDA la distribución posterior es intratable, en  \citep{teh2005sharing} se propone un algoritmo basado en MCMC bajo la construcción CRF de un HDP. En este trabajo se utiliza la implementación en C++ \citep{HDP} de este algoritmo.
 
-%\todo[inline][Hiperparámetros]
+\subsubsection{Hiperparámetros}
+HDP tiene tres hiperparámertos, el parámetro de concentración a nivel corpus $\gamma$, el parámetro de concentración a nivel documento $\alpha_{0}$ y $\eta$ el parámetro de la medida base Dirichlet.\\
 
-%Si bien el modelo posee hiperparámetros estos no se calibraron en base alguna métrica. Los parámetros de concentración fueron marginalizados por un prior vague gamma (empirical bayes), distribución que tiene gran parte de su masa en cero y una cola pesada. Como consecuencia de esto la distribución le dara más peso a la ver a los datos que al prior(?). Adicionalmente el modelo tendrá a tener menos tópicos y a clasificar nuevas palabras en tópicos previamente generados (Chinese Restaurant Process). En el caso de la dirichlet se usa n=0.5 /V simétrica, en general se prefiere eta menor que 1 para generar tópicos con distribución sparse, muy distintos, y que la semántica este compacta en pocas palabras para facilitar la interpretabilidad.
+En modelamiento de tópicos se prefiere usar $\eta\in (0,1)$, esto generará distribuciones \textit{sparse} sobre el vocabulario. Así, se suelen tener tópicos más distinguibles, donde el \textit{core} de palabras del tópico concentra la masa de la distribución. Además, como la semántica del tópico está compactada en pocas palabras se facilita la interpretación. En este caso se utiliza un punto intermedio, fijando $\eta=0.5$.\\ 
+
+\begin{figure}
+    \includegraphics[width=0.8\textwidth]{ch2/gamma.eps}
+    \caption{Función de densidad de probabilidad (pdf) de una distribución Gamma para diferentes parámetros de forma $\alpha$ y tasa $\beta$.}
+    \label{img:gamma}
+\end{figure}
+
+
+En \citep{teh2005sharing} los parámetros de concentración se integran a fuera usando un prior \textit{vague gamma} \citep{escobar1995bayesian}. Un prior \textit{vague gamma} es una distribución Gamma con una gran parte de la masa en torno a cero y una cola pesada (ver Figura \ref{img:gamma} para una ilustración de la pdf para diferentes parámetros). Por consecuencia, el prior tendrá un menor efecto de regularización y a medida que más datos se obtienen la posterior conincidirá con las observaciones empíricas. En este caso se utiliza un prior $\Gamma(\alpha=1, \beta=1)$.
 
 
 \subsection{LDA versus HDP}
@@ -602,7 +609,7 @@ Un aspecto relevante de esta metodología es definir el úmbral de corte, el cua
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.8\textwidth]{img/ch2/cdf_sim.png}
+    \includegraphics[width=0.8\textwidth]{ch2/cdf_sim.png}
     \caption{Estimación empírica de la función de densidad acumulada (cdf) de la similitud entre tópicos de épocas adyacentes en el grafo \textit{fully connected} para tres medidas de similitud. Fuente: Figura 4 \citep{beykikhoshk2018discovering}.}
     \label{img:cdf_sim}
 \end{figure}
@@ -672,7 +679,7 @@ En este experimento se aplicaron cinco etapas:
 \begin{enumerate}
 \item \textbf{Tokenización}: La tokenización es una operación sobre una cadena de caracteres (\textit{string}) que consiste en dividir el \textit{string} (ej: por el caracter espacio) en un conjunto de términos, obteniéndose así una lista elementos llamados \textit{tokens}, que en términos simples pueden considerarse como una palabra.
 \item \textbf{Procesamiento de caracteres}: En esta etapa se suelen aplicar algunas operaciones básicas de procesamiento. En este proceso se llevan los tokens a unicode y minúsculas. Luego, se eliminan patrones de caracteres que difícilmente pueden tener algún significado, como correos electrónicos, símbolos de puntuación, tokens con números y letras o solo números. 
-\item \textbf{Eliminación de stopwords}: Las \textit{stopwords} son palabras que aportan poca información (ej: artículos, preposiciones y conectores), usualmente tienen un alta frecuencia dentro del corpus. Para esto se utiliza una lista de palabras de \textit{stopwords} disponible en el paquete NLTK de Python de 313 palabras \citep{bird2009natural}. Además, esta lista se alimenta con 951 \textit{stopwords} contextuales, palabras específicas del corpus que aportan poca información, en el caso del robo de vehículos palabras relacionas a \quotes{robo} o \quotes{vehículo} no aportan ninguna información, puesto a que todos los relatos hablan del robo de un vehículo. 
+\item \textbf{Eliminación de stopwords}: Las \textit{stopwords} \citep{wilbur1992automatic} son palabras que aportan poca información (ej: artículos, preposiciones y conectores), usualmente tienen un alta frecuencia dentro del corpus. Para esto se utiliza una lista de palabras de \textit{stopwords} disponible en el paquete NLTK de Python de 313 palabras \citep{bird2009natural}. Además, esta lista se alimenta con 951 \textit{stopwords} contextuales, palabras específicas del corpus que aportan poca información, en el caso del robo de vehículos palabras relacionas a \quotes{robo} o \quotes{vehículo} no aportan ninguna información, puesto a que todos los relatos hablan del robo de un vehículo. 
 \item \textbf{Filtro por vocabulario}: Con el proposito de mantener las palabras que son \quotes{humanamente legibles} se utiliza un vocabulario. Para esto se utilizó el vocabulario del corpus SUC descrito en la sección anterior, de esta menera toda palabra tiene su \textit{word embedding}. 
 \item \textbf{Filtro por frecuencia}: El último nivel de procesamiendo corresponde a eliminar \textit{tokens} con baja frecuencia. Esta etapa viene motivada del hecho de que un modelo difícilmente aprenderá algún patrón de un evento que tiene muy pocas realizaciones, menos si tiene una realización única. Esta etapa se aplica a nivel epoca, eliminando aquellos tokens que aparecen en menos del 0.1\% de los documentos de su respectiva época.
 \end{enumerate}

@@ -175,14 +175,12 @@ En \citep{ahmed2012timeline} se propone Dynamic Hierarchical Dirichlet Process (
 
 En \citep{wilson2011tracking} y \citep{beykikhoshk2018discovering} se propone una metodología que permite capturar los dinámismos mencionados utilizando LDA y HDP respectivamente. Estas consisten en dividir el corpus en épocas, entrenar de forma independiente un modelo de tópico en cada época, para finalmente unir los resultados obtenidos. En este trabajo se utilizan técnicas de modelado dinámico de tópicos bajo este enfoque, usando como HDP para el descubirmiento de tópicos en cada época.
 
-\todo[inline]{Describir organización del documento}
 
 \chapter{Marco teórico}
-\todo[inline]{Añadir motivación}
-\todo[inline]{Describir organización del capítulo}
+En este capítulo se describen los conceptos fundamentales para entender la metodología propuesta. El capítulo es estructurado como sigue. En la sección \ref{sec:mixture_models} se introducen a nivel general los modelos de \textit{clustering} probabiĺísticos conocidos como \textit{mixture models}. En la sección \ref{sec:topic_models} se introduce el modelo de tópicos base de la metodología llamado Hierarchical Dirichlet Process (HDP). En la sección \ref{sec:topic_evolution} se describe cómo se modela la evolución en el tiempo de los tópicos descubiertos. Por último, en la sección \ref{sec:processing} se describe la metodología utilizada para procesar los documentos del caso de estudio.
+
 \section{Mixture Models}
-\label{sec:mixture_model}
-%\citep{orbanz2012lecture
+\label{sec:mixture_models}
 
 Uno de los supuestos básicos en \textit{clustering} es asumir que cada observación $x_{i}$ pertenece a un solo \textit{cluster} $k$. Podemos expresar la asignación a un \textit{cluster} como una variable aleatoria $z_{i}$, donde $z_{i}=k$ significa que $x$ pertenece al \textit{cluster} $k$, esta variable no es observada en los datos y se considera una variable oculta. Podemos obtener la distribución que caracteriza a un solo \textit{cluster} $k$ condicionando en $z_{i}$
 
@@ -320,13 +318,6 @@ Esto se suele denotar como $\pi \sim \text{GEM}(\alpha)$, donde GEM representa G
 
 Algunos ejemplos de este proceso son mostrados en la Figura \ref{img:dp_samples} (a). A mayor $\alpha$, menos varianza y mayor número de átomos, por el contrario, pequeños valores de $\alpha$ muestran una alta varianza y menor número de átomos, adicionalmente exhiben mayor varianza en el número de átomos.
 
-\begin{figure}
-    \centering
-    \includegraphics[width=\textwidth]{ch2/dp_samples.eps}
-    \caption{(a) Muestra de una distribución GEM para diferentes parámetros de concentración $\alpha\in \{0.1, 0.6, 6\}$. (b) Medidas aleatorias generadas a partir de un Dirichlet Process con medida base normal $\mathcal{N}(0,1)$ para diferentes parámetros de concentración $\alpha\in \{0.1, 0.6, 6\}$}
-    \label{img:dp_samples}
-\end{figure}
-
 Se puede demostrar que este proceso terminará con probabilidad uno, a pesar que el número de elementos que este genera incrementa con $\alpha$. Además, el tamaño del componente $\pi_{k}$ decrece en promedio. Ahora definamos 
 \begin{align}
     G(\phi) = \sum_{k=1}^{\infty}\pi_{k}\delta_{\phi_{k}}(\phi)
@@ -334,6 +325,12 @@ Se puede demostrar que este proceso terminará con probabilidad uno, a pesar que
 
 donde $\pi \sim \text{GEM}(\alpha)$ y $\phi_{k} \sim H$, se puede demostrar que $G \sim \text{DP}(\alpha, H)$. Como consecuencia de esta construcción, las muestras de un DP son \textbf{discretas con probabilidad uno}. En otras palabras, al ir muestreando $\bar{\phi_{i}}\sim G$ veremos valores repetidos, por lo que la mayoría de los datos vendrán de los $\phi_{k}$ con $\pi_{k}$ más largos. En la Figura \ref{img:dp_samples} (b) muestra un par de medidas aleatorias generadas a partir de un DP con una medida base normal.\\
 
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{ch2/dp_samples.eps}
+    \caption{(a) Muestra de una distribución GEM para diferentes parámetros de concentración $\alpha\in \{0.1, 0.6, 6\}$. (b) Medidas aleatorias generadas a partir de un Dirichlet Process con medida base normal $\mathcal{N}(0,1)$ para diferentes parámetros de concentración $\alpha\in \{0.1, 0.6, 6\}$}
+    \label{img:dp_samples}
+\end{figure}
 
 \subsection{Chinese Restaurant Process}
 \label{sec:crp}
@@ -355,7 +352,7 @@ donde $k^{*}$ representa un nuevo \textit{cluster} que no ha sido usado aún. Es
 El hecho de que las tablas actualmente ocupadas son más probables de obtener nuevos clientes se le suele llamar el fenómeno del \textit{rich get richer}. En efecto, se puede demostrar que la dsitribución del número de \textit{clusters} que induce este prior es básicamente una ley de potencia, donde el número de tablas $K$ con probabilidad 1 se aproxima a $\alpha log(N)$ cuando $N\rightarrow \infty$, mostrando que la complejidad del modelo crece logarítmicamente con el tamaño de los datos.
 
 \section{Modelos de tópicos}
-
+\label{sec:topic_models}
 Los modelos de tópicos probabilísticos nos ayudan a descubrir los temas latentes (\textit{clusters}) en una colección de documentos, como estos temas están conectados unos a otros y cómo cambian en el tiempo. Permiten resumir un gran colección de documentos a través de sus temas y organizarlos entorno a estos.\\
 
 Los modelos probabilísticos tratan un tópico como una distribución de probabilidad discreta sobre el vocabulario del corpus, siendo un práctica habitual interpretar un tópico a partir de sus $N$ palabras más probables. Por ejemplo, para $N=5$ las palabras más probables de un tópico son: \quotes{llaves}, \quotes{domicilio}, \quotes{individuos}, \quotes{casa} y \quotes{porton}, por lo que una etiqueta valida para este tópico podría ser \quotes{portonazo}.\\ 
@@ -575,7 +572,7 @@ Para esto en \citep{sievert2014ldavis} se define una métrica denominada \textit
 , donde $\lambda$ determina el peso que se le da a la probabilidad de la palabra $w$ dentro del tópico $k$ ($\phi_{kw}$) relativo a su \textit{lift}, el cual se define por el ratio entre la probabilidad de la palabra dentro del tópico y su probabilidad marginal a lo largo del corpus ($p_w$). Fijando $\lambda=1$ se obtiene el ranking de términos decrecientes en orden de su probabilidad dentro del tópico, y fijando $\lambda=0$ el ranking se basa solo en el \textit{lift}.
 
 \section{Modelamiento de la evolución de los tópicos en el tiempo}
-
+\label{sec:topic_evolution}
 Nuestro objetivo no es solo descubrir tópicos sino también modelar sus interacciones en el tiempo, como nacimiento, muerte, evolución, divisón y fusión.\\ 
 
 En \citep{wilson2011tracking} y \citep{beykikhoshk2018discovering} se propone una metodología que permite capturar los dinámismos mencionados usando LDA y HDP respectivamente. Donde se propone dividir el corpus en $T$ épocas, en cada época se entrena un modelo de tópicos estático, obteniéndose así $T$ conjuntos de tópicos $\phi=\{\phi_{1}, \ldots, \phi_{T}\}$, con $\phi_{t}=\{\phi_{t,1}, \ldots, \phi_{t,K_{t}}\}$ el conjunto de tópicos que describen la época $t$, y $K_{t}$ el número de tópicos inferido en esa época. Una vez descubiertos los tópicos se hace uso de medidas de distancia o similitud para relacionar tópicos de épocas adyacentes \\
@@ -672,6 +669,7 @@ La métrica escogida en este caso es el \textit{macro average recall} \citep{for
 Adicionalmente, al contar con un grafo etiquetado podemos observar el efecto de los hiperparámetros $\zeta$ y $q$ en la métrica de desempeño escogida. El hiperparámetro $\zeta\in[0,1]$ define el úmbral de corte, representa el punto operante de la cdf del grafo \textit{fully connected}, permite definir el cuantil que se usará como úmbral para eliminar arcos con similitud menor a este. El parámetro $q \in [0,1]$ define el soporte de los tópicos, utilizando aquellas palabras más probables que explican 100q\% de la distribución acumulada del tópico. 
 
 \section{Procesamiento}
+\label{sec:processing}
 
 El proposito del procesamiento en \textit{text mining} es simplificar los datos lo más posible tal que se mantiene el \textit{core} de palabras del corpus. En el caso de modelamiento de tópicos, esta etapa puede reducir significativamente el vocabulario. Como consecuencia, esto puede traer una mejora en la significancia estadística de los modelos, puesto que se puede obtener un mejor balance entre cantidad de parámetros y observaciones. Adicionalmente, puede facilitar la interpretación de los tópicos, removiendo palabras que aportan poca información.\\
 

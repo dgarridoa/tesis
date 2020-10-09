@@ -85,13 +85,17 @@ for epoch in epochs:
     dictionary.filter_extremes(no_below=lb, no_above=ub)
     logger.info(f"Vocabulary size after elimination: {len(dictionary)}")
     
+    # new vocabulary and corpus
+    vocab = list(dictionary.token2id.keys())
+    corpus = [[word for word in doc if word in vocab] for doc in corpus]
+    # remove documents with less than DOC_LEN words
+    corpus = [doc for doc in corpus if len(doc)>=float(os.getenv("DOC_LEN"))]
+    logger.info(f"Corpus size after elimination of docs with less than {os.getenv('DOC_LEN')} words: {len(corpus)}")
+
     logger.info("Getting corpus in Blei’s LDA-C format")
     # a document is a list of tuples, each tuples has two element, the first is the id of the word and the second is its frequency
+    dictionary = Dictionary(corpus)
     corpus = [dictionary.doc2bow(doc) for doc in corpus]
-    
-    # remove empty documents
-    corpus = [doc for doc in corpus if len(doc)>0]
-    logger.info(f"Corpus size after elimination of empty docs: {len(corpus)}")
     
     # save dictionary and corpus in LDA-C format
     logger.info("Saving Corpus")

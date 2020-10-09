@@ -32,11 +32,11 @@ En la Figura \ref{img:documents} se muestra algunos ejemplos de la base de datos
 \section{Procesamiento}
 \label{sec:data_processing}
 
-En esta sección se detallan los resultados de aplicar el procesamiento descrito en la sección \ref{sec:processing}. Con fines gráficos los resultados del procesamiento se decriben en un orden distinto al descrito en dicha sección, con el objetivo de mostrar en como estas afectan el tamaño del vocabulario. El orden es el siguiente, (i) tokenización, (ii) procesamiento de caracteres, (iii) eliminación de palabras poco frecuentes, (iv) filtro por vocabulario y (v) eliminación de \textit{stopwords}.\\
+En esta sección se detallan los resultados de aplicar el procesamiento descrito en la sección \ref{sec:processing}. Con fines gráficos los resultados del procesamiento se decriben en un orden distinto al descrito en dicha sección, con el objetivo de mostrar en como estas afectan el tamaño del vocabulario. El orden es el siguiente, (i) tokenización, (ii) procesamiento de caracteres, (iii) eliminación de palabras poco frecuentes, (iv) filtro por vocabulario, (v) eliminación de \textit{stopwords} y (vi) eliminación de documentos con pocas palabras.\\
 
 En la Figura \ref{img:cum_dist1} se muestran la distribución acumulada del corpus original tras solo aplicar tokenización. En este caso los \textit{tokens} totales corresponden a 2030980 asociado a un vocabulario de 93203 palabras.\\
 
-La Figura \ref{img:cum_dist2} muestra los resultados al aplicar la etapa de procesamiento de caracteres, de esta se observa que se reduce el tamaño del vocabulario en cerca de la mitad, específicamente a 42921 palabras, similarmente con la cantidad de tokens, que ahora son 1028412.
+La Figura \ref{img:cum_dist2} muestra los resultados al aplicar la etapa de procesamiento de caracteres, de esta se observa que se reduce el tamaño del vocabulario en cerca de la mitad, específicamente a 42921 palabras, similarmente con la cantidad de \textit{tokens}, que ahora son 1028412.
 
 \begin{figure}
     \centering
@@ -54,11 +54,13 @@ La Figura \ref{img:cum_dist2} muestra los resultados al aplicar la etapa de proc
 
 Hasta este nivel de procesamiento se tiene que al menos el 50\% de las palabras ocurren una única vez y al menos un 80\% tiene una frecuencia igual o menor a 4. El 95\% de la distribución acumulada puede ser explicada con 7837 palabras (un 18\% del vocabulario actual). En conclusión, la distribución de las palabras tiene una cola bastante pesada.\\
 
-En la Figura \ref{img:cum_dist3} se muestra la nueva distribución tras eliminar las palabras que aparecen en menos del 0.1\% de los documentos de su época. En este nivel de procesamiento se redujo bastante el tamaño del vocabulario a 3148 (al rededor de 14 veces) sin alterar tan significativamente la cantidad de tokens (alrededor de un 10\%), siendo ahora 925693 tokens.\\
+En la Figura \ref{img:cum_dist3} se muestra la nueva distribución tras eliminar las palabras que aparecen en menos del 0.1\% de los documentos de su época. En este nivel de procesamiento se redujo bastante el tamaño del vocabulario a 3148 (al rededor de 14 veces) sin alterar tan significativamente la cantidad de \textit{tokens} (alrededor de un 10\%), siendo ahora 925693 \textit{tokens}.\\
 
-Luego se filtran palabras usando el vocabulario extraído del SUC. En la Figura \ref{img:cum_dist4} se observa que el vocabulario se redujo a 2902 y el corpus a 901745 tokens. En este caso la variación no fue tan significativa, alrededor de un 8\% en el tamaño del vocabulario y de un 3\% en el caso del corpus.\\
+Luego se filtran palabras usando el vocabulario extraído del SUC. En la Figura \ref{img:cum_dist4} se observa que el vocabulario se redujo a 2902 y el la cantidad de \textit{tokens} a 901745. En este caso la variación no fue tan significativa, alrededor de un 8\% en el tamaño del vocabulario y de un 3\% en el caso de los \textit{tokens}.\\
 
-Finalmente, se eliminan las \textit{stopwords}, de la Figura \ref{img:cum_dist5} se puede observar que esto significó una reducción significativa de tanto el vocabulario como en el tamaño del corpus, respectivamente en 32\%(1960 palabras) y 45\%(495182 \textit{tokens}). La reducción abrupta en la cantidad de \textit{tokens} se debe principalmente a que las \textit{stopwords} son parte de las palabras más frecuentes dentro del corpus.
+A continuación, se eliminan las \textit{stopwords}, de la Figura \ref{img:cum_dist5} se puede observar que esto significó una reducción significativa de tanto el vocabulario como en el número de \textit{tokens}, respectivamente en 32\%(1960 palabras) y 45\%(495182 \textit{tokens}). La reducción abrupta en la cantidad de \textit{tokens} se debe principalmente a que las \textit{stopwords} son parte de las palabras más frecuentes dentro del corpus.\\
+
+Por último, se eliminan los documentos con menos de 5 palabras, de la Figura \ref{img:cum_dist6} se puede observar que esto implicó una reducción de alrededor del 20\% en el tamaño del corpus y del 8\% en el número de \textit{tokens}.
 
 \begin{figure}
     \centering
@@ -81,7 +83,14 @@ Finalmente, se eliminan las \textit{stopwords}, de la Figura \ref{img:cum_dist5}
     \label{img:cum_dist5}
 \end{figure}
 
-En la tabla \ref{table:processing_stats} se muestra un cuadro resumen con estadísticas del corpus bajo distintos niveles de procesamiento. De aquí se extrae que el tamaño del vocabulario, el corpus y la cantidad de tokens se redujo en alrededor de un 98\%, un 1\% y un 76\% respectivamente.
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\textwidth]{ch4/cum_dist_6.eps}
+    \caption{Frecuencia acumulada del vocabulario en orden decreciente de ocurrencia aplicando hasta el sexto nivel de procesamiento.}
+    \label{img:cum_dist6}
+\end{figure}
+
+En la tabla \ref{table:processing_stats} se muestra un cuadro resumen con estadísticas del corpus bajo distintos niveles de procesamiento. De aquí se extrae que el tamaño del vocabulario, el corpus y la cantidad de \textit{tokens} se redujo en alrededor de un 98\%, un 20\% y un 76\% respectivamente.
 
 \begin{table}[H]
     \begin{tabular}{|c|c|c|c|}
@@ -91,12 +100,12 @@ En la tabla \ref{table:processing_stats} se muestra un cuadro resumen con estad�
     t+ch          & 49003      & 42921       & 1028412 \\ \hline
     t+ch+f        & 48988      & 3148        & 925693  \\ \hline
     t+ch+f+v      & 48988      & 2902        & 901745  \\ \hline
-    t+ch+f+v+s      & 48566      & 1960        & 495182  \\ \hline
+    t+ch+f+v+s    & 48566      & 1960        & 495182  \\ \hline
+    t+ch+f+v+s+d  & 38850      & 1960        & 453206  \\ \hline
     \end{tabular}
-    \caption{Estadísticas del corpus bajo distintos niveles de procesamientos, \textbf{t}: tokenización, \textbf{ch}: procesamiento de caracteres, \textbf{f}: filtro por frecuencia, \textbf{v}: filtro por vocabulario, \textbf{s}: eliminación de \textit{stopwords}.}
+    \caption{Estadísticas del corpus bajo distintos niveles de procesamientos, \textbf{t}: tokenización, \textbf{ch}: procesamiento de caracteres, \textbf{f}: filtro por frecuencia, \textbf{v}: filtro por vocabulario, \textbf{s}: eliminación de \textit{stopwords}, \textbf{d}: eliminación de documentos.}
     \label{table:processing_stats}
     \end{table}
-
 
 En la tabla \ref{table:innovation_rate} se muestra el detalle del vocabulario para cada una de las épocas tras procesar el corpus, de aquí se extrae que en promedio un 12.83\% del vocabulario se olvida de una época a otra y un 18.92\% es nuevo, es otras palabras, en promedio alrededor de un 32\% del vocabulario no es común entre tópicos de épocas adyacentes. Esto justifica la necesidad por utilizar medidas de similitud robustas a cambios en el vocabulario, permitiendo así una comparación más justa entre tópicos que no tienen un vocabulario común.
 

@@ -58,7 +58,7 @@ Para interpretar un tópico, lo usual es examinar una lista ordenada de las pala
 , donde $\lambda$ determina el peso que se le da a la probabilidad de la palabra $w$ dentro del tópico $k$ ($\phi_{kw}$) relativo a su \textit{lift}, el cual se define por el ratio entre la probabilidad de la palabra dentro del tópico y su probabilidad marginal a lo largo del corpus ($p_w$). Fijando $\lambda=1$ se obtiene el ranking de términos decrecientes en orden de su probabilidad dentro del tópico, y fijando $\lambda=0$ el ranking se basa solo en el \textit{lift}.
 
 \section{Construcción del grafo temporal}
-\label{ref:build_graph}
+\label{sec:build_graph}
 
 Nuestro objetivo no es solo descubrir tópicos sino también modelar sus interacciones en el tiempo, como nacimiento, muerte, evolución, divisón y fusión.
 Así, la metodología propuesta se basa en la metodología descrita en la sección \ref{sec:similarity_graph} propuesta en \citep{beykikhoshk2018discovering}, debido que esta captura los dinamismos mencionados.\\
@@ -119,7 +119,7 @@ Adicionalmente, al contar con un grafo etiquetado podemos observar el efecto de 
 
 \section{Resumen metodología}
 
-En la Figura \ref{fig:scheme} se presenta un esquema que resume de la metodología propuesta para el descubrimiento y seguimiento de tópicos en el tiempo. El primer proceso de la metodología corresponde al procesamiento, el cual toma el corpus original y lo divide en épocas, luego a nivel época se aplican cinco niveles de procesamiento de forma secuencial: tokenización, procesamiento de caracteres, eliminación de \textit{stopwords}, filtro por vocabulario y filtro por frecuencia. Como producto del proceso anterior se obtiene un corpus listo para la aplicación de algún modelo de tópicos, en este caso corresponde al modelo HDP, el cual se aplica de forma independiente sobre cada una de las épocas. Por último, una vez descubiertos los tópicos se procede a construir el grafo temporal, para esto es necesario computar la WMD entre los tópicos de épocas adyacentes, luego se podan los arcos cuya similitud es menor al cuantil $\zeta$ de la distribución acumulada del grafo \textit{fully connected}.
+En la Figura \ref{img:scheme} se presenta un esquema que resume de la metodología propuesta para el descubrimiento y seguimiento de tópicos en el tiempo. El primer proceso de la metodología corresponde al procesamiento, el cual toma el corpus original y lo divide en épocas, luego a nivel época se aplican cinco niveles de procesamiento de forma secuencial: tokenización, procesamiento de caracteres, eliminación de \textit{stopwords}, filtro por vocabulario y filtro por frecuencia. Como producto del proceso anterior se obtiene un corpus listo para la aplicación de algún modelo de tópicos, en este caso corresponde al modelo HDP, el cual se aplica de forma independiente sobre cada una de las épocas. Por último, una vez descubiertos los tópicos se procede a construir el grafo temporal, para esto es necesario computar la WMD entre los tópicos de épocas adyacentes, luego se podan los arcos cuya similitud es menor al cuantil $\zeta$ de la distribución acumulada del grafo \textit{fully connected}.
 
 \def\db[#1,#2,#3,#4,#5]#6{%
   \node[draw, cylinder, alias=cyl, shape border rotate=90, aspect=#3, %
@@ -176,5 +176,5 @@ En la Figura \ref{fig:scheme} se presenta un esquema que resume de la metodolog�
 \isaedge[g1,g2,,];
 \end{tikzpicture}
 \caption{Esquema de la metodología de descubrimiento y evolución de tópicos.}
-\label{fig:scheme}
+\label{img:scheme}
 \end{figure}

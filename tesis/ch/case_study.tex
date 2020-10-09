@@ -1,39 +1,42 @@
-\todo[inline]{Motivación}
-\todo[inline]{Describir organización del contenido}
+En este capítulo se analizan los resultados de la metodología propuesta al fenómeno de robo de vehículos. En la sección \ref{sec:data} se describen la fuente de información utilizada. En la sección \ref{sec:data_processing} los resultados del procesamiento de los datos. Por último, en la sección\ref{sec:quantative}-\ref{sec:qualitative} se realiza un análisis cuantitativo y cualitativo de los resultados.
 
-\todosec[inline]{Diseño del experimento}
+\section{Datos}
+\label{sec:data}
 
-
-\section{Datos}\todosec{Descripción del dataset: mejorar estilo y añadir ejemplos}
-
-Para este experimento se cuenta con relatos de víctimas del robo de vehículos provistos por la Asociación de Aseguradores de Chile (AACH). Esta base de datos consta con 49015 relatos entre los años 2011 y 2016. En la Figura .. se muestra la cantidad de relatos por año.
+Para este experimento se cuenta con relatos de víctimas del robo de vehículos provistos por la Asociación de Aseguradores de Chile (AACH). Esta base de datos consta con 49015 relatos entre los años 2011-2016, veasé la Figura \ref{img:robberies_aach} para el detalle por año.
 
 \begin{figure}
 \includegraphics[width=0.8\textwidth]{ch4/robberies_aach.eps}
 \caption{Cantidad de robos registrados por año en base de datos AACH.}
-\label{ref:robberies_aach}
+\label{img:robberies_aach}
 \end{figure}
 
-En la figura ... se detallan algunos ejemplos de relatos
+En la Figura \ref{img:documents} se muestra algunos ejemplos de la base de datos de la AACH, de aquí se observa que los relatos carecen de estandarización y presentan múltiples errores ortográficos. En consecuencia, la etapa de procesamiento toma suma relevancia, ya que aplicar un modelo de tópicos a un corpus sin ningún tipo de procesamiento nos puede llevar a resultados no deseados. En la sección \ref{sec:data_processing} se detallan los resultados obtenidos sobre el corpus tras aplicar los niveles de procesamiento mencionados en la sección \ref{sec:processing}.
 
-
-Características ... falta de estandarización ....
-
--> Procesamiento
-
-% descripción detallada del conjunto de datos
-% gráficos del Informe_1_fondef?
-% hablar del nivel de granularidad, justificar en base facilidad de análisis de resultados, interpretación, largo del grafo, combinatoria, etc
-
-% Para el uso de WMD es necesario contar con \textit{word embeddings}, para esto se utilizaron los \textit{embeddings} de \citep{fastextSBWC}, estos \textit{embeddings} fueron obtenidos utilizando el algoritmo FastText \citep{bojanowski2017enriching} sobre el corpus Spanish Billion Word Corpus (SBWC) \citep{cardellinoSBWCE}. FasText en comparación a otros enfoques para extraer \textit{embeddings} representa los \textit{tokens} a través de n-gramas de caracteres, de esta manera se pueden obtener \textit{embeddings} de \textit{tokens} no vistos durante el entrenamiento a partir de los \textit{embeddings} de los caracteres que lo componen.
+\def\grayboxtext[#1,#2]#3{
+        \node[fill=gray!80, text width=36em, draw=black!80, rounded corners, align=justify, below=#1] (#2) {#3}; 
+}
+\begin{figure}
+\begin{tikzpicture}
+    \grayboxtext[,t1]{\small ESTABA ESTACIONADO EL LA CALLE ROTEMBURGO ENTRE NORUGA Y SEÑORA DEL ROSAIO  Y AL MOMENTO DE IR A BUSCAR EL AUTO SE DA CUENTA QUE EL VH NO SE ENCUETRA AL PARECER LO ROBARON. NO POSEEE LOS DOCUMENTOS DEL VH vh aparece pero con mulples daños e evaluar queda en manos del liquidador.};
+    \grayboxtext[0.2cm of t1,t2]{\small ME ENCONTRABA CARGANDO COMBUSTIBLE EN LA SHELL DE CARRASCAL CON WALKER MARTÍNEZ Y REPENTINAMENTE FUI ASALTADA EN FORMA VIOLENTA LLEVASE MI VEH (TENGO GRABACIÓN ). DAÑOS: ROBO DE MI VEH . LEIVA SE DERIVA A DON MARIO MEDINA .3 UF.DED/XX@XX.CL};
+    \grayboxtext[0.2cm of t2,t3]{\small TEXT : DEJO MI VEHICULO ESTACIONADO EN DICHO LUGAR AL VOLVER ME PERCATO QUE EL VEHICULO HABIA SIDO ROBADO  EL MISMO DIA DEL ROBO A LAS 20:00 SOY CONTACTADO POR CARABINEROS DE LA COMUNA DE EL BOSQUE LOS CUALES ME INFORMAN QUE HABIAN RECUPERADO MI VEHICULO EL CUAL PRESENTABA LOS SIGUIENTES DAÑOS : VIDRIO TRASERO DERECHO QUEBRADA  CHAPA DE CONTACTO FORZADA  PARACHOQUE DELANTERO DERECHO RAYADO  ALARMADESCONECTADA  OTROS DAÑOS EN EL SISTEMA ELECTRICO  ALARMA DE AIRBAGS ENCENDIDA  ROBO DE ESPECIES.};
+    \grayboxtext[0.2cm of t3,t4]{\small Descripción Siniestro: el dia 24 de abril se le arrendo el vh a XX el cual estuvo sin problemas pagando el arriendo  hasta el mes pasado que no pago mas y se le ha llamado en reiteradas veces y dice que va a venir a dejar el auto y no aparecel. por eso se realizo una denuncia por apropiacion indevida};
+    \grayboxtext[0.2cm of t4,t5]{\small ammg  53966748    vh asegurado transitaba en calle copiapo alt. 750  en este punto sufro portonazo sujetos armados roban mi vh hoy a las 04.30am vh fue encontrado en sector de la pintana mi vh ahora esta siendo periciado.    daños por evaluar};
+    \grayboxtext[0.2cm of t5,t6]{\small PATENTE XX Siendo las 22:30 en la interseccion de san Alfonso con Claudio Gay  un individuo me obliga a bajar del vehiculo apuntandome con una pistola  de inmediato aparecen dos personas mas  las que me suben en la parte trasera del furgon donde constantemente me amenazan con dispararme  me bajan del vehiculo en un potrero cercano a la autopista del sol  teniendome boca abajo golpeandome  luego me colocan un pa?o en la cara perdiendo el conocimiento  al despertar desorientado me dirijo a car};
+\end{tikzpicture}
+\caption{Muestra de relatos de la base de datos AACH.}
+\label{img:documents}
+\end{figure}
 
 \section{Procesamiento}
+\label{sec:data_processing}
 
 En esta sección se detallan los resultados de aplicar el procesamiento descrito en la sección \ref{sec:processing}. Con fines gráficos los resultados del procesamiento se decriben en un orden distinto al descrito en dicha sección, con el objetivo de mostrar en como estas afectan el tamaño del vocabulario. El orden es el siguiente, (i) tokenización, (ii) procesamiento de caracteres, (iii) eliminación de palabras poco frecuentes, (iv) filtro por vocabulario y (v) eliminación de \textit{stopwords}.\\
 
 En la Figura \ref{img:cum_dist1} se muestran la distribución acumulada del corpus original tras solo aplicar tokenización. En este caso los \textit{tokens} totales corresponden a 2030980 asociado a un vocabulario de 93203 palabras.\\
 
-La Figura \ref{im:cum_dist2} muestra los resultados al aplicar la etapa de procesamiento de caracteres, de esta se observa que se reduce el tamaño del vocabulario en cerca de la mitad, específicamente a 42921 palabras, similarmente con la cantidad de tokens, que ahora son 1028412.
+La Figura \ref{img:cum_dist2} muestra los resultados al aplicar la etapa de procesamiento de caracteres, de esta se observa que se reduce el tamaño del vocabulario en cerca de la mitad, específicamente a 42921 palabras, similarmente con la cantidad de tokens, que ahora son 1028412.
 
 \begin{figure}
     \centering
@@ -115,6 +118,7 @@ En la tabla \ref{table:innovation_rate} se muestra el detalle del vocabulario pa
 
 
 \section{Análisis cuantitativo de resultados}
+\label{sec:quantative}
 \todoredo[inline]{Rehacer}
 
 % Al aplicar HDP de forma independiente en cada una de los épocas se obtuvo el siguiente número de tópicos [8, 10, 9, 8, 8, 9].
@@ -210,4 +214,5 @@ En la tabla \ref{table:innovation_rate} se muestra el detalle del vocabulario pa
 % \end{figure}\todoredo{Rehacer}
 
 \section{Análisis cualitativo de resultados}
+\label{sec:qualitative}
 \todosec[inline]{Análisis cualitativo de tópicos}

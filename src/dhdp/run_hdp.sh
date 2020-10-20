@@ -3,13 +3,9 @@
 # load environment variables
 set -a; . ../.env; set +a
 
-# relevants paths
-data_path="${CORPUS}"
-dir_to_save="${MODEL_PATH}"
-
 # clean previous results
-rm -rf $dir_to_save
-mkdir $dir_to_save
+rm -rf $MODEL_PATH
+mkdir $MODEL_PATH
 
 ##### parallelizing hdp #####
 hdp="hdp/hdp/./hdp"
@@ -20,10 +16,10 @@ hdp(){
     # get epoch
     epoch=$(echo $file| cut -d'_' -f 2| cut -d'.' -f 1)
     # path to save model results
-    path_to_save="${dir_to_save}/model_${epoch}"
+    path_to_save="${MODEL_PATH}/model_${epoch}"
     mkdir $path_to_save
     # run hdp
-    $hdp --algorithm train --data $file --directory $path_to_save --save_lag -1 --random_seed 123 --max_iter $MAX_ITER --gamma_a 0.001 --alpha_a 0.001 
+    $hdp --algorithm train --data $file --directory $path_to_save --save_lag -1 --random_seed 123 --max_iter $MAX_ITER --gamma_a 1 --alpha_a 1 
 }
 
 # initialize a semaphore with a given number of tokens
@@ -51,7 +47,7 @@ run_with_lock(){
 
 # run code
 open_sem $CORES
-files=$(find ${data_path} -name *.mm)
+files=$(find $CORPUS -name *.mm)
 for file in $files
 do
     run_with_lock hdp $file

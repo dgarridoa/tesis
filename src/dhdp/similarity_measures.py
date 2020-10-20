@@ -248,3 +248,11 @@ def compute_similarity(similarity_type, embeddings, token2id1, token2id2, topic1
         raise ValueError("similarity_type must be in {'wmd', 'cosine', 'js'}") 
     
     return similarity
+
+def get_topic_topn(token2id, topic, topn):
+    id2token = {v: k for k, v in token2id.items()}
+    topn_ids = np.argsort(topic)[-topn:][::-1]
+    topn_list = [id2token[id] for id in topn_ids]
+    topn_str = "<br>".join(topn_list)
+       
+    return topn_str 

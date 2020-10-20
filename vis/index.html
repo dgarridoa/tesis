@@ -2,18 +2,26 @@
 <html>
     <head>
         <script type = "text/javascript" src = "//d3js.org/d3.v4.min.js"></script>
-        <link rel="stylesheet" href="styles.css">
+      
+        <!-- CSS -->
+        <link rel="stylesheet" href="css/styles.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+        
+
+        <!-- jQuery and JS bundle w/ Popper.js -->
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
     </head>
     <body>
+        
+    <div id="graph" class="container"></div>
     
-    <div id="graph"></div>
     <script>
 
-        var margin = {top: 20, right: 30, bottom: 20, left: 30}
-        var width = 300
-        var height = 300
-        var thickness = 50
-
+        var margin = {top: 25, right: 30, bottom: 20, left: 30}
+        var width = 800
+        var height = 400
+        var thickness = 5
 
         function myfun(str){
             var mylist = str.split("-");
@@ -21,10 +29,13 @@
             var y = Number(mylist[1])
             return Array(x,y)
         }
+        var zoom = d3.zoom();
         var svg = d3.select("#graph")
             .append("svg")
-                .attr("width", width + margin.left + margin.right)
-                .attr("height", height + margin.top + margin.bottom)
+                .classed("svg-graph", true)
+            .call(d3.zoom().on("zoom", function () {
+                svg.attr("transform",d3.event.transform)
+            }))
             .append("g")
                 .attr("transform",
                     "translate(" + margin.left + "," + margin.top + ")");
@@ -33,23 +44,20 @@
             // x axis
             var x = d3.scaleLinear()
                 .domain([1, d3.max(data.nodes, d=>d.epoch)])
-                .range([margin.left, width-margin.right-40])
+                .range([margin.left, margin.left+width-margin.right-40])
                 .interpolate(d3.interpolateRound);
             
             // y axis
             var y = d3.scaleLinear()
                 .domain([1, d3.max(data.nodes, d=>d.id)])
-                .range([height-margin.bottom, margin.top])
+                .range([margin.top+height-margin.bottom, margin.top])
                 .interpolate(d3.interpolateRound)
 
-            // node scale
-            var color = d3.scaleSequential()
-                .domain([0, d3.max(data.nodes, d => d.size)])
-                .interpolator(d3.interpolateViridis)
-            
+            //// edges ////
+
             // edge thick
             var thick = d3.scaleLinear()
-                .domain([0, d3.max(data.edges, d => d.w)])
+                .domain([d3.min(data.edges, d => d.w), 0, d3.max(data.edges, d => d.w)])
                 .range([thickness, 1, thickness])
 
              // tooltips
@@ -60,39 +68,24 @@
                     
             var edgeMouseover = function(d) {
                 edgeTooltip.style("visibility", "visible")
-                    .html(d.w)
+                    .html(d.w.toFixed(3))
                       .style("left", d3.event.pageX+10 + "px")
                       .style("top", d3.event.pageY + "px")
+                      .style("font-size", "10px")
+                      .style("background-color", "white")
+                      .style("background-margin", "5px")
+                      .style("border", "solid")
+                      .style("border-width", "1px")
+                      .style("border-radius", "2px")
+                    d3.select("line.line"+d.s+"_"+d.t)
+                        .style("stroke", "black")
             }
             var edgeMouseout = function(d) {
                 edgeTooltip.transition()
                     .delay(1000)
                     .style("visibility", "hidden")
-            }
-
-            var nodeTooltip = d3.select("#graph")
-                .append("div")
-                    .style("position", "absolute")
-                    .style("visibility", "hidden")
-
-            var nodeMousemove = function(d) {
-                nodeTooltip.style("visibility", "visible")
-                    .html(d.topn)
-                      .style("left", d3.event.pageX+10 + "px")
-                      .style("top", d3.event.pageY + "px")
-                      .style("background-color", "white")
-                      .style("border", "solid")
-                      .style("border-width", "2px")
-                      .style("border-radius", "5px")
-                    d3.select(this)
-                    .style("stroke", "black")
-                    .style("opacity", 1)
-            }
-
-            var nodeMouseout = function(d) {
-                nodeTooltip.transition()
-                    .delay(100)
-                    .style("visibility", "hidden")
+                    d3.select("line.line"+d.s+"_"+d.t)
+                        .style("stroke", "#999")
             }
 
             // edges   
@@ -101,14 +94,50 @@
             .data(data.edges)
             .enter()
             .append("line")
+                .attr("class", d=>"line"+d.s+"_"+d.t)
                 .attr("x1", d=>x(myfun(d.s)[0]))
                 .attr("y1", d=>y(myfun(d.s)[1]))
                 .attr("x2", d=>x(myfun(d.t)[0]))
                 .attr("y2", d=>y(myfun(d.t)[1]))
-                .attr("stroke-with", d=>thick(d.w))
                 .style("stroke", "#999")
-            .on("mouseover", d=>edgeMouseover(d))
-            .on("mouseout", d=>edgeMouseout(d))
+                .attr("stroke-width", d=>thick(d.w))
+                .style("opacity", d=>2*d.w)
+                .on("mouseover", edgeMouseover)
+                .on("mouseleave", edgeMouseout)
+
+            //// nodes ////
+
+            // node size
+            var color = d3.scaleSequential()
+                .domain([0, d3.max(data.nodes, d => d.size)])
+                .interpolator(d3.interpolateViridis)
+            // tooltip
+            var nodeTooltip = d3.select("#graph")
+                .append("div")
+                    .style("position", "absolute")
+                    .style("visibility", "hidden")
+
+            var nodeMousemove = function(d) {
+                nodeTooltip.style("visibility", "visible")
+                    .html(d.topn+"<br> size:"+d.size.toFixed(3))
+                      .style("left", d3.event.pageX+10 + "px")
+                      .style("top", d3.event.pageY + "px")
+                      .style("background-color", "white")
+                      .style("border", "solid")
+                      .style("border-width", "2px")
+                      .style("border-radius", "5px")
+                      .style("font-size", "10px")
+                    d3.select("circle.circle"+d.epoch+"_"+d.id)
+                      .style("stroke-width", 2)
+            }
+
+            var nodeMouseout = function(d) {
+                nodeTooltip.transition()
+                    .delay(100)
+                    .style("visibility", "hidden")
+                d3.select("circle.circle"+d.epoch+"_"+d.id)
+                    .style("stroke-width", 1)
+            }
 
             // nodes
             var node = svg.append("g")
@@ -116,24 +145,23 @@
             .data(data.nodes)
             .enter()
             .append("circle")
+                .attr("class", d=>"circle"+d.epoch+"_"+d.id)
                 .attr("cx", d=>x(d.epoch))
                 .attr("cy", d=>y(d.id))
                 .attr("r", 10)
                 .attr("stroke", "black")
-                .attr("stroke-width", 2)
+                .attr("stroke-width", 1)
                 .style("fill", d=>color(d.size))
-                .style("opacity", 1.0)
-            //.on("mouseover", d=>nodeMouseover(d))
             .on("mousemove", d=>nodeMousemove(d))
             .on("mouseout", d=>nodeMouseout(d))
             
-            // legend
+            //// legend /////
 
             // y axis bar
             var yBar = d3
                 .scaleLinear()
                 .domain([0, d3.max(data.nodes, d => d.size)])
-                .range([height, 0])
+                .range([margin.top+height-margin.bottom, margin.top])
 
             var lastEpoch = Math.max.apply(null, data.nodes.map(d=>d.epoch));
             
@@ -146,7 +174,7 @@
                 }
             return arr;
             }
-            var mydata = linspaceArray(0, 1, 1000)
+            var mydata = linspaceArray(0, Math.max.apply(null, data.nodes.map(d=>d.size)), 1000)
            
             var legend = svg.append("g")
             .selectAll("rect")
@@ -166,13 +194,13 @@
                 return d;
             }).ticks(5))
             .append("text")
-            //.attr("transform", "rotate(90)")
-                // .attr("x", x(lastEpoch)+40)
-                // .attr("y", d=>yBar(d))
-            //.attr("dy", "5.1em")
-            //.attr("text-anchor", "end")
-            //.attr("stroke", "black")
-            //.text("Topic Size");
+            .attr("transform", "rotate(90)")
+                .attr("x", height/2+margin.top)
+                .attr("y", -40)
+            .attr("text-anchor", "end")
+            .attr("stroke", "black")
+            .attr("stroke-width", 1.0)
+            .text("Topic Size");
     })
     
     </script>

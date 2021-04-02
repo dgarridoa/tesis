@@ -403,3 +403,18 @@
 	\addtocounter{lstlisting}{\value{templateListings}}
 	\addtocounter{table}{\value{templateTables}}
 }
+\ifthenelse{\equal{\todonotesconfig}{true}}{
+	% big todo
+	\newcommand{\todosec}[2][]{\todo[size=\Large, #1]{#2}}
+	% normal todo
+	% \todo{...}
+	% update
+	\newcommand{\todoupdate}[2][]{\todo[color=green!40, #1]{#2}}
+	% add reference/cite
+	\newcommand{\todoaddref}[2][]{\todo[color=blue, size=\tiny, #1]{#2}}
+	% delete or redo
+	\newcommand{\todoredo}[2][]{\todo[color=red, #1]{#2}}
+	% add figure
+	\newcommand{\missfig}[2][]{\missingfigure[figwidth=6cm, figcolor=white, #1]{#2}}
+}{	
+}

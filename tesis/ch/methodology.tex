@@ -1,4 +1,4 @@
-En este capítulo se describe la metodología propuesta para el descubrimiento de tópicos y su evolución en el tiempo. En la sección \ref{sec:processing} se describe la metodología de procesamiento utilizada para limpiar los datos que usará el modelo. En la sección \ref{sec:model_selected} se justifica la elección del modelo junto a la configuración de hiperparámetros y la herramienta usada para facilitar su interpretación. Por último, en la sección \ref{sec:build_graph} se describe la metodología escogida para modelar la evolución en el tiempo y la médida de similitud utilizada para comparar tópicos de épocas adyacentes.
+En este capítulo se describe la metodología propuesta para el descubrimiento de tópicos y su evolución en el tiempo. En primer lugar, en la sección \ref{sec:processing} se describe la metodología de procesamiento utilizada para limpiar los datos que usará el modelo. En segundo lugar, en la sección \ref{sec:model_selected} se justifica la elección del modelo de tópicos junto a la herramienta usada para facilitar la interpretación de estos. En tercer lugar, en la sección \ref{sec:build_graph} se describe la metodología escogida para modelar la evolución en el tiempo y la médida de similitud utilizada para comparar tópicos de épocas adyacentes. En cuarto lugar, en la sección \ref{sec:hiperparameters} se describen los hiperparámetros y su configuración. Por último, en la sección \ref{sec:methodology_resume} se resume de manera global la metodología.
 
 \section{Procesamiento}
 \label{sec:processing}
@@ -25,21 +25,6 @@ En un enfoque tradicional, se requiere de entrenar múltiples veces LDA para dif
 En el aspecto cualitativo ambos modelos entregan tópicos igual de consistentes. En cuanto a métricas de desempeño como $\textit{perplexity}$ HDP suele tener mejor desempeño \citep{teh2005sharing}.\\
 
 Para el descubrimiento de tópicos se utilizó la implementación disponible en C++ \citep{HDP} de HDP para modelamiento de tópicos. Esta implementación está basada en el algoritmo de Gibbs Sampling propuesto en \citep{teh2005sharing}.
-
-\subsection{Configuración de hiperparámetros}
-\label{sec:hdp_hiperparameters}
-
-HDP tiene tres hiperparámertos, el parámetro de concentración a nivel corpus $\gamma$, el parámetro de concentración a nivel documento $\alpha_{0}$ y $\eta$ el parámetro de la medida base Dirichlet.\\
-
-En modelamiento de tópicos se prefiere usar $\eta\in (0,1)$, esto generará distribuciones \textit{sparse} sobre el vocabulario. Así, se suelen tener tópicos más distinguibles, donde el \textit{core} de palabras del tópico concentra la masa de la distribución. Además, como la semántica del tópico está compactada en pocas palabras se facilita la interpretación. En este caso se utilizó un punto intermedio, fijando $\eta=0.5$.\\ 
-
-En \citep{teh2005sharing} los parámetros de concentración se integran afuera usando un prior \textit{vague gamma} \citep{escobar1995bayesian}. Un prior \textit{vague gamma} es una distribución Gamma con una gran parte de la masa en torno a cero y una cola pesada. Véase la Figura \ref{img:gamma} para una ilustración de la pdf para diferentes parámetros. Por consecuencia, el prior tendrá un menor efecto de regularización y a medida que más datos se obtienen la posterior coincidirá con las observaciones empíricas. En este caso se utilizó un prior $\Gamma(\alpha=1, \beta=1)$.
-
-\begin{figure}
-    \includegraphics[width=0.8\textwidth]{ch3/gamma.eps}
-    \caption{Función de densidad de probabilidad (pdf) de una distribución Gamma para diferentes parámetros de forma $\alpha$ y tasa $\beta$.}
-    \label{img:gamma}
-\end{figure}
 
 \subsection{Interpretación de tópicos}
 
@@ -106,19 +91,37 @@ Los tópicos siguen una distribución con forma de ley de potencia sobre el voca
 
 Computar WMD requiere contar con \textit{word embeddings}. Para estó se utilizó una de las más grandes colecciones de \textit{word embeddings} en español \citep{fastextSUC}, que cuenta con 1.313.423 \textit{embeddings}, colección obtenida utilizando el algoritmo FasText \citep{bojanowski2017enriching} sobre el corpus Spanish Unannotated Corpora (SUC) \citep{josecanneteSUC}, uno de los más grandes corpus de texto en español. FasText en comparación a otros enfoques para extraer \textit{embeddings} representa los \textit{tokens} a través de n-gramas de caracteres, de esta manera puede obtener \textit{embeddings} de \textit{tokens} no vistos durante el entrenamiento a partir de los \textit{embeddings} de los caracteres que lo componen.
 
-\subsection{Métricas}
+\section{Configuración de hiperparámetros}
+\label{sec:hiperparameters}
 
-En la metodología propuesta podemos considerar dos fuentes de evaluación de desempeño, el descubrimiento de tópicos y cómo se relacionan. En ambos casos no se cuenta con el \textit{ground truth} para medir correctamente el desempeño. Si conocieramos el \textit{ground truth}, podríamos utilizar \textit{purity} \citep{manning2008introduction} para comparar la asignación de los documentos en torno a los tópicos con la etiqueta. En el caso del grafo temporal, si conocieramos las conexiones presentes y ausentes podríamos utilizar métricas de clasificación.\\
+En la metodología propuesta se pueden considerar dos fuentes de evaluación de desempeño, el descubrimiento de tópicos y cómo se relacionan. En ambos casos no se cuenta con el \textit{ground truth} para medir correctamente el desempeño. Si se conociera el \textit{ground truth}, se podría utilizar la métrica \textit{purity} \citep{manning2008introduction} para comparar la asignación de los documentos en torno a los tópicos con la etiqueta. En el caso del grafo temporal, si se conocieran las conexiones presentes y ausentes se podrían utilizar métricas de clasificación.\\
+
+\subsection{Configuración de hiperparámetros de HDP}
+\label{sec:hdp_hiperparameters}
+
+HDP cuenta con tres hiperparámertos, el parámetro de concentración a nivel corpus $\gamma$, el parámetro de concentración a nivel documento $\alpha_{0}$ y $\eta$ el parámetro de la medida base Dirichlet.\\
 
 En \citep{blei2003latent,griffiths2004finding,cao2009density,arun2010finding,deveaud2014accurate,zhang2017lda} se describen algunas métricas que no requieren de una etiqueta, que pueden ser útil para realizar selección de modelo de tópico. Cabe destacar que estas métricas carecen de significado y sirven para comparar si un modelo de tópicos es superior a otro.\\
 
-Esta investigación no tiene por objetivo calibrar los hiperparámetros del HDP y se utilizó la configuración especificada en la sección \ref{sec:hdp_hiperparameters}. Por el contrario, se enfoca en medir el desempeño de las interacciones entre los tópicos descubiertos, asumiendo que los tópicos descubiertos están correctos. El desempeño es medido mediante métricas de clasificación sobre un grafo etiquetado. Esto es posible  debido a que el fenómeno de robo de vehículos no presenta muchos tópicos a diferencia de los tópicos latentes que podríamos encontrar en Wikipedia.\\
+En general, en modelamiento de tópicos se prefiere usar $\eta\in (0,1)$, esto generará distribuciones \textit{sparse} sobre el vocabulario. Así, se suelen tener tópicos más distinguibles, donde el \textit{core} de palabras del tópico concentra la masa de la distribución. Además, como la semántica del tópico está compactada en pocas palabras se facilita la interpretación. En este caso se utilizó un punto intermedio, fijando $\eta=0.5$.\\ 
 
-La métrica escogida en este caso es el \textit{macro average recall} \citep{forman2003extensive}, esta corresponde al promedio simple entre la tasa de aciertos de la clase presencia y ausencia de conexión. En general, debería haber más ausencia que presencia de conexión, así bajo esta métrica la clase presencia de conexión no será menospreciada, ya que el macro recall considera que el tasa de acertividad de ambas clases son igual de importantes.\\
+En \citep{teh2005sharing} los parámetros de concentración se integran afuera usando un prior \textit{vague gamma} \citep{escobar1995bayesian}. Un prior \textit{vague gamma} es una distribución Gamma con una gran parte de la masa en torno a cero y una cola pesada. Véase la Figura \ref{img:gamma} para una ilustración de la pdf para diferentes parámetros. Por consecuencia, el prior tendrá un menor efecto de regularización y a medida que más datos se obtienen la posterior coincidirá con las observaciones empíricas. En este caso se utilizó un prior $\Gamma(\alpha=1, \beta=1)$.
 
-Adicionalmente, al contar con un grafo etiquetado podemos observar el efecto de los hiperparámetros $\zeta$ y $q$ en la métrica de desempeño escogida. El hiperparámetro $\zeta\in[0,1]$ define el úmbral de corte, representa el punto operante de la cdf del grafo \textit{fully connected}, permite definir el cuantil que se usará como úmbral para eliminar arcos con similitud menor a este. El parámetro $q \in [0,1]$ define el soporte de los tópicos, utilizando aquellas palabras más probables que explican 100q\% de la distribución acumulada del tópico. 
+\begin{figure}
+    \includegraphics[width=0.8\textwidth]{ch3/gamma.eps}
+    \caption{Función de densidad de probabilidad (pdf) de una distribución Gamma para diferentes parámetros de forma $\alpha$ y tasa $\beta$.}
+    \label{img:gamma}
+\end{figure}
+
+\subsection{Configuración de hiperparámetros del grafo temporal}
+\label{sec:graph_hiperparameters}
+
+El grafo temporal cuenta con dos hiperparámetros: $q$ y $\zeta$. El parámetro $q \in [0,1]$ define el soporte de los tópicos, utilizando aquellas palabras más probables que explican 100q\% de la distribución acumulada del tópico. Por otro lado, el hiperparámetro $\zeta\in[0,1]$ define el úmbral de corte, representa el punto operante de la cdf del grafo \textit{fully connected}, permite definir el cuantil que se usará como úmbral para eliminar arcos con similitud menor a este.\\
+
+En cuanto al parámetro $q$ un valor razonable podría estar entre $[0.8, 0.95]$, de esta manera se conserva el \textit{core} de palabras del tópico y se disminuye de manera significativa el tiempo de cómputo. Por otro lado, valores razonables de $\zeta$ podrían estar entre $[0.9, 0.99]$, de esta manera solo se conservarían aquellas relaciones con una alta similitud relativa, debido a que el umbral de corte no depende de la medida de similitud utilizada.
 
 \section{Resumen metodología}
+\label{sec:methodology_resume}
 
 En la Figura \ref{img:scheme} se presenta un esquema que resume de la metodología propuesta para el descubrimiento y seguimiento de tópicos en el tiempo. En primer lugar, se divide el corpus original en épocas y a cada época se le aplican las siguientes cinco etapas en forma secuencial: tokenización, procesamiento de caracteres, eliminación de \textit{stopwords}, filtro por vocabulario y filtro por frecuencia. Como producto del proceso anterior se obtiene un corpus listo para la aplicación de un modelo de tópicos. En segundo lugar, se aplica HDP de forma independiente sobre cada una de las épocas. Por último, una vez descubiertos los tópicos se procede a construir el grafo temporal, para esto es necesario computar la WMD entre los tópicos de épocas adyacentes. Finalmente, se podan los arcos cuya similitud es menor al cuantil $\zeta$ de la distribución acumulada del grafo \textit{fully connected}.
 

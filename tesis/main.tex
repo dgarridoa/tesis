@@ -42,8 +42,8 @@
 	PROFESOR GUÍA: \\
 	RICHARD WEBER \\
 	\vspace{0.5cm} \\
-	MIEMBROS DE LA COMISIÓN: \\
-	GIORGIOGIULIO PARRA\\
+	%MIEMBROS DE LA COMISIÓN: \\
+	%GIORGIOGIULIO PARRA\\
 	%PROFESOR 3 \\
 	\vspace{0.5cm} \\
 	\MakeUppercase{\localizacionuniversidad} \\
@@ -79,7 +79,7 @@
 \input{lib/cfg/init}
 
 % TODONOTES
-\usepackage{todonotes}
+%\usepackage{todonotes}
 
 % INICIO DE LAS PÁGINAS
 \begin{document}
@@ -92,12 +92,19 @@
 
 % DEDICATORIA
 \begin{dedicatoria}
-	\todo[inline]{TODO}
+Dedicado a mis padres: Gabriela y Pedro que sin ellos no habría llegado a ser lo que soy.
+
 \end{dedicatoria}
 
 % AGRADECIMIENTOS
 \begin{agradecimientos}
-    \todosec[inline]{TODO}
+En primer lugar, quiero dar agradecimiento a mi madre Gabriela, quién me ha acompañado, cuidado y amado incondicionalmente. A mi padre Pedro, por su cariño, preocupación y guía. Gracias por ayudarme a ser una persona de bien, humilde y formar una visión esperanzadora de la vida.\newline
+
+Al profesor Richard, por la oportunidad de iniciarme en el mundo de los datos que tanto me apasiona, por la confianza, apoyo y preocupación.\newline
+
+
+Gracias!
+
 \end{agradecimientos}
 
 % TABLA DE CONTENIDOS - ÍNDICE
@@ -105,8 +112,7 @@
 
 % RESUMEN O ABSTRACT
 \begin{resumen}
-	\todo[inline]{Actualizar tras terminar la conclusión}
-    En este trabajo se describe una metodología para el descubrimiento de tópicos en el tiempo. La metodología propuesta está basada en (i) discretización del corpus en épocas, (ii) descubrimiento de tópicos en cada época mediante Hierarchical Dirichlet Process (HDP), (iii) la construcción de un grafo de similitud entre tópicos de épocas adyacentes, el cual permite modelar cambios entre los tópicos como: nacimiento, muerte, evolución, división y fusión. En contraste a trabajos anteriores, la metodología propuesta utiliza Word Mover's Distance (WMD) como medida de similitud entre tópicos, medida que destaca por ser robusta a tópicos que no poseen un vocabulario común, debido a que trabaja con sus \textit{word embeddings}. Se reportan resultados experimentales tanto cuantitativos como cualitativos en el fenómeno de robo de vehículos en Chile, usando como corpus los relatos de víctimas de robo de vehículo entre los años 2011-2016 provistos por la Asociación de Aseguradores de Chile (AACH). El algoritmo propuesto logra capturar bien los tópicos latentes del corpus, descubriendo delitos tales como \quotes{portonazo}, apropiación indebida y robo con violencia.
+    En este trabajo se describe una metodología para el descubrimiento de tópicos en el tiempo. La metodología propuesta está basada en (i) discretización del corpus en épocas, (ii) descubrimiento de tópicos en cada época mediante Hierarchical Dirichlet Process (HDP), (iii) la construcción de un grafo de similitud entre tópicos de épocas adyacentes, el cual permite modelar cambios entre los tópicos como: nacimiento, muerte, evolución, división y fusión. En contraste a trabajos anteriores, la metodología propuesta utiliza Word Mover's Distance (WMD) como medida de similitud entre tópicos, medida que destaca por ser robusta a tópicos que no poseen un vocabulario común, debido a que trabaja con sus \textit{word embeddings}. Se reportan resultados experimentales tanto cuantitativos como cualitativos en el fenómeno de robo de vehículos en Chile, usando como corpus los relatos de víctimas de robo de vehículo entre los años 2011-2016 provistos por la Asociación de Aseguradores de Chile (AACH). El algoritmo propuesto logra capturar bien los tópicos latentes del corpus, descubriendo delitos tales como robo sin presencia del conductor, robo con violencia y \quotes{portonazo}.
 \end{resumen}
 
 % CONFIGURACIONES FINALES

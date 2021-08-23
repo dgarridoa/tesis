@@ -1,23 +1,74 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <script type = "text/javascript" src = "//d3js.org/d3.v4.min.js"></script>
+  <head>
+    <script type = "text/javascript" src = "//d3js.org/d3.v4.min.js"></script>
       
-        <!-- CSS -->
-        <link rel="stylesheet" href="css/styles.css">
-        <link rel="stylesheet" href="nav/nav_scroll.css">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-        
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="nav/nav_scroll.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
-        <!-- jQuery and JS bundle w/ Popper.js -->
-        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    </head>
-    <body>
-
+    <!-- jQuery and JS bundle w/ Popper.js -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    
+    <!-- NavBar script -->
     <script src='nav/nav_scroll.js'></script>
+    
+    <!-- Graph script -->
+    <script type="module">
+      import {graph} from "./graph.js";
+      graph("#graph", "data/graph.json")
+    </script> 
+    
+    <!-- LDAvis script -->
+    <script type="text/javascript">
+      function readTextFile(file, callback) {
+          var rawFile = new XMLHttpRequest();
+          rawFile.overrideMimeType("application/json");
+          rawFile.open("GET", file, true);
+          rawFile.onreadystatechange = function() {
+              if (rawFile.readyState === 4 && rawFile.status == "200") {
+                  callback(rawFile.responseText);
+              }
+          }
+          rawFile.send(null);
+      }
 
+      function LDAvis_load_lib(url, callback){
+          var s = document.createElement('script');
+          s.src = url;
+          s.async = true;
+          s.onreadystatechange = s.onload = callback;
+          s.onerror = function(){console.warn("failed to load library " + url);};
+          document.getElementsByTagName("head")[0].appendChild(s);
+      }
+
+      $(document).ready(function(){
+          $("#form").click(function(){
+              var dt = document.getElementById('epoch').value;
+              var file = "data/"+dt+".json";
+              document.getElementById('ldavis').innerHTML = "";
+              $.ajax({success: 
+                  readTextFile(file, function(text){
+                      var ldavis_data = JSON.parse(text);
+                      LDAvis_load_lib("https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js", function(){
+                          LDAvis_load_lib("LDAvis.js", function(){
+                          new LDAvis("#" + "ldavis", ldavis_data);
+                          })
+                      });
+                  })
+              });
+          });
+      });
+    </script>
+
+  </head>
+  <body>
+
+
+    <!-- Navbar with input parameters -->
     <div>
         <nav class="navbar navbar-default navbar-fixed-top navbar-fixed-top.scrolled">
             <div class="navbar-header">
@@ -35,56 +86,13 @@
         <br></br>
         <br></br>
     </div>
-        
-    <div id="graph" class="container"></div>
-   
-    <script type="module"> 
-        import {graph} from "./graph.js";
-        graph("#graph", "data/graph.json")
-    </script> 
     
-    <!-- topic distributions -->
-    <div id="ldavis"></div>
-    <script type="text/javascript">
-
-    function readTextFile(file, callback) {
-        var rawFile = new XMLHttpRequest();
-        rawFile.overrideMimeType("application/json");
-        rawFile.open("GET", file, true);
-        rawFile.onreadystatechange = function() {
-            if (rawFile.readyState === 4 && rawFile.status == "200") {
-                callback(rawFile.responseText);
-            }
-        }
-        rawFile.send(null);
-    }
-
-    function LDAvis_load_lib(url, callback){
-        var s = document.createElement('script');
-        s.src = url;
-        s.async = true;
-        s.onreadystatechange = s.onload = callback;
-        s.onerror = function(){console.warn("failed to load library " + url);};
-        document.getElementsByTagName("head")[0].appendChild(s);
-    }
-
-    $(document).ready(function(){
-        $("#form").click(function(){
-            var dt = document.getElementById('epoch').value;
-            var file = "data/"+dt+".json";
-            document.getElementById('ldavis').innerHTML = "";
-            $.ajax({success: 
-                readTextFile(file, function(text){
-                    var ldavis_data = JSON.parse(text);
-                    LDAvis_load_lib("https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js", function(){
-                        LDAvis_load_lib("LDAvis.js", function(){
-                        new LDAvis("#" + "ldavis", ldavis_data);
-                        })
-                    });
-                })
-            });
-        });
-    });
-    </script>
-    </body>
+    <div class="container">     
+      <!-- Graph topic evolution -->
+      <div id="graph" class="container"></div>
+   
+      <!-- LDAvis topic distributions -->
+      <div id="ldavis"></div>
+    </div>
+  </body>
 </html>

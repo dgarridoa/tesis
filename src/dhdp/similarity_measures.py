@@ -59,7 +59,8 @@ def add_padding(token2id1, token2id2, topic1, topic2, q):
     topic2: array-like
         distribution from topic 2.
     q: float, optional 
-        quantile rate between 0 and 1 inclusive, used to filter words with less probability in a topic, represents the top N most likely words in a topic, such that its cumulative distribution adds up to q.
+        quantile rate between 0 and 1 inclusive, used to filter words with less probability in a topic, 
+        represents the top N most likely words in a topic, such that its cumulative distribution adds up to q.
     
     Returns
     -------

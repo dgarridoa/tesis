@@ -82,6 +82,7 @@ La primera restricción indica que el flujo que se mueve de una palabra $u$ del 
 La WMD se puede transformar fácilmente en una médida de similitud considerando $\rho(\phi_{i}, \phi_{j}) = \frac{1}{1+WMD(\phi_{i}, \phi_{j})}$. Notar que si la WMD es 0 la similitud es 1 y si es $\infty$ la similitud es 0. \\
 
 \subsection{WMD complejidad}
+\label{sec:wmd_complexity}
 
 WMD es una medida de distancia intensiva en recursos computacionales. Para mejorar el entendimiento se utiliza la representación poliedral del problema. Sea $N$ el tamaño del vocabulario entre dos épocas adyacentes, luego la región factible del problema anterior se puede representar como $\{x| Ax=b, x\geq 0\}$ sobre un grafo bipartito, con $A\in \mathbb{R}^{2N\times N^{2}}$ la matriz de incidencia, $b\in \mathbb{R}^{2N}$ la capacidad de los nodos y $x\in \mathbb{R}^{N}$ el flujo a enviar por cada uno de los arcos. Para resolver este problema se utilizó la implementación de \citep{PyEMD}, la cual está basada en el algoritmo \citep{pele2009fast}, cuya complejidad del mejor tiempo promedio escala $\mathcal{O}(N^{2}log N)$.\\
 
@@ -89,7 +90,7 @@ Los tópicos siguen una distribución con forma de ley de potencia sobre el voca
 
 \subsection{Word Embeddings}
 
-Computar WMD requiere contar con \textit{word embeddings}. Para estó se utilizó una de las más grandes colecciones de \textit{word embeddings} en español \citep{fastextSUC}, que cuenta con 1.313.423 \textit{embeddings}, colección obtenida utilizando el algoritmo FasText \citep{bojanowski2017enriching} sobre el corpus Spanish Unannotated Corpora (SUC) \citep{josecanneteSUC}, uno de los más grandes corpus de texto en español. FasText en comparación a otros enfoques para extraer \textit{embeddings} representa los \textit{tokens} a través de n-gramas de caracteres, de esta manera puede obtener \textit{embeddings} de \textit{tokens} no vistos durante el entrenamiento a partir de los \textit{embeddings} de los caracteres que lo componen.
+Computar WMD requiere contar con \textit{word embeddings}. Para estó se utilizó una de las más grandes colecciones de \textit{word embeddings} en español \citep{fastextSUC}, que cuenta con 1,313,423 \textit{embeddings}, colección obtenida utilizando el algoritmo FasText \citep{bojanowski2017enriching} sobre el corpus Spanish Unannotated Corpora (SUC) \citep{josecanneteSUC}, uno de los más grandes corpus de texto en español. FasText en comparación a otros enfoques para extraer \textit{embeddings} representa los \textit{tokens} a través de n-gramas de caracteres, de esta manera puede obtener \textit{embeddings} de \textit{tokens} no vistos durante el entrenamiento a partir de los \textit{embeddings} de los caracteres que lo componen.
 
 \section{Configuración de hiperparámetros}
 \label{sec:hiperparameters}

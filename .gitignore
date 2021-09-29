@@ -27,6 +27,10 @@ dtm.js
 *.blg
 *.lof
 *.lot
+*.nav
+*snm
+*tframeh
+*.vrb
 setting.json
 .metals
 backlog.md

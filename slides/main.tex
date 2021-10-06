@@ -19,17 +19,17 @@
 ]{beamer}
 
 % INFORMACIÓN DEL DOCUMENTO
-\def\documenttitle {Título de la presentación en portada}
-\def\documentsubtitle {Título de la presentación}
-\def\documentsubject {Tema a tratar}
+\def\documenttitle {Modelamiento y seguimiento de tópicos para detección de modus operandi en robo de vehículos}
+\def\documentsubtitle {Modelamiento dinámico de tópicos}
+\def\documentsubject {Tesis para optar al grado de Magíster en Gestión de Operaciones \newline Memoria para optar al título de Ingenierio Civil Industrial}
 
-\def\documentauthor {Nombre del autor}
-\def\coursename {Curso}
-\def\coursecode {CO-1234}
+\def\documentauthor {Diego Garrido}
+\def\coursename {}
+\def\coursecode {}
 
 \def\universityname {Universidad de Chile}
 \def\universityfaculty {Facultad de Ciencias Físicas y Matemáticas}
-\def\universitydepartment {Departamento de la Universidad}
+\def\universitydepartment {Departamento de Ingeniería Industrial}
 \def\universitydepartmentimage {departamentos/fcfm}
 \def\universitylocation {Santiago de Chile}
 
@@ -37,8 +37,9 @@
 \title[\documentsubtitle]{\documenttitle}
 \subtitle{\documentsubject}
 \author[\documentauthor]{
-	\documentauthor,
-	\footnotesize \href{mailto:pablo@ppizarror.com}{pablo@ppizarror.com}
+	\documentauthor \newline\newline
+Profesor guía: Richard Weber \newline
+Miembros de la comisión: Giorgiogiulio Parra, Ángel Jiménez
 }
 \institute[UChile]{
 	\includegraphics[height=1.1cm]{\universitydepartmentimage} \\
@@ -63,7 +64,213 @@
 
 % ======================= INICIO DEL DOCUMENTO =======================
 
-\input{example} % Ejemplo, se puede borrar
+%\input{example} % Ejemplo, se puede borrar
 
 % FIN DEL DOCUMENTO
+
+\begin{frame}
+	\frametitle{Contenidos}
+	\tableofcontents
+\end{frame}
+
+
+\section{Motivación}
+
+\begin{frame}
+
+\frametitle{Motivación} 
+
+\begin{itemize}
+  \item A medida que capturamos mas informacion se vuelve mas dificil encontrar y descubrir lo que necesitamos. Siendo clave contar con herramientas que nos ayuden a organizar, buscar y entender grandes colecciones de datos.
+  \item Con modelamiento de topicos podemos enfocar nuestra busqueda en temas especificos. Por ejemplo, descubrir nuevas tedencias de investigacion, analizar la evolucion de la contigencia social en redes sociales, estudiar la efectividad de campanas publicitarias en base a reviews, etc.
+\end{itemize}
+
+%Grandes volumenes de datos digitales son alamacenados día a día, en forma de noticias, blogs, páginas web, artículos científicos, libros, imágenes, sonido, video, redes sociales, etc. Volviéndose clave contar con herramientas computacionales que ayuden a organizar, buscar y entender grandes colecciones de datos. \\
+
+%Si pudieramos buscar y explorar documentos en base a sus temas, podríamos enfocar nuestra búsqueda en temas específicos o más amplios, podríamos observar como estos temas cambian en el tiempo o como se relacionan unos a otros. En vez de buscar documentos únicamente a través de palabras claves, podríamos primero hallar temas que son de nuestro interés, y luego examinar los documentos relacionados a ese tema. Por ejemplo, podríamos descubrir nuevas tendencias de investigación, analizar la evolución de la contigencia social, estudiar la efectividad de campañas publicitarias en base a la opinión de los consumidores, organizar y recomendar contenido en un blog, etc.\\
+
+\end{frame}
+
+
+\begin{frame}
+  
+\frametitle{Motivación: Objetivo}
+El objetivo del trabajo de tesis es desarrollar una metodología que permita descubrir tópicos en el tiempo, siendo capaz de modelar cambios tales como: nacimiento, muerte, evolución, división y fusión. Adicionalmente, debe ser robusta a cambios en el vocabulario en el tiempo, permitiendo comparar tópicos de épocas adyacentes a pesar que de no tener un vocabulario común.
+
+%El objetivo del trabajo de tesis es desarrollar una metodología que permita descubrir tópicos en el tiempo, siendo capaz de modelar cambios tales como: nacimiento, muerte, evolución, división y fusión. Adicionalmente, debe ser robusta a cambios en el vocabulario en el tiempo, permitiendo comparar tópicos de épocas adyacentes a pesar que de no tener un vocabulario común.
+
+\end{frame}
+
+
+\section{Revisión del estado del arte}
+
+\begin{frame}
+
+\frametitle{Revisión del estado del arte: Enfoque}
+El modelamiento de tópicos es uno de los enfoques más prometores de \texit{clustering} aplicado a texto, siendo su objetivo descubrir los temas (\textit{clusters}) ocultos presentes en el corpus, permitiendo resumir, organizar y explorar grandes colecciones de datos.
+
+\insertimage[\label{img:topic_modelling}]{img/topic_modelling.png}{scale=0.3}{Ejemplo de topicos descubiertos usando LDA en un corpus de publicaciones científicas.}
+
+%El problema enunciado consiste en una tarea de \textit{clustering}, debido a que no se cuenta con una etiqueta del tema al que corresponde cada documento, siendo el propósito del trabajo descubrirla. El modelamiento de tópicos es uno de los enfoques más prometores de \texit{clustering} aplicado a texto, siendo su objetivo descubrir los temas (\textit{clusters}) ocultos presentes en el corpus, permitiendo resumir, organizar y explorar grandes colecciones de datos.\\
+
+\end{frame}
+
+\begin{frame}
+
+\frametitle{Revisión del estado del arte: Tipos de modelos de topicos}
+Las tecnicas de modelamiento de topicos suelen estar basadas en factorizacion matricial o en modelos probabilisticos generativos. A continuacion algunos ejemplos:
+
+\begin{itemize}
+  \item LSI (Latent Semantic Indexing) \cite{dumais2004latent} o NMF (Non-negative Matrix Factorization)\cite{xu2003document}. 
+  \item LDA (Latent Dirichlet Allocation)\cite{blei2003latent} o HDP (Hierarchical Dirichlet Process)\cite{teh2005sharing}. LDA necesita de antemano fijar el número de tópicos a descubrir y HDP lo infiere a partir del corpus.
+\end{itemize} 
+
+Se escoge el enfoque probabilístico ya que es capaz de expresar incertidumbre en la asignación de un tópico a un documento y en la asignación de palabras a los tópicos. Además, este enfoque suele aprender tópicos más descriptivos \cite{stevens2012exploring}.\\
+
+%Algunas de las técnicas de modelamiento de tópicos están basadas en factorización matricial como LSI (Latent Semantic Indexing) \cite{dumais2004latent} o NMF (Non-negative Matrix Factorization)\cite{xu2003document}, pero este trabajo está basado en modelos probabilísticos generativos, como LDA (Latent Dirichlet Allocation)\cite{blei2003latent} o HDP (Hierarchical Dirichlet Process)\cite{teh2005sharing}. Ambos enfoques tienen sus pros y contras, en este trabajo se prefiere el enfoque probabilístico ya que es capaz de expresar incertidumbre en la asignación de un tópico a un documento y en la asignación de palabras a los tópicos, además, este enfoque suele aprender tópicos más descriptivos \cite{stevens2012exploring}.\\
+
+\end{frame}
+
+\begin{frame}
+  
+\frametitle{Revisión del estado del arte: Modelamiento dinamico}
+En el modelamiento de tópicos se pueden presentar los siguientes dinamismos:
+
+\begin{enumerate}
+  \item \textbf{Evolución de tópicos.}
+  \item \textbf{Dinámismo en la mezcla de tópicos.}
+  \item \textbf{Nacimiento, muerte, fusión y división de tópicos.}
+\end{enumerate}
+
+Dentro de los modelos de tópicos dinamicos se tiene:
+\begin{itemize}
+  \item Dynamic Topic Modelling (DTM) y Topic Over Time (TOC)\cite{wang2006topics} permiten capturar el punto 1 y 2 manteniendo fijo el número de topicos en el tiempo.
+  \item Dynamic Hierarchical Dirichlet Process (DHDP)\cite{ahmed2012timeline} captura los tres puntos, con excepcion de fusión y división. No es una tecnología ampliamente usada y no cuenta con una implementación disponible.\\
+  \item En \cite{wilson2011tracking} y \cite{beykikhoshk2018discovering} se propone una metodología que permite capturar los dinámismos mencionados dividiendo el corpus en épocas, entrenar de forma independiente un modelo de tópico en cada época (LDA y HDP respectivamente), para finalmente unir los resultados obtenidos. 
+\end{itemize}
+
+%En el modelamiento de tópicos se pueden presentar los siguientes dinamismos:
+%\begin{enumerate}
+%    \item \textbf{Evolución de los tópicos}: la evolución de los tópicos se refleja en el cambio en la distribución sobre las palabras. Por ejemplo, el \quotes{portonazo} en un determinado momento se comete en grupos de 2-3 personas con arma blanca, luego evoluciona de arma blanca a arma de fuego y lo perpetran jóvenes menores de edad.
+%    \item \textbf{Dinámismo en la mezcla de tópicos}: esto permite capturar la popularidad de los tópicos en el tiempo.
+%    \item \textbf{Nacimiento, muerte, fusión y división de tópicos}: En el contexto de robos es natural que en el tiempo aparezcan nuevos \textit{modus operandi} como también que desaparezcan aquellos que ya no parecen tan atractivos.
+%\end{enumerate}
+%
+
+%Dentro de los primeros modelos de tópicos dinámicos exitosos está Dynamic Topic Modelling (DTM) junto Topic Over Time (TOC)\cite{wang2006topics}. Estos modelos mantienen el número de tópicos fijo en el tiempo, por lo que si aparece un nuevo tópico este quedará clasificado dentro de un tópico preexistente desde el comienzo, por lo que solo es capaz de capturar el punto 1 y 2.\\
+
+%En \cite{ahmed2012timeline} se propone Dynamic Hierarchical Dirichlet Process (DHDP), modelo que no mantiene el número de tópicos fijo en el tiempo, sino que lo infiere a partir del corpus. Sin embargo, este modelo no es capaz de capturar fusión y división de tópicos. Además, a diferencia de los otros modelos de tópicos mencionados, DHDP no es una tecnología ampliamente usada y no cuenta con una implementación disponible, por lo que se desconoce su desempeño en otras fuentes de información.\\
+
+%En \cite{wilson2011tracking} y \cite{beykikhoshk2018discovering} se propone una metodología que permite capturar los dinámismos mencionados utilizando LDA y HDP respectivamente. Estas consisten en dividir el corpus en épocas, entrenar de forma independiente un modelo de tópico en cada época, para finalmente unir los resultados obtenidos. En este trabajo se utilizan técnicas de modelado dinámico de tópicos bajo este enfoque, usando HDP para el descubirmiento de tópicos en cada época.
+
+\end{frame}
+
+
+\section{Metodología propuesta}
+\begin{frame}
+
+\frametitle{Metodología propuesta: Resumen}
+
+La metodologia propuesta para el descubrimiento de topicos en el tiempo esta basada en (i) discretizacion del corpus en epocas, (ii) descubrimiento de topicos en cada epoca mediante Hierarchical Dirichlet Process (HDP), (iii) la construccion de un grafo de similitud entre topicos de epocas adyacentes, el cual permite modelar cambios entre los topicos como: nacimiento, muerte, evolucion, division y fusion. En contraste a trabajos anteriores, la metodologia propuesta utiliza Word Mover's Distance (WMD) como medida de similitud entre topicos, medida que destaca por ser robusta a topicos que no poseen un vocabularion comun, debido a que trabaja con sus word embeddings. 
+\end{frame}
+
+
+\begin{frame}
+
+\frametitle{Metodología propuesta: Hierarchical Dirichlet Process}
+
+\end{frame}
+
+
+
+
+\begin{frame}
+
+\frametitle{Metodología propuesta: Grafo de similitud temporal}
+
+\end{frame}
+
+
+
+
+\begin{frame}
+
+\frametitle{Metodología propuesta: Word Mover's Distance}
+
+\end{frame}
+
+\begin{frame}
+
+\frametitle{Metodología propuesta: Configuracion de hiperparametros}
+
+\end{frame}
+
+
+
+\section{Descubrimiento de tópicos en robo de vehículos}
+
+
+\begin{frame}
+
+\frametitle{}
+
+\end{frame}
+
+
+\begin{frame}
+
+\frametitle{}
+
+\end{frame}
+
+
+\begin{frame}
+
+\frametitle{}
+
+\end{frame}
+
+
+
+\begin{frame}
+
+\frametitle{}
+
+\end{frame}
+
+\begin{frame}
+
+\frametitle{}
+
+\end{frame}
+
+\begin{frame}
+
+\frametitle{}
+
+\end{frame}
+
+
+
+\section{Conclusiones y trabajos futuros}
+
+\begin{frame}
+
+\frametitle{}
+
+\end{frame}
+
+\begin{frame}
+
+\frametitle{}
+
+\end{frame}
+
+
+%analizar el grafo variacional estudiando los puntos de corte (backbone).
+\begin{frame}[allowframebreaks]\normalsize
+	\frametitle{\namereferences}
+	\bibliography{library}
+\end{frame}
+
 \end{document}

@@ -63,19 +63,16 @@ Miembros de la comisión: Giorgiogiulio Parra, Ángel Jiménez
 \templateFinalcfg
 
 % ======================= INICIO DEL DOCUMENTO =======================
-
-%\input{example} % Ejemplo, se puede borrar
-
-% FIN DEL DOCUMENTO
+\begin{frame}
+	\titlepage
+\end{frame}
 
 \begin{frame}
 	\frametitle{Contenidos}
 	\tableofcontents
 \end{frame}
 
-
 \section{Motivación}
-
 \begin{frame}
 \frametitle{Motivación} 
 
@@ -96,25 +93,21 @@ Miembros de la comisión: Giorgiogiulio Parra, Ángel Jiménez
 %Si pudieramos buscar y explorar documentos en base a sus temas, podríamos enfocar nuestra búsqueda en temas específicos o más amplios, podríamos observar como estos temas cambian en el tiempo o como se relacionan unos a otros. En vez de buscar documentos únicamente a través de palabras claves, podríamos primero hallar temas que son de nuestro interés, y luego examinar los documentos relacionados a ese tema. Por ejemplo, podríamos descubrir nuevas tendencias de investigación, analizar la evolución de la contigencia social, estudiar la efectividad de campañas publicitarias en base a la opinión de los consumidores, organizar y recomendar contenido en un blog, etc.\\
 
 %El objetivo del trabajo de tesis es desarrollar una metodología que permita descubrir tópicos en el tiempo, siendo capaz de modelar cambios tales como: nacimiento, muerte, evolución, división y fusión. Adicionalmente, debe ser robusta a cambios en el vocabulario en el tiempo, permitiendo comparar tópicos de épocas adyacentes a pesar que de no tener un vocabulario común.
-
 \end{frame}
 
 
 \section{Revisión del estado del arte}
 
 \begin{frame}
-
 \frametitle{Revisión del estado del arte: Enfoque}
 El modelamiento de tópicos es uno de los enfoques más prometores de \texit{clustering} aplicado a texto, siendo su objetivo descubrir los temas (\textit{clusters}) ocultos presentes en el corpus, permitiendo resumir, organizar y explorar grandes colecciones de datos.
 
 \insertimage{topic_modelling.png}{scale=0.3}{}
 
 %El problema enunciado consiste en una tarea de \textit{clustering}, debido a que no se cuenta con una etiqueta del tema al que corresponde cada documento, siendo el propósito del trabajo descubrirla. El modelamiento de tópicos es uno de los enfoques más prometores de \texit{clustering} aplicado a texto, siendo su objetivo descubrir los temas (\textit{clusters}) ocultos presentes en el corpus, permitiendo resumir, organizar y explorar grandes colecciones de datos.\\
-
 \end{frame}
 
 \begin{frame}
-
 \frametitle{Revisión del estado del arte: Tipos de modelos de tópicos}
 Las técnicas de modelamiento de tópicos suelen estar basadas en factorización matricial o en modelos probabilísticos generativos. A continuación algunos ejemplos de ambos enfoques:
 
@@ -128,11 +121,9 @@ Este trabajo se aborda el enfoque probabilístico ya que es capaz de expresar in
 %como interpretar un topico en este enfoque
 
 %Algunas de las técnicas de modelamiento de tópicos están basadas en factorización matricial como LSI (Latent Semantic Indexing) \cite{dumais2004latent} o NMF (Non-negative Matrix Factorization)\cite{xu2003document}, pero este trabajo está basado en modelos probabilísticos generativos, como LDA (Latent Dirichlet Allocation)\cite{blei2003latent} o HDP (Hierarchical Dirichlet Process)\cite{teh2005sharing}. Ambos enfoques tienen sus pros y contras, en este trabajo se prefiere el enfoque probabilístico ya que es capaz de expresar incertidumbre en la asignación de un tópico a un documento y en la asignación de palabras a los tópicos, además, este enfoque suele aprender tópicos más descriptivos \cite{stevens2012exploring}.\\
-
 \end{frame}
 
 \begin{frame}
-  
 \frametitle{Revisión del estado del arte: Modelamiento dinámico}
 En el modelamiento de tópicos se pueden presentar los siguientes dinámismos:
 
@@ -168,26 +159,23 @@ Dentro de los modelos de tópicos dinamicos se tiene:
 
 \section{Metodología propuesta}
 \begin{frame}
-
 \frametitle{Metodología propuesta}
-
 \begin{itemize}
   \item Se divide el corpus original en épocas y a cada época se le aplican las siguientes cinco etapas en forma secuencial: tokenización, procesamiento de caracteres, eliminación de \textit{stopwords}, filtro por vocabulario y filtro por frecuencia. 
   \item Se aplica HDP de forma independiente sobre cada una de las épocas. 
   \item Se construye el grafo temporal utilizando similitud WMD entre tópicos de épocas adyacentes. Finalmente, se podan los arcos cuya similitud es menor al cuantil $\zeta$ de la distribución acumulada del grafo \textit{fully connected}.
 \end{itemize}
-\insertimage{methodology.png}{scale=0.18}{}
+
+\insertimage{methodology.png}{scale=0.17}{}
 
 %En la Figura \ref{img:scheme} se presenta un esquema que resume de la metodología propuesta para el descubrimiento y seguimiento de tópicos en el tiempo. En primer lugar, se divide el corpus original en épocas y a cada época se le aplican las siguientes cinco etapas en forma secuencial: tokenización, procesamiento de caracteres, eliminación de \textit{stopwords}, filtro por vocabulario y filtro por frecuencia. Como producto del proceso anterior se obtiene un corpus listo para la aplicación de un modelo de tópicos. En segundo lugar, se aplica HDP de forma independiente sobre cada una de las épocas. Por último, una vez descubiertos los tópicos se procede a construir el grafo temporal, para esto es necesario computar la WMD entre los tópicos de épocas adyacentes. Finalmente, se podan los arcos cuya similitud es menor al cuantil $\zeta$ de la distribución acumulada del grafo \textit{fully connected}.
-
-
 \end{frame}
 
 
 \begin{frame}
 \frametitle{Metodología propuesta: Hierarchical Dirichlet Process}
 Hierarchical Dirichlet Process (HDP) es un \textit{prior} jerárquico no paramétrico, el cual está formado por un DP cuya medida base $G_{0}$ es dibujada a partir de un DP. En el caso de modelamiento de tópicos, se tiene un medida global $G_{0}$ a nivel corpus que es dibujada a partir de un DP con medida base Dirichlet y una medida para cada documento que es dibujada a partir de un DP cuya medida base es $G_{0}$. El modelo completo es como sigue:
-\newline\newline\newline
+\newline\newline
 \begin{columns}
   \begin{column}{0.5\textwith}
   \hspace*{-3cm}\vbox{\begin{aligned}
@@ -240,9 +228,7 @@ Hierarchical Dirichlet Process (HDP) es un \textit{prior} jerárquico no paramé
   \end{itemize}
   \insertimage{cdf_sim.png}{scale=0.12}{}
 %\caption{Estimación empírica de la función de densidad acumulada (cdf) de la similitud entre tópicos de épocas adyacentes en un grafo \textit{fully connected} para tres medidas de similitud. Fuente: Figura 4 \cite{beykikhoshk2018discovering}.}
-
 \end{columns}
-
 
 %Para relacionar los tópicos de una época es necesario contar una medida de similitud $\rho \in [0,1]$, con esta médida de similitud se puede construir un gráfo, donde los nodos son los tópicos de una época y los arcos relacionan tópicos de una época con la siguiente, siendo el peso del arco la similitud entre los tópicos. Una vez construido el grafo se eliminan las conexiones débiles en base a un umbral $\zeta \in [0,1]$ a definir, reteniendo solo aquellas conexiones entre tópicos suficientemente similares entre épocas adyacentes, matemáticamente se poda el arco entre los tópicos $\phi_{t,i}$ y $\phi_{t+1,j}$ si $\rho(\phi_{t,i}, \phi_{t+1,j})\leq \zeta$.\\
 
@@ -263,10 +249,8 @@ Hierarchical Dirichlet Process (HDP) es un \textit{prior} jerárquico no paramé
 %Sea $F_{p}$ la cdf sobre las similitudes del grafo inicial, luego sea $\zeta \in [0,1]$ el punto operante de la cdf, luego eliminamos el arco entre los tópicos $\phi_{t,i}$ y $\phi_{t+1,j}$ si $\rho(\phi_{t,i}, \phi_{t+1,j})\leq F_{p}^{-1}(\zeta)$, donde  $F_{p}^{-1}(\zeta)$ es el cuantil $\zeta$ de $F_{p}$. En \ref{img:cdf_sim} se tiene una ilustración para tres médidas de similitud, en esta se observa que la elección de un úmbral de corte arbitrario depende fuertemente de la médida de similitud escógida, por lo que la elección en base a la cdf puede ser más apropiada.
 \end{frame}
 
-
 \begin{frame}
 \frametitle{Metodología propuesta: Word Mover's Distance}
-
 %En general, las medidas de similitud o distancia comparan vectores con el mismo dominio y dimensión, esto significa que los tópicos de épocas adyacentes deben compartir el mismo vocabulario. Matemáticamente, sea $\phi_{t, i}$ un tópico de la época $t$ y $V_{t}$ su vocabulario, sea  $\phi_{t+1, j}$ un tópico de la época $t+1$ y $V_{t+1}$ su vocabulario. Con una alta probabilidad existen palabras en $V_{t}$ que no están en $V_{t+1}$ y viceversa. Para poder comparar tópicos en épocas adyacentes  es necesario contar con un vocabulario global $V_{t+1}^{'}=V_{t}\cup V_{t+1}$, luego aplicar $padding$ a los vectores $\phi_{t, i}$ y $\phi_{t+1, j}$, es decir, rellenar con ceros las posiciones que no están en el vocabulario de su dominio.\\
 
 %Una gran desventaja del enfoque anterior es que no captura similitud entre palabras, puesto que cada palabra ocupa una posición dentro del vector y no hay forma de comparar palabras que no son comúnes en ambas épocas. El peor caso sería considerar los vocabularios $V_{t}$ y $V_{t+1}$, con $V_{t}\cap V_{t+1} =  \emptyset$, a pesar de que cada palabra en $V_{t}$ tiene un sinónimo en $V_{t+1}$ la similitud entre tópicos entre las épocas $t$ y $t+1$ sería cero.\\
@@ -364,8 +348,6 @@ El grafo temporal cuenta con dos hiperparámetros:
 \end{frame}
 
 
-
-
 \section{Descubrimiento de tópicos en robo de vehículos}
 
 \begin{frame}
@@ -383,7 +365,6 @@ El grafo temporal cuenta con dos hiperparámetros:
 \end{frame}
 
 
-
 \begin{frame}
 \frametitle{}
 \end{frame}
@@ -395,8 +376,6 @@ El grafo temporal cuenta con dos hiperparámetros:
 \begin{frame}
 \frametitle{}
 \end{frame}
-
-
 
 \section{Conclusiones y trabajos futuros}
 
@@ -407,8 +386,6 @@ El grafo temporal cuenta con dos hiperparámetros:
 \begin{frame}
 \frametitle{}
 \end{frame}
-
-
 
 %analizar el grafo variacional estudiando los puntos de corte (backbone).
 \begin{frame}[allowframebreaks]\normalsize

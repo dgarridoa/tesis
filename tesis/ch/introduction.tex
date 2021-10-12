@@ -40,7 +40,7 @@ En el modelamiento de tópicos se pueden presentar los siguientes dinamismos:
 
 En el modelamiento de tópicos estático destaca LDA y HDP. La diferencia principal es que LDA necesita de antemano fijar el número de tópicos a descubrir y HDP lo infiere a partir del corpus.\\
 
-Dentro de los primeros modelos de tópicos dinámicos exitosos está Dynamic Topic Modelling (DTM) junto Topic Over Time (TOC)\citep{wang2006topics}. Estos modelos mantienen el número de tópicos fijo en el tiempo, por lo que si aparece un nuevo tópico este quedará clasificado dentro de un tópico preexistente desde el comienzo, por lo que solo es capaz de capturar el punto 1 y 2.\\
+Dentro de los primeros modelos de tópicos dinámicos exitosos está Dynamic Topic Modelling (DTM)\citep{blei2006dynamic} junto Topic Over Time (TOC)\citep{wang2006topics}. Estos modelos mantienen el número de tópicos fijo en el tiempo, por lo que si aparece un nuevo tópico este quedará clasificado dentro de un tópico preexistente desde el comienzo, por lo que solo es capaz de capturar el punto 1 y 2.\\
 
 En \citep{ahmed2012timeline} se propone Dynamic Hierarchical Dirichlet Process (DHDP), modelo que no mantiene el número de tópicos fijo en el tiempo, sino que lo infiere a partir del corpus. Sin embargo, este modelo no es capaz de capturar fusión y división de tópicos. Además, a diferencia de los otros modelos de tópicos mencionados, DHDP no es una tecnología ampliamente usada y no cuenta con una implementación disponible, por lo que se desconoce su desempeño en otras fuentes de información.\\
 

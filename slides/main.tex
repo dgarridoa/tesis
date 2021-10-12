@@ -15,7 +15,7 @@
 	spanish, % Idioma: spanish, english, etc.
 	aspectratio=43, % 1610, 169, 149, 54, 43, 32
 	hyperref={pdfencoding=auto,psdextra},
-	xcolor={dvipsnames,table,usenames}
+	xcolor={dvipsnames,table,usenames},
 ]{beamer}
 
 % INFORMACIÓN DEL DOCUMENTO
@@ -62,6 +62,14 @@ Miembros de la comisión: Giorgiogiulio Parra, Ángel Jiménez
 % CONFIGURACIONES FINALES
 \templateFinalcfg
 
+\newcommand\blfootnote[1]{%
+  \begingroup
+  \renewcommand\thefootnote{}\footnote{#1}%
+  \addtocounter{footnote}{-1}%
+  \endgroup
+}
+
+\definecolor{royalblue}{HTML}{214ED3}
 % ======================= INICIO DEL DOCUMENTO =======================
 \begin{frame}
 	\titlepage
@@ -71,59 +79,74 @@ Miembros de la comisión: Giorgiogiulio Parra, Ángel Jiménez
 	\frametitle{Contenidos}
 	\tableofcontents
 \end{frame}
-
 \section{Motivación}
-\begin{frame}
+\begin{frame}[t]
 \frametitle{Motivación} 
+% agregar dos imagenes que representen el punto 1 y 3. ejemplo de accidentes de trayecto causado por mascarillas.
+\begin{columns}[t]
+  \column{0.5\textwidth}
+  \begin{center}
+    \begin{minipage}{0.8\textwidth}
+    \begin{itemize}
+    \item[] \textbf{\scalebox{1.5}{\textcolor{royalblue}{2 EB}} de data por día} %10^18
+    \item[] \textbf{\scalebox{1.5}{\textcolor{royalblue}{80\%}} no estructurado}
+    \item[] \textbf{\scalebox{1.5}{\textcolor{royalblue}{12\%}} es analizada}
+    \end{itemize}
+    \end{minipage}
+   \end{center}
+  \blfootnote{\url{https://www.sigmacomputing.com/blog/top-20-big-data-statistics/}}
+  
+  \vspace*{-0.2in}
+  \begin{figure}
+  \includegraphics[width=0.8\textwidth]{covid_mask.jpg}
+  \end{figure}
 
-\begin{columns}[c]
-\column{.45\textwidth}
-\insertimage{text_data.png}{scale=0.5}{}
+  \vspace*{-0.4in}
+  \begin{figure}
+  \includegraphics[width=0.8\textwidth]{similarity_graph.png} 
+  \end{figure}
 
-\column{.45\textwidth}
-\begin{itemize}
-  \item A medida que capturamos mas información se vuelve más difícil encontrar y descubrir lo que necesitamos. Volviéndose clave contar con herramientas que ayuden a organizar, buscar y entender grandes colecciones de datos.
-  \item El modelamiento de tópicos permite enfocar la búsqueda en temas específicos. Por ejemplo, descubrir nuevas tedencias de investigación, analizar la evolución de la contigencia social en redes sociales, etc.
-  \item El \textbf{objetivo} del trabajo de tesis es desarrollar una metodología que permita descubrir tópicos en el tiempo, siendo capaz de modelar cambios tales como: nacimiento, muerte, evolución, división y fusión.
-\end{itemize}
+\column{0.5\textwidth}
+  \begin{itemize}
+    \item Aumento del volumenes de textos requiere métodos automáticos de procesamientos. 
+    \item El modelamiento de tópicos dinámico permite descubrir nuevos fenómenos de base. Ejemplo: descubrimiento de nuevos tipos de accidentes de trayecto apartir de relatos de accidentes laborales.
+    \item Este trabajo es una propuesta de modelamiento dinámico de nacimiento, muerte, evolución, división y fusión de tópicos.
+  \end{itemize}
 \end{columns}
-
-%Grandes volumenes de datos digitales son alamacenados día a día, en forma de noticias, blogs, páginas web, artículos científicos, libros, imágenes, sonido, video, redes sociales, etc. Volviéndose clave contar con herramientas computacionales que ayuden a organizar, buscar y entender grandes colecciones de datos. \\
-
-%Si pudieramos buscar y explorar documentos en base a sus temas, podríamos enfocar nuestra búsqueda en temas específicos o más amplios, podríamos observar como estos temas cambian en el tiempo o como se relacionan unos a otros. En vez de buscar documentos únicamente a través de palabras claves, podríamos primero hallar temas que son de nuestro interés, y luego examinar los documentos relacionados a ese tema. Por ejemplo, podríamos descubrir nuevas tendencias de investigación, analizar la evolución de la contigencia social, estudiar la efectividad de campañas publicitarias en base a la opinión de los consumidores, organizar y recomendar contenido en un blog, etc.\\
-
-%El objetivo del trabajo de tesis es desarrollar una metodología que permita descubrir tópicos en el tiempo, siendo capaz de modelar cambios tales como: nacimiento, muerte, evolución, división y fusión. Adicionalmente, debe ser robusta a cambios en el vocabulario en el tiempo, permitiendo comparar tópicos de épocas adyacentes a pesar que de no tener un vocabulario común.
 \end{frame}
-
 
 \section{Revisión del estado del arte}
 
-\begin{frame}
-\frametitle{Revisión del estado del arte: Enfoque}
-El modelamiento de tópicos es uno de los enfoques más prometores de \texit{clustering} aplicado a texto, siendo su objetivo descubrir los temas (\textit{clusters}) ocultos presentes en el corpus, permitiendo resumir, organizar y explorar grandes colecciones de datos.
+\begin{frame}[t]
+\frametitle{Revisión del estado del arte: ¿Qué es el modelamiento de tópicos?}
+  El modelamiento de tópicos es uno de los enfoques más prometores de \textit{clustering} aplicado a texto, siendo su objetivo descubrir los temas (\textit{clusters}) ocultos presentes en el corpus, permitiendo \textbf{resumir}, \textbf{organizar} y \textbf{explorar} grandes colecciones de datos.
 
 \insertimage{topic_modelling.png}{scale=0.3}{}
 
-%El problema enunciado consiste en una tarea de \textit{clustering}, debido a que no se cuenta con una etiqueta del tema al que corresponde cada documento, siendo el propósito del trabajo descubrirla. El modelamiento de tópicos es uno de los enfoques más prometores de \texit{clustering} aplicado a texto, siendo su objetivo descubrir los temas (\textit{clusters}) ocultos presentes en el corpus, permitiendo resumir, organizar y explorar grandes colecciones de datos.\\
+%El problema enunciado consiste en una tarea \textit{clustering}, debido a que no se cuenta con una etiqueta del tema al que corresponde cada documento, siendo el propósito del trabajo descubrirla. El modelamiento de tópicos es uno de los enfoques más prometores de \texit{clustering} aplicado a texto, siendo su objetivo descubrir los temas (\textit{clusters}) ocultos presentes en el corpus, permitiendo resumir, organizar y explorar grandes colecciones de datos.\\
 \end{frame}
 
-\begin{frame}
+\begin{frame}[t]
 \frametitle{Revisión del estado del arte: Tipos de modelos de tópicos}
-Las técnicas de modelamiento de tópicos suelen estar basadas en factorización matricial o en modelos probabilísticos generativos. A continuación algunos ejemplos de ambos enfoques:
+Las técnicas de modelamiento de tópicos suelen estar basadas en \textbf{factorización matricial} o en \textbf{modelos probabilísticos generativos}. 
+\newline\newline
+A continuación algunos ejemplos de ambos enfoques:
 
+%reemplazar por monos
 \begin{itemize}
-  \item LSI (Latent Semantic Indexing) \cite{dumais2004latent} o NMF (Non-negative Matrix Factorization)\cite{xu2003document}. 
-  \item LDA (Latent Dirichlet Allocation)\cite{blei2003latent} o HDP (Hierarchical Dirichlet Process)\cite{teh2005sharing}. LDA necesita de antemano fijar el número de tópicos a descubrir y HDP lo infiere a partir del corpus.
+  \item \textbf{LSI} (Latent Semantic Indexing) \cite{dumais2004latent} o \textbf{NMF} (Non-negative Matrix Factorization)\cite{xu2003document}. 
+  \item \textbf{LDA} (Latent Dirichlet Allocation)\cite{blei2003latent} o \textbf{HDP} (Hierarchical Dirichlet Process)\cite{teh2005sharing}. 
 \end{itemize} 
 
-Este trabajo se aborda el enfoque probabilístico ya que es capaz de expresar incertidumbre en la asignación de un tópico a un documento y en la asignación de palabras a los tópicos. Además, este enfoque suele aprender tópicos más descriptivos \cite{stevens2012exploring}.\\
+Este trabajo aborda el enfoque probabilístico: 
+\begin{itemize}
+  \item \textbf{Expresa incertidumbre} en la asignación de un tópico a un documento y en la asignación de palabras a los tópicos.% Por que es mejor?
+  \item Suele aprender \textbf{tópicos más descriptivos} \cite{stevens2012exploring}.% Por que es mas descriptivo?
+\end{itemize}
 
-%como interpretar un topico en este enfoque
-
-%Algunas de las técnicas de modelamiento de tópicos están basadas en factorización matricial como LSI (Latent Semantic Indexing) \cite{dumais2004latent} o NMF (Non-negative Matrix Factorization)\cite{xu2003document}, pero este trabajo está basado en modelos probabilísticos generativos, como LDA (Latent Dirichlet Allocation)\cite{blei2003latent} o HDP (Hierarchical Dirichlet Process)\cite{teh2005sharing}. Ambos enfoques tienen sus pros y contras, en este trabajo se prefiere el enfoque probabilístico ya que es capaz de expresar incertidumbre en la asignación de un tópico a un documento y en la asignación de palabras a los tópicos, además, este enfoque suele aprender tópicos más descriptivos \cite{stevens2012exploring}.\\
 \end{frame}
 
-\begin{frame}
+\begin{frame}[t]
 \frametitle{Revisión del estado del arte: Modelamiento dinámico}
 En el modelamiento de tópicos se pueden presentar los siguientes dinámismos:
 
@@ -135,46 +158,33 @@ En el modelamiento de tópicos se pueden presentar los siguientes dinámismos:
 
 Dentro de los modelos de tópicos dinamicos se tiene:
 \begin{itemize}
-  \item Dynamic Topic Modelling (DTM) y Topic Over Time (TOC)\cite{wang2006topics} permiten capturar el punto 1 y 2 manteniendo fijo el número de topicos en el tiempo.
-  \item Dynamic Hierarchical Dirichlet Process (DHDP)\cite{ahmed2012timeline} captura los tres puntos, con excepcion de fusión y división. No es una tecnología ampliamente usada y no cuenta con una implementación disponible.\\
-  \item En \cite{wilson2011tracking} y \cite{beykikhoshk2018discovering} se propone una metodología que permite capturar los dinámismos mencionados dividiendo el corpus en épocas, entrenar de forma independiente un modelo de tópico en cada época (LDA y HDP respectivamente), para finalmente unir los resultados obtenidos. 
+  \item \textbf{DTM} (Dynamic Topic Modelling)\cite{blei2006dynamic} y \textbf{TOC} (Topic Over Time)\textbf{permiten el punto 1 y 2} manteniendo fijo el número de topicos en el tiempo.
+  \item \textbf{DHDP} (Dynamic Hierarchical Dirichlet Process)\cite{ahmed2012timeline} \textbf{captura el punto 1, 2 y 3 parcialmente}, con excepción de fusión y división. \textbf{No cuenta con una implementación}.\\
+  \item En \cite{wilson2011tracking} y \cite{beykikhoshk2018discovering} se capturan los dinámismos mencionados dividiendo el corpus en épocas, entrenando de forma independiente un modelo por época para finalmente unificar (LDA y HDP).
 \end{itemize}
 
-%En el modelamiento de tópicos se pueden presentar los siguientes dinamismos:
-%\begin{enumerate}
-%    \item \textbf{Evolución de los tópicos}: la evolución de los tópicos se refleja en el cambio en la distribución sobre las palabras. Por ejemplo, el \quotes{portonazo} en un determinado momento se comete en grupos de 2-3 personas con arma blanca, luego evoluciona de arma blanca a arma de fuego y lo perpetran jóvenes menores de edad.
-%    \item \textbf{Dinámismo en la mezcla de tópicos}: esto permite capturar la popularidad de los tópicos en el tiempo.
-%    \item \textbf{Nacimiento, muerte, fusión y división de tópicos}: En el contexto de robos es natural que en el tiempo aparezcan nuevos \textit{modus operandi} como también que desaparezcan aquellos que ya no parecen tan atractivos.
-%\end{enumerate}
-%
-
-%Dentro de los primeros modelos de tópicos dinámicos exitosos está Dynamic Topic Modelling (DTM) junto Topic Over Time (TOC)\cite{wang2006topics}. Estos modelos mantienen el número de tópicos fijo en el tiempo, por lo que si aparece un nuevo tópico este quedará clasificado dentro de un tópico preexistente desde el comienzo, por lo que solo es capaz de capturar el punto 1 y 2.\\
-
-%En \cite{ahmed2012timeline} se propone Dynamic Hierarchical Dirichlet Process (DHDP), modelo que no mantiene el número de tópicos fijo en el tiempo, sino que lo infiere a partir del corpus. Sin embargo, este modelo no es capaz de capturar fusión y división de tópicos. Además, a diferencia de los otros modelos de tópicos mencionados, DHDP no es una tecnología ampliamente usada y no cuenta con una implementación disponible, por lo que se desconoce su desempeño en otras fuentes de información.\\
-
-%En \cite{wilson2011tracking} y \cite{beykikhoshk2018discovering} se propone una metodología que permite capturar los dinámismos mencionados utilizando LDA y HDP respectivamente. Estas consisten en dividir el corpus en épocas, entrenar de forma independiente un modelo de tópico en cada época, para finalmente unir los resultados obtenidos. En este trabajo se utilizan técnicas de modelado dinámico de tópicos bajo este enfoque, usando HDP para el descubirmiento de tópicos en cada época.
 
 \end{frame}
 
 
 \section{Metodología propuesta}
-\begin{frame}
+\begin{frame}[t]
 \frametitle{Metodología propuesta}
 \begin{itemize}
-  \item Se divide el corpus original en épocas y a cada época se le aplican las siguientes cinco etapas en forma secuencial: tokenización, procesamiento de caracteres, eliminación de \textit{stopwords}, filtro por vocabulario y filtro por frecuencia. 
-  \item Se aplica HDP de forma independiente sobre cada una de las épocas. 
-  \item Se construye el grafo temporal utilizando similitud WMD entre tópicos de épocas adyacentes. Finalmente, se podan los arcos cuya similitud es menor al cuantil $\zeta$ de la distribución acumulada del grafo \textit{fully connected}.
+  \item División del corpus en épocas siendo cada época procesada mediante tokenización, eliminación de caracteres, eliminación de \textit{stopwords}, filtro por vocabulario y filtro por frecuencia. 
+  \item Aplicación de HDP en cada época de manera independiente. 
+  \item Construcción del grafo computando la similitud WMD entre tópicos de épocas adyacentes y eliminación de arcos cuya similitud es menor al cuantil $\zeta$ de la distribución acumulada de la similitud.
 \end{itemize}
 
-\insertimage{methodology.png}{scale=0.17}{}
+\vspace*{-0.2in}
+\insertimage{methodology.png}{scale=0.18}{}
 
-%En la Figura \ref{img:scheme} se presenta un esquema que resume de la metodología propuesta para el descubrimiento y seguimiento de tópicos en el tiempo. En primer lugar, se divide el corpus original en épocas y a cada época se le aplican las siguientes cinco etapas en forma secuencial: tokenización, procesamiento de caracteres, eliminación de \textit{stopwords}, filtro por vocabulario y filtro por frecuencia. Como producto del proceso anterior se obtiene un corpus listo para la aplicación de un modelo de tópicos. En segundo lugar, se aplica HDP de forma independiente sobre cada una de las épocas. Por último, una vez descubiertos los tópicos se procede a construir el grafo temporal, para esto es necesario computar la WMD entre los tópicos de épocas adyacentes. Finalmente, se podan los arcos cuya similitud es menor al cuantil $\zeta$ de la distribución acumulada del grafo \textit{fully connected}.
 \end{frame}
 
 
-\begin{frame}
+\begin{frame}[t]
 \frametitle{Metodología propuesta: Hierarchical Dirichlet Process}
-Hierarchical Dirichlet Process (HDP) es un \textit{prior} jerárquico no paramétrico, el cual está formado por un DP cuya medida base $G_{0}$ es dibujada a partir de un DP. En el caso de modelamiento de tópicos, se tiene un medida global $G_{0}$ a nivel corpus que es dibujada a partir de un DP con medida base Dirichlet y una medida para cada documento que es dibujada a partir de un DP cuya medida base es $G_{0}$. El modelo completo es como sigue:
+\textbf{HDP} (Hierarchical Dirichlet Process) es un \textit{prior} jerárquico no paramétrico, el cual está formado por un DP cuya medida base $G_{0}$ es dibujada a partir de un DP. 
 \newline\newline
 \begin{columns}
   \begin{column}{0.5\textwith}
@@ -187,7 +197,7 @@ Hierarchical Dirichlet Process (HDP) es un \textit{prior} jerárquico no paramé
   \end{aligned}}
   \end{column}
   \begin{column}{0.5\textwith}
-  \hspace*{-8em}\raisebox{2em}{\scalebox{0.8}{
+  \hspace*{-10em}\raisebox{2em}{\scalebox{0.8}{
       \tikz{ %
       \node[latent, dashed] (H) {$H$} ; %
       \node[latent, right=of H] (G0) {$G_{0}$} ; %
@@ -207,61 +217,43 @@ Hierarchical Dirichlet Process (HDP) es un \textit{prior} jerárquico no paramé
 %  \caption{Representación gráfica de HDP: círculos denotan variables aleatorias, círculos abiertos denotan parámetros, círculos sombreados denotan variables observadas y los platos indican replicación.}
 \end{column}
 \end{columns}
+
+La discretitud de $G_{0}$ asegura:
+  \begin{itemize}
+      \item A nivel corpus los documentos comparten el mismo conjunto de tópicos (\textit{mixture components}). 
+      \item A nivel documento $G_{d}$ hereda los tópicos de $G_{0}$, pero los pesos de cada tópico (\textit{mixture proportions}) es específica del documento.
+  \end{itemize}
 \end{frame}
  
-\begin{frame}
+\begin{frame}[t]
 \frametitle{Metodología propuesta: Grafo de similitud temporal}
-\begin{columns}[c]
-\column{0.5\textwidth} % Columna izquierda y espesor
+\begin{columns}[t]
+\column{0.5\textwidth}
   \begin{itemize}
-    \item Construcción del grafo \texit{fully connected} de las similitudes entre tópicos de épocas adyacentes ($\phi_{t,i}$ y $\phi_{t+1,j}$) usando una medida de similitud $\rho \in [0,1]$.
+    \item Construcción del grafo \textit{fully connected} de las similitudes entre tópicos de épocas adyacentes ($\phi_{t,i}$ y $\phi_{t+1,j}$) usando una medida de similitud $\rho \in [0,1]$.
     \item Eliminación de las conexiones débiles en base a un umbral $\zeta \in [0,1]$, reteniendo solo aquellas conexiones que cumplen $\rho(\phi_{t,i}, \phi_{t+1,j})\leq \zeta$.
 
   \end{itemize}
 \insertimage{similarity_graph.png}{scale=0.12}{}
-%\caption{Ilustración conceptual del grafo de similitud que modela la dinámica de los tópicos en el tiempo. Un nodo corresponde a un tópico en una época específica; el ancho de los arcos es proporcional a la similitud entre los tópicos, arcos ausentes fueron eliminados por presentar una similitud menor a un umbral. Fuente:  Figura 3 de \cite{beykikhoshk2018discovering}}
 		
-\column{.5\textwidth} % Columna derecha y espesor
+\column{.5\textwidth} 
   \begin{itemize}
     \item El umbral de corte es el cuantil $\zeta \in [0,1]$ de la cdf de las similitudes ($F_{p}$), es decir, $F_{p}^{-1}(\zeta)$.
     \item El úmbral de corte no es arbitrario según la médida de similitud escógida.
   \end{itemize}
   \insertimage{cdf_sim.png}{scale=0.12}{}
-%\caption{Estimación empírica de la función de densidad acumulada (cdf) de la similitud entre tópicos de épocas adyacentes en un grafo \textit{fully connected} para tres medidas de similitud. Fuente: Figura 4 \cite{beykikhoshk2018discovering}.}
 \end{columns}
 
-%Para relacionar los tópicos de una época es necesario contar una medida de similitud $\rho \in [0,1]$, con esta médida de similitud se puede construir un gráfo, donde los nodos son los tópicos de una época y los arcos relacionan tópicos de una época con la siguiente, siendo el peso del arco la similitud entre los tópicos. Una vez construido el grafo se eliminan las conexiones débiles en base a un umbral $\zeta \in [0,1]$ a definir, reteniendo solo aquellas conexiones entre tópicos suficientemente similares entre épocas adyacentes, matemáticamente se poda el arco entre los tópicos $\phi_{t,i}$ y $\phi_{t+1,j}$ si $\rho(\phi_{t,i}, \phi_{t+1,j})\leq \zeta$.\\
-
-%Está metodología permite detectar desaparición de un tópico, nacimiento de un nuevo tópico, como también división o fusión entre diferentes tópicos. A continuación se define en detalle cada uno de estos dinamismos:
-
-%  \begin{itemize}
-%    \item \textbf{Nacimiento de un tópico:} Tópico sin arcos entrante ($\phi_{j+2}$).
-%    \item \textbf{Muerte de un tópico:} Tópico sin arcos salientes ($\phi_{j}$).
-%    \item \textbf{Evolución de un tópico:} Tópico con exactamente un arco de entrada y salida ($\phi_{j+2}$ evoluciona a $\phi_{k+1}$).
-%    \item \textbf{División de un tópico:} Tópico con más de un arco saliente ($\phi_{i}$ se divide en  $\phi_{j}$ y $\phi_{j+1}$).
-%    \item \textbf{Fusión de un tópico:} Tópico con más de un arco entrante ($\phi_{i}$ y $\phi_{i+1}$ forman al tópico $\phi_{j+1}$).
-%  \end{itemize}
-%\insertimage[\label{img:graph}]{img/similarity_graph.png}{scale=0.1}{}
-      %\caption{Ilustración conceptual del grafo de similitud que modela la dinámica de los tópicos en el tiempo. Un nodo corresponde a un tópico en una época específica; el ancho de los arcos es proporcional a la similitud entre los tópicos, arcos ausentes fueron eliminados por presentar una similitud menor a un umbral. Fuente:  Figura 3 de \cite{beykikhoshk2018discovering}}
-
-%Un aspecto relevante de esta metodología es definir el úmbral de corte, el cual no es fácilmente interpretable, además el úmbral depende de la médida de similitud escogida, dificultando así la comparación entre médidas de similitud. En \cite{beykikhoshk2018discovering} proponen una alternativa más interpretable para definir el úmbral, para esto estiman la función de densidad acumulada (cdf) del grafo inicial, donde todos los nodos de una época están conectados con todos los nodos de la época adyacente, al que llamaremos grafo \textit{fully connected}. \\
-
-%Sea $F_{p}$ la cdf sobre las similitudes del grafo inicial, luego sea $\zeta \in [0,1]$ el punto operante de la cdf, luego eliminamos el arco entre los tópicos $\phi_{t,i}$ y $\phi_{t+1,j}$ si $\rho(\phi_{t,i}, \phi_{t+1,j})\leq F_{p}^{-1}(\zeta)$, donde  $F_{p}^{-1}(\zeta)$ es el cuantil $\zeta$ de $F_{p}$. En \ref{img:cdf_sim} se tiene una ilustración para tres médidas de similitud, en esta se observa que la elección de un úmbral de corte arbitrario depende fuertemente de la médida de similitud escógida, por lo que la elección en base a la cdf puede ser más apropiada.
 \end{frame}
 
-\begin{frame}
+\begin{frame}[t]
 \frametitle{Metodología propuesta: Word Mover's Distance}
-%En general, las medidas de similitud o distancia comparan vectores con el mismo dominio y dimensión, esto significa que los tópicos de épocas adyacentes deben compartir el mismo vocabulario. Matemáticamente, sea $\phi_{t, i}$ un tópico de la época $t$ y $V_{t}$ su vocabulario, sea  $\phi_{t+1, j}$ un tópico de la época $t+1$ y $V_{t+1}$ su vocabulario. Con una alta probabilidad existen palabras en $V_{t}$ que no están en $V_{t+1}$ y viceversa. Para poder comparar tópicos en épocas adyacentes  es necesario contar con un vocabulario global $V_{t+1}^{'}=V_{t}\cup V_{t+1}$, luego aplicar $padding$ a los vectores $\phi_{t, i}$ y $\phi_{t+1, j}$, es decir, rellenar con ceros las posiciones que no están en el vocabulario de su dominio.\\
+  \begin{itemize}
+    \item Se escoge \textbf{WMD} (Word Mover's Distance) \cite{kusner2015word}: distancia que permite comparar vectores sin vocabulario común ya que trabaja sobre el espacio de los\textit{word embeddings}. 
+    \item Sea  $V_{i}$ y $V_{j}$ los vocabularios del tópico $i$ y $j$ respectivamente, luego su WMD viene dado por $WMD(\phi_{i}, \phi_{j})$:
+  \end{itemize}
 
-%Una gran desventaja del enfoque anterior es que no captura similitud entre palabras, puesto que cada palabra ocupa una posición dentro del vector y no hay forma de comparar palabras que no son comúnes en ambas épocas. El peor caso sería considerar los vocabularios $V_{t}$ y $V_{t+1}$, con $V_{t}\cap V_{t+1} =  \emptyset$, a pesar de que cada palabra en $V_{t}$ tiene un sinónimo en $V_{t+1}$ la similitud entre tópicos entre las épocas $t$ y $t+1$ sería cero.\\
-
-%Para lidiar con el problema anterior, se propone utilizar una medida de distancia conocida como Word Mover's Distance (WMD) \cite{kusner2015word}, medida utilizada para comparar dos documento bajo una representación \textit{bag of words} a través de sus \textit{word embeddings} \cite{mikolov2013distributed}.\\
-
-%WMD calcula el costo mínimo de transformar un documento en otro, en esto caso particular sería el costo mínimo de llevar un tópico a otro. Para esto se resuelve el problema de transporte, donde los flujos son los pesos $\phi_{t,i}$ y $\phi_{t+1,j}$ y la matriz de costos es una matriz de distancia euclidiana entre los \textit{word embedding} de todas las palabras de $V_{t}$ con $V_{t+1}$. En la Figura \ref{img:wmd_obama} se ilustra el espacio en el que viven las palabras de dos documentos.
-
-Las medidas de similitud suelen comparan vectores con mismo dominio y dimensión, por ende tópicos de épocas adyacentes deben compartir un vocabulario común. Para lidiar con este problema se propone utilizar Word Mover's Distance (WMD)\cite{kusner2015word}, medida que trabaja sobre el espacio de los \texit{word embeddings}.
-Sea  $V_{i}$ y $V_{j}$ los vocabularios del tópico $i$ y $j$ respectivamente, luego su WMD viene dado por $WMD(\phi_{i}, \phi_{j})$:
-
+\vspace*{-0.3in}
 \begin{columns}
 \begin{column}{0.4\textwidth}
 
@@ -272,66 +264,43 @@ Sea  $V_{i}$ y $V_{j}$ los vocabularios del tópico $i$ y $j$ respectivamente, l
 & x_{u,v} \geq 0,\; u \in V_{i} \;, v \in V_{j}\\ \nonumber
 \end{align}
 
-%Donde $x_{u,v}$ es el flujo que va de la palabra $u$ del tópico $i$ a la palabra $v$ del tópico $j$, $\phi_{i,u}$ es la probabilidad de la palabra $u$ en el tópico $i$, $c_{u,v}$ es el costo de mover una unidad de flujo por el arco $(u,v)$, el costo entre palabras se mide como la distancia euclidiana entre los \textit{word embedding} de dichas palabras.\\
-%La primera restricción indica que el flujo que se mueve de una palabra $u$ del tópico $i$ a todas las palabras del tópico $j$ debe sumar su peso ($\phi_{i,u}$), la segunda restricción significa que el flujo que se mueve de una palabra $v$ del tópico $j$ a todas las palabras del tópico $i$ debe sumar su peso ($\phi_{j,v}$). Lo anterior implica que esta medida de distancia es simétrica, es decir, $WMD(\phi_{i}, \phi_{j}) = WMD(\phi_{j}, \phi_{i})$.\\
-
 \end{column}
 
 \begin{column}{0.6\textwidth}
 \insertimage{wmd-obama.png}{scale=0.15}{}
-    %\caption{Espacio vectorial de los \textit{word embeddings} de las palabras de dos documentos con un vocabulario de tamaño 4. Fuente: Figura de \cite{WMDPy}.}
 \end{column}
 
 \end{columns}
 La WMD se puede transformar fácilmente en una médida de similitud considerando $\rho(\phi_{i}, \phi_{j}) = \frac{1}{1+WMD(\phi_{i}, \phi_{j})}$. Notar que si la WMD es 0 la similitud es 1 y si es $\infty$ la similitud es 0. \\
 
-%La WMD se puede transformar fácilmente en una médida de similitud considerando $\rho(\phi_{i}, \phi_{j}) = \frac{1}{1+WMD(\phi_{i}, \phi_{j})}$. Notar que si la WMD es 0 la similitud es 1 y si es $\infty$ la similitud es 0. \\
 \end{frame}
 
-\begin{frame}
+\begin{frame}[t]
 \frametitle{Metodología propuesta: WMD complejidad}
-%WMD es una medida de distancia intensiva en recursos computacionales. Para mejorar el entendimiento se utiliza la representación poliedral del problema. Sea $N$ el tamaño del vocabulario entre dos épocas adyacentes, luego la región factible del problema anterior se puede representar como $\{x| Ax=b, x\geq 0\}$ sobre un grafo bipartito, con $A\in \mathbb{R}^{2N\times N^{2}}$ la matriz de incidencia, $b\in \mathbb{R}^{2N}$ la capacidad de los nodos y $x\in \mathbb{R}^{N}$ el flujo a enviar por cada uno de los arcos. Para resolver este problema se utilizó la implementación de \cite{PyEMD}, la cual está basada en el algoritmo \cite{pele2009fast}, cuya complejidad del mejor tiempo promedio escala $\mathcal{O}(N^{2}log N)$.\\
 
-%Los tópicos siguen una distribución con forma de ley de potencia sobre el vocabulario, donde una pequeña fracción de las palabras concentran la mayor parte de la masa de la distribución. Además, en la práctica la interpretación de los tópicos se basa en los top $N$ palabras más probables, usualmente con $N \in [5, 30]$, entonces, se puede aprovechar esta estructura para efectos de computar la WMD de un forma más eficiente, por ejemplo, utilizando solo las palabras que capturan un determinado porcentaje de la distribución acumulada del tópico. Por ejemplo, si se reduce el vocabulario a un décimo en el peor caso promedio se obtiene un \textit{speed up} de 200.\\
+WMD es una medida de distancia \textbf{intensiva en recursos computacionales}.\newline
 
-WMD es una medida de distancia intensiva en recursos computacionales.
+Usando el algoritmo desarrollado por \cite{pele2009fast} se tiene que el mejor tiempo promedio escala $\mathcal{O}(N^{2}log N)$, donde $N$ es el tamaño del vocabulario entre dos épocas adyacentes.
+  \begin{align*}
+\{x| Ax=b, x\geq 0\}, A\in \mathbb{R}^{2N\times N^{2}}, b\in \mathbb{R}^{2N}, x\in \mathbb{R}^{N}
+  \end{align*}
+
+Se requiere de \textbf{heurísticas} para acelerar el tiempo de computo.
 \begin{itemize}
-  \item Sea $N$ el tamaño del vocabulario entre dos épocas adyacentes.
-  \item Sea $\{x| Ax=b, x\geq 0\}$ la región factible sobre un grafo bipartito, con $A\in \mathbb{R}^{2N\times N^{2}}$ la matriz de incidencia, $b\in \mathbb{R}^{2N}$ la capacidad de los nodos y $x\in \mathbb{R}^{N}$ el flujo a enviar por cada uno de los arcos.
-  \item Usando el algoritmo desarrollado por \cite{pele2009fast} se tiene que el mejor tiempo promedio escala $\mathcal{O}(N^{2}log N)$.
-\end{itemize}
-
-Se requiere de heurísticas para acelerar el tiempo de computo.
-\begin{itemize}
-  \item Los tópicos siguen una distribución con forma de ley de potencia sobre el vocabulario, donde una pequeña fracción de las palabras concentran la mayor parte de la masa de la distribución. 
-  \item En la práctica la interpretación de los tópicos se basa en los top $N$ palabras más probables, usualmente con $N \in [5, 30]$, entonces, se puede aprovechar esta estructura para efectos de computar la WMD de un forma más eficiente, por ejemplo, utilizando solo las palabras que capturan un determinado porcentaje de la distribución acumulada del tópico.\\
+  \item Los tópicos siguen una distribución con forma de \textbf{ley de potencia} sobre el vocabulario, donde una pequeña fracción de las palabras concentran la mayor parte de la masa de la distribución. 
+  \item En la práctica \textbf{la interpretación de los tópicos se basa en los top $N$ palabras más probables}, usualmente con $N \in [5, 30]$, entonces, se puede aprovechar esta estructura para efectos de computar la WMD de un forma más eficiente, por ejemplo, utilizando solo las palabras que capturan un determinado porcentaje de la distribución acumulada del tópico.\\
 \end{itemize}
 \end{frame}
 
-\begin{frame}
-
+\begin{frame}[t]
 \frametitle{Metodología propuesta: Configuracion de hiperparametros}
 
-%En la metodología propuesta se pueden considerar dos fuentes de evaluación de desempeño, el descubrimiento de tópicos y cómo se relacionan. En ambos casos no se cuenta con el \textit{ground truth} para medir correctamente el desempeño. Si se conociera el \textit{ground truth}, se podría utilizar la métrica \textit{purity} \cite{manning2008introduction} para comparar la asignación de los documentos en torno a los tópicos con la etiqueta. En el caso del grafo temporal, si se conocieran las conexiones presentes y ausentes se podrían utilizar métricas de clasificación.\\
-
-%HDP cuenta con tres hiperparámertos, el parámetro de concentración a nivel corpus $\gamma$, el parámetro de concentración a nivel documento $\alpha_{0}$ y $\eta$ el parámetro de la medida base Dirichlet.\\
-
-%En \cite{blei2003latent,griffiths2004finding,cao2009density,arun2010finding,deveaud2014accurate,zhang2017lda} se describen algunas métricas que no requieren de una etiqueta, que pueden ser útil para realizar selección de modelo de tópico. Cabe destacar que estas métricas carecen de significado y sirven para comparar si un modelo de tópicos es superior a otro.\\
-
-%En general, en modelamiento de tópicos se prefiere usar $\eta\in (0,1)$, esto generará distribuciones \textit{sparse} sobre el vocabulario. Así, se suelen tener tópicos más distinguibles, donde el \textit{core} de palabras del tópico concentra la masa de la distribución. Además, como la semántica del tópico está compactada en pocas palabras se facilita la interpretación. En este caso se utilizó un punto intermedio, fijando $\eta=0.5$.\\ 
-
-%En \cite{teh2005sharing} los parámetros de concentración se integran afuera usando un prior \textit{vague gamma} \cite{escobar1995bayesian}. Un prior \textit{vague gamma} es una distribución Gamma con una gran parte de la masa en torno a cero y una cola pesada. Véase la Figura \ref{img:gamma} para una ilustración de la pdf para diferentes parámetros. Por consecuencia, el prior tendrá un menor efecto de regularización y a medida que más datos se obtienen la posterior coincidirá con las observaciones empíricas. En este caso se utilizó un prior $\Gamma(\alpha=1, \beta=1)$.
-
-%El grafo temporal cuenta con dos hiperparámetros: $q$ y $\zeta$. El parámetro $q \in [0,1]$ define el soporte de los tópicos, utilizando aquellas palabras más probables que explican 100q\% de la distribución acumulada del tópico. Por otro lado, el hiperparámetro $\zeta\in[0,1]$ define el úmbral de corte, representa el punto operante de la cdf del grafo \textit{fully connected}, permite definir el cuantil que se usará como úmbral para eliminar arcos con similitud menor a este.\\
-
-%En cuanto al parámetro $q$ un valor razonable podría estar entre $[0.8, 0.95]$, de esta manera se conserva el \textit{core} de palabras del tópico y se disminuye de manera significativa el tiempo de cómputo. Por otro lado, valores razonables de $\zeta$ podrían estar entre $[0.9, 0.99]$, de esta manera solo se conservarían aquellas relaciones con una alta similitud relativa, debido a que el umbral de corte no depende de la medida de similitud utilizada.
-
-\begin{columns}
+\begin{columns}[t]
 \begin{column}{0.5\textwidth}
 HDP cuenta con tres hiperparámertos:
 \begin{itemize} 
-  \item El parámetro de concentración a nivel corpus $\gamma$ y el parámetro de concentración a nivel documento $\alpha_{0}$. En \cite{teh2005sharing} los parámetros de concentración se integran afuera usando un prior \textit{vague gamma} \cite{escobar1995bayesian}. En este caso se utilizó un prior $\Gamma(\alpha=1, \beta=1)$.
-  \item El parámetro de la medida base Dirichlet $\eta$. Se prefiere usar $\eta\in (0,1)$, esto generará distribuciones \textit{sparse} sobre el vocabulario. En este caso se utilizó un punto intermedio, fijando $\eta=0.5$.\\ 
+  \item El \textbf{parámetro de concentración a nivel corpus $\gamma$} y el \textbf{parámetro de concentración a nivel documento $\alpha_{0}$}. En \cite{teh2005sharing} los parámetros de concentración se integran afuera usando un prior \textit{vague gamma} \cite{escobar1995bayesian}. En este caso se utilizó un prior $\Gamma(\alpha=1, \beta=1)$.
+  \item El \textbf{parámetro de la medida base Dirichlet $\eta$}. Se prefiere usar $\eta\in (0,1)$ ya que genera distribuciones \textit{sparse} sobre el vocabulario. En este caso se utilizó un punto intermedio, fijando $\eta=0.5$.\\ 
 \end{itemize}
 %\insertimage{gamma.eps}{scale=0.5}{}
 %\caption{Función de densidad de probabilidad (pdf) de una distribución Gamma para diferentes parámetros de forma $\alpha$ y tasa $\beta$.}
@@ -340,8 +309,8 @@ HDP cuenta con tres hiperparámertos:
 \begin{column}{0.5\textwidth}
 El grafo temporal cuenta con dos hiperparámetros:
 \begin{itemize}
-  \item $q \in [0,1]$ cuantil de corte de la cdf del tópico. Valores razonables son $[0.8, 0.95]$, de esta manera se conserva el \textit{core} de palabras del tópico y se disminuye de manera significativa el tiempo de cómputo.
-  \item $\zeta\in[0,1]$ cuantil de corte de la cdf de las similitudes del grafo \texix{fully connected}. Valores razonables de $\zeta$ podrían estar entre $[0.9, 0.99]$, de esta manera solo se conservarían aquellas relaciones con una alta similitud relativa, debido a que el umbral de corte no depende de la medida de similitud utilizada.
+  \item \textbf{$q \in [0,1]$ cuantil de corte de la cdf del tópico}. Se prefieren valores en $[0.8, 0.95]$ ya que conservan el \textit{core} de palabras del tópico y disminuye significativamente el tiempo de cómputo.
+  \item \textbf{$\zeta\in[0,1]$ cuantil de corte de la cdf de las similitudes del grafo \texix{fully connected}}. Se prefieren valores en $[0.9, 0.99]$ ya que se conservan aquellas relaciones con alta similitud relativa.
 \end{itemize}
 \end{column}
 \end{columns}

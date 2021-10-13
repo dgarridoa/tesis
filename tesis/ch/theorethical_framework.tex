@@ -1,4 +1,4 @@
-En este capítulo se describen los conceptos fundamentales para comprender la metodología propuesta en el capitulo \ref{ch:methodology}. El capítulo es estructurado como sigue. En la sección \ref{sec:mixture_models} se introduce a nivel general los modelos de \textit{clustering} probabiĺísticos conocidos como \textit{mixture models}. En la sección \ref{sec:topic_models} se describen los modelos de tópicos estáticos LDA y HDP. Finalmente, en la sección \ref{sec:topic_evolution} se explica una metodología que modela la evolución de los tópicos en el timepo. 
+En este capítulo se describen los conceptos fundamentales para comprender la metodología propuesta en el capitulo \ref{ch:methodology}. El capítulo es estructurado como sigue. En la sección \ref{sec:mixture_models} se introduce a nivel general los modelos de \textit{clustering} probabilísticos conocidos como \textit{mixture models}. En la sección \ref{sec:topic_models} se describen los modelos de tópicos estáticos LDA y HDP. Finalmente, en la sección \ref{sec:topic_evolution} se explica una metodología que modela la evolución de los tópicos en el tiempo. 
 
 \section{Mixture Models}
 \label{sec:mixture_models}
@@ -64,7 +64,7 @@ En la Figura \ref{img:dirichlet_distribution} se observa el efecto de los parám
 \begin{figure}
     \centering
     \includegraphics[width=\textwidth]{ch2/dirichlet_simplex.eps}
-    \caption{Densidad de la distribución Dirichlet con $K=3$. Define una distribución sobre el \textit{simplex}, el cual puede ser representado por una superficie trinagular.}
+    \caption{Densidad de la distribución Dirichlet con $K=3$. Define una distribución sobre el \textit{simplex}, el cual puede ser representado por una superficie triangular.}
     \label{img:dirichlet_distribution}
 \end{figure}
 
@@ -115,7 +115,7 @@ Esto se mantiene para cualquier conjunto de particiones. Por lo tanto, si observ
 G|\bar{\phi}_{1:N}, \alpha, H \sim \text{DP}\bigg(\alpha+N, \frac{1}{\alpha+N}\bigg(\alpha H+\sum_{i=1}^{N}\delta_{\phi_{i}}\bigg)\bigg)
 \end{align}
 
-Por ende el DP define un \textit{prior} conjugado para cualquier espacio medible, donde el parámetro de concentración $\alpha$ es el tamaño de muestro efectivo de la medida base $H$.\\
+Por ende el DP define un \textit{prior} conjugado para cualquier espacio medible, donde el parámetro de concentración $\alpha$ es el tamaño de muestreo efectivo de la medida base $H$.\\
 
 Existen diferentes perspectivas que ayudan a entender la propiedad de \textit{clustering} de un Dirichlet Process. En la sección \ref{sec:sbp}. y \ref{sec:crp}. se describen dos: el Stick Breaking Process y Chinese Restaurant Process (CRP).
 
@@ -175,7 +175,7 @@ El hecho de que las tablas actualmente ocupadas son más probables de obtener nu
 
 \section{Modelos de tópicos}
 \label{sec:topic_models}
-Los modelos de tópicos probabilísticos ayudan a descubrir los temas latentes (\textit{clusters}) en una colección de documentos, como estos temas están conectados unos a otros y cómo cambian en el tiempo. Permiten resumir un gran colección de documentos a través de sus temas y organizarlos entorno a estos.\\
+Los modelos de tópicos probabilísticos ayudan a descubrir los temas latentes (\textit{clusters}) en una colección de documentos, cómo estos temas están conectados unos a otros y cómo cambian en el tiempo. Permiten resumir un gran colección de documentos a través de sus temas y organizarlos entorno a estos.\\
 
 Los modelos probabilísticos tratan un tópico como una distribución de probabilidad discreta sobre el vocabulario del corpus, siendo un práctica habitual interpretar un tópico a partir de sus $N$ palabras más probables. Por ejemplo, con $N=5$ las palabras más probables de un tópico son: \quotes{llaves}, \quotes{domicilio}, \quotes{individuos}, \quotes{casa} y \quotes{porton}, por lo que una etiqueta valida para este tópico podría ser \quotes{portonazo}.\\ 
 

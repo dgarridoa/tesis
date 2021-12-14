@@ -88,6 +88,7 @@ Miembros de la comisión: Giorgiogiulio Parra, Ángel Jiménez
   \begin{center}
     \begin{minipage}{0.8\textwidth}
     \begin{itemize}
+   % Poner esta cifra en contexoto. Un computador de un tera por persona en el mundo 
     \item[] \textbf{\scalebox{1.5}{\textcolor{royalblue}{2 EB}} de data por día} %10^18
     \item[] \textbf{\scalebox{1.5}{\textcolor{royalblue}{80\%}} no estructurado}
     \item[] \textbf{\scalebox{1.5}{\textcolor{royalblue}{12\%}} es analizada}
@@ -98,19 +99,14 @@ Miembros de la comisión: Giorgiogiulio Parra, Ángel Jiménez
   
   \vspace*{-0.2in}
   \begin{figure}
-  \includegraphics[width=0.8\textwidth]{covid_mask.jpg}
-  \end{figure}
-
-  \vspace*{-0.4in}
-  \begin{figure}
   \includegraphics[width=0.8\textwidth]{similarity_graph.png} 
   \end{figure}
 
 \column{0.5\textwidth}
   \begin{itemize}
-    \item Aumento del volumenes de textos requiere métodos automáticos de procesamientos. 
-    \item El modelamiento de tópicos dinámico permite descubrir nuevos fenómenos de base. Ejemplo: descubrimiento de nuevos tipos de accidentes de trayecto apartir de relatos de accidentes laborales.
-    \item Este trabajo es una propuesta de modelamiento dinámico de nacimiento, muerte, evolución, división y fusión de tópicos.
+    \item Aumento de volumenes de datos requiere métodos automáticos de análisis. 
+    \item El modelamiento de tópicos dinámico permite descubrir nuevos fenómenos de base.%Ejemplo: descubrimiento de nuevos tipos de accidentes de trayecto apartir de relatos de accidentes laborales.
+    \item Este trabajo es una propuesta de modelamiento dinámico: nacimiento, muerte, evolución, división y fusión de tópicos.
   \end{itemize}
 \end{columns}
 \end{frame}
@@ -158,25 +154,23 @@ En el modelamiento de tópicos se pueden presentar los siguientes dinámismos:
 
 Dentro de los modelos de tópicos dinamicos se tiene:
 \begin{itemize}
-  \item \textbf{DTM} (Dynamic Topic Modelling)\cite{blei2006dynamic} y \textbf{TOC} (Topic Over Time)\textbf{permiten el punto 1 y 2} manteniendo fijo el número de topicos en el tiempo.
+  \item \textbf{DTM} (Dynamic Topic Modelling)\cite{blei2006dynamic} y \textbf{TOC} (Topic Over Time)\cite{wang2006topics} \textbf{permiten el punto 1 y 2} manteniendo fijo el número de topicos en el tiempo.
   \item \textbf{DHDP} (Dynamic Hierarchical Dirichlet Process)\cite{ahmed2012timeline} \textbf{captura el punto 1, 2 y 3 parcialmente}, con excepción de fusión y división. \textbf{No cuenta con una implementación}.\\
   \item En \cite{wilson2011tracking} y \cite{beykikhoshk2018discovering} se capturan los dinámismos mencionados dividiendo el corpus en épocas, entrenando de forma independiente un modelo por época para finalmente unificar (LDA y HDP).
 \end{itemize}
-
-
 \end{frame}
 
 
 \section{Metodología propuesta}
 \begin{frame}[t]
 \frametitle{Metodología propuesta}
-\begin{itemize}
-  \item División del corpus en épocas siendo cada época procesada mediante tokenización, eliminación de caracteres, eliminación de \textit{stopwords}, filtro por vocabulario y filtro por frecuencia. 
+\begin{enumerate}
+  \item División del corpus en épocas siendo cada época preprocesada de forma independiente. 
   \item Aplicación de HDP en cada época de manera independiente. 
-  \item Construcción del grafo computando la similitud WMD entre tópicos de épocas adyacentes y eliminación de arcos cuya similitud es menor al cuantil $\zeta$ de la distribución acumulada de la similitud.
-\end{itemize}
+  \item Construcción del grafo de similitud WMD entre épocas adyacentes y eliminación de arcos con similitud menor al cuantil $\zeta$ de la \textbf{cdf}.
+\end{enumerate}
 
-\vspace*{-0.2in}
+\vspace*{-0.1in}
 \insertimage{methodology.png}{scale=0.18}{}
 
 \end{frame}
@@ -220,8 +214,8 @@ Dentro de los modelos de tópicos dinamicos se tiene:
 
 La discretitud de $G_{0}$ asegura:
   \begin{itemize}
-      \item A nivel corpus los documentos comparten el mismo conjunto de tópicos (\textit{mixture components}). 
-      \item A nivel documento $G_{d}$ hereda los tópicos de $G_{0}$, pero los pesos de cada tópico (\textit{mixture proportions}) es específica del documento.
+    \item \textbf{A nivel del corpus} los documentos comparten el mismo \textbf{conjunto de tópicos} (\textit{mixture components}). 
+    \item \textbf{A nivel del documento} $G_{d}$ hereda los tópicos de $G_{0}$, pero los \textbf{pesos de cada tópico} (\textit{mixture proportions}) es específica del documento.
   \end{itemize}
 \end{frame}
  
@@ -231,8 +225,7 @@ La discretitud de $G_{0}$ asegura:
 \column{0.5\textwidth}
   \begin{itemize}
     \item Construcción del grafo \textit{fully connected} de las similitudes entre tópicos de épocas adyacentes ($\phi_{t,i}$ y $\phi_{t+1,j}$) usando una medida de similitud $\rho \in [0,1]$.
-    \item Eliminación de las conexiones débiles en base a un umbral $\zeta \in [0,1]$, reteniendo solo aquellas conexiones que cumplen $\rho(\phi_{t,i}, \phi_{t+1,j})\leq \zeta$.
-
+    \item Eliminación de las conexiones débiles en base a un umbral $\alpha \in [0,1]$, reteniendo solo aquellas conexiones que cumplen $\rho(\phi_{t,i}, \phi_{t+1,j})\leq \alpha$.
   \end{itemize}
 \insertimage{similarity_graph.png}{scale=0.12}{}
 		
@@ -243,15 +236,14 @@ La discretitud de $G_{0}$ asegura:
   \end{itemize}
   \insertimage{cdf_sim.png}{scale=0.12}{}
 \end{columns}
-
 \end{frame}
 
 \begin{frame}[t]
 \frametitle{Metodología propuesta: Word Mover's Distance}
-  \begin{itemize}
-    \item Se escoge \textbf{WMD} (Word Mover's Distance) \cite{kusner2015word}: distancia que permite comparar vectores sin vocabulario común ya que trabaja sobre el espacio de los\textit{word embeddings}. 
-    \item Sea  $V_{i}$ y $V_{j}$ los vocabularios del tópico $i$ y $j$ respectivamente, luego su WMD viene dado por $WMD(\phi_{i}, \phi_{j})$:
-  \end{itemize}
+\begin{itemize}
+  \item Se escoge \textbf{WMD} (Word Mover's Distance) \cite{kusner2015word}: distancia que permite comparar vectores sin vocabulario común ya que trabaja sobre el espacio de los \textit{word embeddings}. 
+  \item Sea  $V_{i}$ y $V_{j}$ los vocabularios del tópico $i$ y $j$ respectivamente, luego su WMD viene dado por $WMD(\phi_{i}, \phi_{j})$:
+\end{itemize}
 
 \vspace*{-0.3in}
 \begin{columns}
@@ -271,7 +263,7 @@ La discretitud de $G_{0}$ asegura:
 \end{column}
 
 \end{columns}
-La WMD se puede transformar fácilmente en una médida de similitud considerando $\rho(\phi_{i}, \phi_{j}) = \frac{1}{1+WMD(\phi_{i}, \phi_{j})}$. Notar que si la WMD es 0 la similitud es 1 y si es $\infty$ la similitud es 0. \\
+WMD se puede transformar en médida de similitud considerando: $\rho(\phi_{i}, \phi_{j}) = \frac{1}{1+WMD(\phi_{i}, \phi_{j})}$ Nota: WMD es 0 si la similitud es 1 e $\infty$ si la similitud es 0.
 
 \end{frame}
 
@@ -288,7 +280,7 @@ Usando el algoritmo desarrollado por \cite{pele2009fast} se tiene que el mejor t
 Se requiere de \textbf{heurísticas} para acelerar el tiempo de computo.
 \begin{itemize}
   \item Los tópicos siguen una distribución con forma de \textbf{ley de potencia} sobre el vocabulario, donde una pequeña fracción de las palabras concentran la mayor parte de la masa de la distribución. 
-  \item En la práctica \textbf{la interpretación de los tópicos se basa en los top $N$ palabras más probables}, usualmente con $N \in [5, 30]$, entonces, se puede aprovechar esta estructura para efectos de computar la WMD de un forma más eficiente, por ejemplo, utilizando solo las palabras que capturan un determinado porcentaje de la distribución acumulada del tópico.\\
+  \item En la práctica \textbf{la interpretación de los tópicos se basa en los top $N$ palabras más probables}, usualmente con $N \in [5, 30]$, entonces, se puede aprovechar esta estructura para efectos de computar la WMD de un forma más eficiente, por ejemplo, utilizando solo las palabras que capturan un determinado porcentaje de la distribución acumulada del tópico.
 \end{itemize}
 \end{frame}
 
@@ -300,10 +292,8 @@ Se requiere de \textbf{heurísticas} para acelerar el tiempo de computo.
 HDP cuenta con tres hiperparámertos:
 \begin{itemize} 
   \item El \textbf{parámetro de concentración a nivel corpus $\gamma$} y el \textbf{parámetro de concentración a nivel documento $\alpha_{0}$}. En \cite{teh2005sharing} los parámetros de concentración se integran afuera usando un prior \textit{vague gamma} \cite{escobar1995bayesian}. En este caso se utilizó un prior $\Gamma(\alpha=1, \beta=1)$.
-  \item El \textbf{parámetro de la medida base Dirichlet $\eta$}. Se prefiere usar $\eta\in (0,1)$ ya que genera distribuciones \textit{sparse} sobre el vocabulario. En este caso se utilizó un punto intermedio, fijando $\eta=0.5$.\\ 
+  \item El \textbf{parámetro de la medida base Dirichlet $\eta$}. Se prefiere usar $\eta\in (0,1)$ ya que genera distribuciones \textit{sparse} sobre el vocabulario. En este caso se utilizó un punto intermedio, fijando $\eta=0.5$.
 \end{itemize}
-%\insertimage{gamma.eps}{scale=0.5}{}
-%\caption{Función de densidad de probabilidad (pdf) de una distribución Gamma para diferentes parámetros de forma $\alpha$ y tasa $\beta$.}
 \end{column}
 
 \begin{column}{0.5\textwidth}
@@ -316,30 +306,100 @@ El grafo temporal cuenta con dos hiperparámetros:
 \end{columns}
 \end{frame}
 
-
 \section{Descubrimiento de tópicos en robo de vehículos}
 
-\begin{frame}
-\frametitle{}
+\begin{frame}[t]
+\frametitle{Caso de estudio}
+% Describir problema y por que es importante
+% Describir la base de datos
+\begin{figure}
+\includegraphics[width=0.4\textwidth]{robberies_aach.eps}
+\end{figure}
 \end{frame}
 
+\begin{frame}[t]
+\frametitle{Preprocesamiento}
+\begin{columns}[t]
+\begin{column}{0.5\textwidth}
+\begin{table}[H]
+    \begin{tabular}{|c|c|c|c|}
+    \hline
+    procesamiento & documentos & vocabulario & tokens  \\ \hline
+    t             & 49,015      & 93,203       & 2,030,980 \\ \hline
+    t+ch          & 49,003      & 42,921       & 1,028,412 \\ \hline
+    t+ch+f        & 48,988      & 3,148        & 925,693  \\ \hline
+    t+ch+f+v      & 48,988      & 2,902        & 901,745  \\ \hline
+    t+ch+f+v+s    & 48,566      & 1,960        & 495,182  \\ \hline
+    t+ch+f+v+s+d  & 38,850      & 1,960        & 453,206  \\ \hline
+    \end{tabular}
+\end{table}
 
-\begin{frame}
-\frametitle{}
+\begin{table}[H]
+    \begin{tabular}{|c|r|r|r|r|}
+    \hline
+    \textbf{época} & \multicolumn{1}{c|}{\textbf{t-1}} & \multicolumn{1}{c|}{\textbf{t}} & \multicolumn{1}{c|}{\textbf{t-1 {[}\%{]}}} & \multicolumn{1}{l|}{\textbf{t {[}\%{]}}} \\ \hline
+    2              & 1,145                              & 1,187                            & 14.41                                      & 18.08                                    \\ \hline
+    3              & 1,187                              & 1,281                            & 13.56                                      & 21.48                                    \\ \hline
+    4              & 1,281                              & 1,329                            & 13.35                                      & 17.10                                    \\ \hline
+    5              & 1,329                              & 1,405                            & 12.57                                      & 18.28                                    \\ \hline
+    6              & 1,405                              & 1,537                            & 10.25                                      & 19.64                                    \\ \hline
+    \end{tabular}
+\end{table}
+\end{column}
+
+\begin{column}{0.5\textwidth}
+\begin{figure}
+    \includegraphics[trim={1.155cm 1.3cm 0 0},clip,width=0.3\textwidth]{cum_dist_1.eps}
+\end{figure}
+
+\begin{figure}
+\includegraphics[trim={1.155cm 1.3cm 0 0},clip,width=0.3\textwidth]{cum_dist_6.eps}
+\end{figure}
+\end{column}
+\end{columns}
 \end{frame}
 
-
 \begin{frame}
-\frametitle{}
+\frametitle{Grafo de similitud temporal}
+\begin{figure}
+\includegraphics[width=\textwidth]{cdf.eps}
+\end{figure}
+
+\begin{figure}
+\subfloat[$\zeta$ = 0]{
+  \includegraphics[width=0.4\textwidth]{graph_q100.png}
+}
+\subfloat[$\zeta$ = 0.9]{
+  \includegraphics[width=0.4\textwidth]{graph_q100_e90.png}
+}\\
+\subfloat[$\zeta$ = 0.95]{
+  \includegraphics[width=0.4\textwidth]{graph_q100_e95.png}
+}
+\subfloat[$\zeta$ = 0.99]{
+  \includegraphics[width=0.4\textwidth]{graph_q100_e99.png}
+}
+\end{figure}
+
+\begin{figure}
+\includegraphics[width=\textwidth]{topics_evolution.eps}
+\end{figure}
+
 \end{frame}
 
-
 \begin{frame}
-\frametitle{}
+\frametitle{Speedup reduciendo el tamaño del tópico}
+
+\begin{figure}
+\includegraphics[width=\textwidth]{speedup.eps}
+\end{figure}
 \end{frame}
 
 \begin{frame}
-\frametitle{}
+\frametitle{Evolución del robo no presencial}
+\end{frame}
+
+\begin{frame}
+\frametitle{Evolución del robo con violencia}
 \end{frame}
 
 \begin{frame}

@@ -1,4 +1,4 @@
-En este capítulo se analizan los resultados de la metodología propuesta al fenómeno de robo de vehículos. En la sección \ref{sec:data} se describen la fuente de información utilizada. En la sección \ref{sec:data_processing} los resultados del procesamiento de los datos. Por último, en la sección \ref{sec:quantative}-\ref{sec:qualitative} se realiza un análisis cuantitativo y cualitativo de los resultados.
+En este capítulo se analizan los resultados de la metodología propuesta al fenómeno de robo de vehículos. En la sección \ref{sec:data} se describe la fuente de información utilizada. En la sección \ref{sec:data_processing} los resultados del procesamiento de los datos. Por último, en la sección \ref{sec:quantative}-\ref{sec:qualitative} se realiza un análisis cuantitativo y cualitativo de los resultados.
 
 \section{Datos}
 \label{sec:data}
@@ -11,7 +11,7 @@ Para este experimento se cuenta con relatos de víctimas del robo de vehículos 
 \label{img:robberies_aach}
 \end{figure}
 
-En la Figura \ref{img:documents} se muestra algunos ejemplos de la base de datos de la AACH, de aquí se observa que los relatos carecen de estandarización y presentan múltiples errores ortográficos. En consecuencia, la etapa de procesamiento toma suma relevancia, ya que aplicar un modelo de tópicos a un corpus sin ningún tipo de procesamiento nos puede llevar a resultados no deseados. En la sección \ref{sec:data_processing} se detallan los resultados obtenidos sobre el corpus tras aplicar los niveles de procesamiento mencionados en la sección \ref{sec:processing}.
+En la Figura \ref{img:documents} se muestra algunos ejemplos de la base de datos de la AACH, de aquí se observa que los relatos carecen de estandarización y presentan múltiples errores ortográficos. En consecuencia, la etapa de procesamiento toma suma relevancia, ya que aplicar un modelo de tópicos a un corpus sin ningún tipo de procesamiento puede llevar a resultados no deseados. En la sección \ref{sec:data_processing} se detallan los resultados obtenidos sobre el corpus tras aplicar los niveles de procesamiento mencionados en la sección \ref{sec:processing}.
 
 \def\grayboxtext[#1,#2]#3{
         \node[fill=gray!80, text width=36em, draw=black!80, rounded corners, align=justify, below=#1] (#2) {#3}; 
@@ -32,9 +32,9 @@ En la Figura \ref{img:documents} se muestra algunos ejemplos de la base de datos
 \section{Procesamiento}
 \label{sec:data_processing}
 
-En esta sección se detallan los resultados de aplicar el procesamiento descrito en la sección \ref{sec:processing}. Con fines gráficos los resultados del procesamiento se decriben en un orden distinto al descrito en dicha sección, con el objetivo de mostrar en como estas afectan el tamaño del vocabulario. El orden es el siguiente, (i) tokenización, (ii) procesamiento de caracteres, (iii) eliminación de palabras poco frecuentes, (iv) filtro por vocabulario, (v) eliminación de \textit{stopwords} y (vi) eliminación de documentos con pocas palabras.\\
+En esta sección se detallan los resultados de aplicar el procesamiento descrito en la sección \ref{sec:processing}. Con fines gráficos los resultados del procesamiento se decriben en un orden distinto al descrito en dicha sección, con el objetivo de mostrar como estas afectan el tamaño del vocabulario. El orden es el siguiente, (i) tokenización, (ii) procesamiento de caracteres, (iii) eliminación de palabras poco frecuentes, (iv) filtro por vocabulario, (v) eliminación de \textit{stopwords} y (vi) eliminación de documentos con pocas palabras.\\
 
-En la Figura \ref{img:cum_dist1} se muestran la distribución acumulada del corpus original tras solo aplicar tokenización. En este caso los \textit{tokens} totales corresponden a 2,030,980 asociado a un vocabulario de 93,203 palabras.\\
+En primer lugar, se muestran la distribución acumulada del corpus original tras solo aplicar tokenización. Como se observa en la Figura \ref{img:cum_dist1} los \textit{tokens} totales corresponden a 2,030,980 asociado a un vocabulario de 93,203 palabras.\\
 
 \begin{figure}
     \centering
@@ -43,7 +43,7 @@ En la Figura \ref{img:cum_dist1} se muestran la distribución acumulada del corp
     \label{img:cum_dist1}
 \end{figure}
 
-La Figura \ref{img:cum_dist2} muestra los resultados al aplicar la etapa de procesamiento de caracteres, de esta se observa que se reduce el tamaño del vocabulario en cerca de la mitad, específicamente a 42,921 palabras, similarmente con la cantidad de \textit{tokens}, que ahora son 1,028,412.
+En segundo lugar, se aplica la etapa de procesamiento de caracteres. De acuerdo a la Figura \ref{img:cum_dist2} el tamaño del vocabulario se reduce a casi la mitad, específicamente a 42,921 palabras, de forma similar la cantidad de \textit{tokens} se reduce a 1,028,412.
 
 \begin{figure}
     \centering
@@ -52,9 +52,9 @@ La Figura \ref{img:cum_dist2} muestra los resultados al aplicar la etapa de proc
     \label{img:cum_dist2}
 \end{figure}
 
-Hasta este nivel de procesamiento se tiene que al menos el 50\% de las palabras ocurren una única vez y al menos un 80\% tiene una frecuencia igual o menor a 4. El 95\% de la distribución acumulada puede ser explicada con 7,837 palabras (un 18\% del vocabulario actual). En conclusión, la distribución de las palabras tiene una cola bastante pesada.\\
+Hasta este nivel de procesamiento se tiene que cerca del 50\% de las palabras ocurren una única vez y al cerca de un 80\% tiene una frecuencia igual o menor a 4. El 95\% de la distribución acumulada puede ser explicada con 7,837 palabras (un 18\% del vocabulario actual). En conclusión, la distribución de las palabras tiene una cola bastante pesada.\\
 
-En la Figura \ref{img:cum_dist3} se muestra la nueva distribución tras eliminar las palabras que aparecen en menos del 0.1\% de los documentos de su época. En este nivel de procesamiento se redujo bastante el tamaño del vocabulario a 3,148 (al rededor de 14 veces) sin alterar tan significativamente la cantidad de \textit{tokens} (alrededor de un 10\%), siendo ahora 925,693 \textit{tokens}.\\
+En tercer lugar, se eliminan las palabras que aparecen en menos del 0.1\% de los documentos de su época. En la Figura \ref{img:cum_dist3} se muestra una reducción importante del vocabulario, específicamente a 3,148 (al rededor de 14 veces), reduciendo levemente  (alrededor de un 10\%) la cantidad de \textit{tokens} a 925,693.\\
 
 \begin{figure}
     \centering
@@ -63,7 +63,7 @@ En la Figura \ref{img:cum_dist3} se muestra la nueva distribución tras eliminar
     \label{img:cum_dist3}
 \end{figure}
 
-Luego se filtran palabras usando el vocabulario extraído del SUC. En la Figura \ref{img:cum_dist4} se observa que el vocabulario se redujo a 2,902 y el la cantidad de \textit{tokens} a 901,745. En este caso la variación no fue tan significativa, alrededor de un 8\% en el tamaño del vocabulario y de un 3\% en el caso de los \textit{tokens}.\\
+En cuarto lugar, se filtran palabras usando el vocabulario extraído del SUC. En la Figura \ref{img:cum_dist4} se observa que el vocabulario se redujo a 2,902 y el la cantidad de \textit{tokens} a 901,745. En este caso la variación no fue menos significativa, alrededor de un 8\% en el tamaño del vocabulario y de un 3\% en el caso de los \textit{tokens}.\\
 
 \begin{figure}
     \centering
@@ -72,7 +72,7 @@ Luego se filtran palabras usando el vocabulario extraído del SUC. En la Figura 
     \label{img:cum_dist4}
 \end{figure}
 
-A continuación, se eliminan las \textit{stopwords}, de la Figura \ref{img:cum_dist5} se puede observar que esto significó una reducción significativa de tanto el vocabulario como en el número de \textit{tokens}, respectivamente en 32\%(1,960 palabras) y 45\%(495,182 \textit{tokens}). La reducción abrupta en la cantidad de \textit{tokens} se debe principalmente a que las \textit{stopwords} son parte de las palabras más frecuentes dentro del corpus.\\
+En quinto lugar, se eliminan las \textit{stopwords}, de la Figura \ref{img:cum_dist5} se puede observar que significó una reducción significativa de tanto el vocabulario como del número de \textit{tokens}, respectivamente en 32\% (1,960 palabras) y 45\% (495,182 \textit{tokens}). La reducción abrupta en la cantidad de \textit{tokens} se debe principalmente a que las \textit{stopwords} son parte de las palabras más frecuentes dentro del corpus.\\
 
 \begin{figure}
     \centering
@@ -81,7 +81,7 @@ A continuación, se eliminan las \textit{stopwords}, de la Figura \ref{img:cum_d
     \label{img:cum_dist5}
 \end{figure}
 
-Por último, se eliminan los documentos con menos de 5 palabras, de la Figura \ref{img:cum_dist6} se puede observar que esto implicó una reducción de alrededor del 20\% en el tamaño del corpus y del 8\% en el número de \textit{tokens}.
+Por último, se eliminan los documentos con menos de 5 palabras, de la Figura \ref{img:cum_dist6} se puede observar que implicó una reducción de alrededor del 20\% en el tamaño del corpus y del 8\% en el número de \textit{tokens}.
 
 \begin{figure}
     \centering
@@ -107,7 +107,7 @@ En la tabla \ref{table:processing_stats} se muestra un cuadro resumen con estad�
     \label{table:processing_stats}
     \end{table}
 
-En la tabla \ref{table:innovation_rate} se muestra el detalle del vocabulario para cada una de las épocas tras procesar el corpus, de aquí se extrae que en promedio un 12.83\% del vocabulario se olvida de una época a otra y un 18.92\% es nuevo, es otras palabras, en promedio alrededor de un 32\% del vocabulario no es común entre tópicos de épocas adyacentes. Esto justifica la necesidad por utilizar medidas de similitud robustas a cambios en el vocabulario, permitiendo así una comparación más justa entre tópicos que no tienen un vocabulario común.
+En la tabla \ref{table:innovation_rate} se muestra el detalle del vocabulario para cada una de las épocas tras procesar el corpus, de aquí se extrae que en promedio un 12.83\% del vocabulario se olvida de una época a otra y un 18.92\% es nuevo, en otras palabras, en promedio alrededor de un 32\% del vocabulario no es común entre tópicos de épocas adyacentes. Esto justifica la necesidad de utilizar medidas de similitud robustas a cambios en el vocabulario, permitiendo así una comparación más justa entre tópicos sin vocabulario común.
 
 \begin{table}[H]
     \begin{tabular}{|c|r|r|r|r|}
@@ -119,8 +119,7 @@ En la tabla \ref{table:innovation_rate} se muestra el detalle del vocabulario pa
     5              & 1,329                              & 1,405                            & 12.57                                      & 18.28                                    \\ \hline
     6              & 1,405                              & 1,537                            & 10.25                                      & 19.64                                    \\ \hline
     \end{tabular}
-    \caption{Evolución del vocabulario en el tiempo, \textbf{t-1}: corresponde al vocabulario del período anterior a la época respectivame,\textbf{t-1}: corresponde al vocabulario de la época actual, \textbf{t-1[\%]}
-    : porcentaje de palabras del período $t-1$ que ya no están en el período $t$ y \textbf{t[\%]}: porcentaje de palabras del período $t$ que no están en el período $t-1$.}
+    \caption{Evolución del vocabulario en el tiempo, \textbf{t-1}: corresponde al vocabulario del período anterior a la época respectiva, \textbf{t}: corresponde al vocabulario de la época actual, \textbf{t-1[\%]}: porcentaje de palabras del período $t-1$ que ya no están en el período $t$ y \textbf{t[\%]}: porcentaje de palabras del período $t$ que no están en el período $t-1$.}
     \label{table:innovation_rate}.
 \end{table}
 
@@ -128,7 +127,7 @@ En la tabla \ref{table:innovation_rate} se muestra el detalle del vocabulario pa
 \section{Análisis cuantitativo de resultados}
 \label{sec:quantative}
 
-En esta sección se describen los resultados cuantitativos de aplicar la metodología propuesta al corpus descrito en la sección \ref{sec:data}. En primer lugar, se analiza el comportamiento temporal de los tópicos bajo distintos puntos operantes $\zeta$ para podar el grafo completo. En segundo lugar, se analizan los resultados de aplicar la heurística descrita en \ref{sec:wmd_complexity}, la cual mejora los tiempos de construcción del grafo de similitud a costa de pérdida en precisión.
+En esta sección se describen los resultados cuantitativos de aplicar la metodología propuesta al corpus descrito en la sección \ref{sec:data}. En primer lugar, se analiza el comportamiento temporal de los tópicos bajo distintos puntos operantes $\zeta$ para podar el grafo \textit{fully-connected}. En segundo lugar, se analizan los resultados de aplicar la heurística descrita en \ref{sec:wmd_complexity}, la cual mejora los tiempos de construcción del grafo de similitud a costa de pérdida en precisión.
 
 \subsection{Grafo de similitud temporal}
 
@@ -137,11 +136,11 @@ Como se menciona en la sección \ref{sec:build_graph}, el grafo temporal se cons
 \begin{figure}
     \centering
     \includegraphics[width=\textwidth]{ch4/cdf.eps}
-    \caption{Estimación empírica de la cdf de la similitud WMD entre tópicos del grafo \textit{fully conected}.}
+    \caption{Estimación empírica de la cdf de la similitud WMD entre tópicos del grafo \textit{fully-conected}.}
     \label{img:cdf_wmd}
 \end{figure}
 
-En la Figura \ref{img:temporal_similarity_graphs} se muestran los grafos resultantes tras aplicar distintos puntos operantes $\zeta$. Como es esperado, un incremento de $\zeta$ resulta en un incremento en la \textit{sparsity} del grafo temporal final.
+En la Figura \ref{img:temporal_similarity_graphs} se muestran los grafos resultantes tras aplicar distintos puntos operantes $\zeta$. Como es esperado, un incremento de $\zeta$ resulta en un incremento en la \textit{sparsity} del grafo temporal.
 
 \begin{figure}
 \centering
@@ -177,13 +176,13 @@ En la Figura \ref{img:topics_evolution} se muestra la proporción de tópicos qu
 
 \subsection{Heurística de mejora del tiempo de construcción del grafo de similitud}
 
-WMD es una medida intensiva en recursos computacionales, por lo que se requiere de herísticas para escalar la metodología a un gran volumen de datos. Como se menciono en la sección \ref{sec:wmd_complexity} una forma de reducir significativamente el tiempo de creación del grafo temporal es utilzar el top N de palabras más probables del tópico que expliquen determinado porcentaje de la distribución acumulada. A la hora de aplicar esta heurística se debe tener en cuenta la posible pérdida de información al representar un tópico con un vocabulario reducido. Sea $G_{\zeta}$ el grafo obtenido al aplicar tras podar el grafo completo con un punto operante $\zeta$ y $G^{'}_{\zeta}$ el grafo aproximado de aplicar la heurística, con $E$ y $E^{'}$ los conjuntos de arcos respectivos. Luego, el porcentaje de arcos correctos de la heurística corresponde a la cardinalidad de la intersección divida por la cardinalidad de la unión, matemáticamente:
+WMD es una medida intensiva en recursos computacionales, por lo que se requiere de heurísticas para escalar la metodología a un gran volumen de datos. Como se menciona en la sección \ref{sec:wmd_complexity} una forma de reducir significativamente el tiempo de creación del grafo temporal es utilzar el top N de palabras más probables del tópico que expliquen determinado porcentaje de la distribución acumulada. A la hora de aplicar esta heurística se debe tener en cuenta la posible pérdida de información al representar un tópico con un vocabulario reducido. Sea $G_{\zeta}$ el grafo obtenido al aplicar tras podar el grafo completo con un punto operante $\zeta$ y $G^{'}_{\zeta}$ el grafo aproximado de aplicar la heurística, con $E$ y $E^{'}$ los conjuntos de arcos respectivos. Luego, el porcentaje de arcos correctos de la heurística corresponde a la cardinalidad de la intersección divida por la cardinalidad de la unión, matemáticamente:
 
 \begin{equation}
   \frac{|E\cap E^{'}|}{|E\cup E^{'}|}
 \end{equation}
 
-En la Figura \ref{img:speedup} se muestra la mejora en \textit{speedup} y el incremento en error al usar un porcentaje menor de la cdf del tópico para construir el grafo de similitud temporal. Utilizando el 20\% de la cdf la construcción del grafo de similitud se acelera en más de 1,207 veces, esto bajo un error medianamente aceptable del orden del 10-30\%. Si se utiliza un 60\% de la cdf se obtiene una aceleración casi 10 veces menor, específicamente de 137, siendo el error menor al 10\%. Por otro lado, si se utiliza un 90\% de la cdf el error es inferior al 5\%, pero bajo un aceleración de 8 superior a utilizar el vocabulario completo del tópico en la construcción del grafo temporal. 
+En la Figura \ref{img:speedup} se muestra la mejora en \textit{speedup} y el incremento en error al usar un porcentaje menor de la cdf del tópico para construir el grafo de similitud temporal. Utilizando el 20\% de la cdf la construcción del grafo de similitud disminuye en más de 1,207 veces, esto bajo un error medianamente aceptable del orden del 10-30\%. Si se utiliza un 60\% de la cdf el tiempo mejora en casi 137 veces, siendo el error menor al 10\%. Por otro lado, si se utiliza un 90\% de la cdf el error es inferior al 5\%, siendo el speedup es aproximadamente 8 veces superior a utilizar el vocabulario completo del tópico en la construcción del grafo temporal.
 
 \begin{figure}
     \centering
@@ -201,7 +200,7 @@ En esta sección se realiza un análisis cualitativo de los tópicos descubierto
 \subsection{Evolución del robo no presencial}
 \label{sec:noviolence_topic}
 
-En la Figura \ref{img:noviolence_topic} se puede muestra la evolución de uno de los tópicos más predominantes del grafo temporal. A diferencia de otros tópicos este tópico no presenta en el tiempo división, fusión ni desaparición. En base a las top 10 palabras más probables el tópico se puede caracterizar como un robo bajo las siguientes circunstancias: vehículo estacionado en la calle, sin la presencia del conductor, el conductor al regresar al lugar se percata de la ausencia del vehículo. Un nombre adecuado para este tópico podría ser \quotes{robo no presencial}, ya que se caracteriza por no contar con la presencia del conductor cuando ocurre el robo. Este tópico se caracteriza por su gran estabilidad en el tiempo, ya que en el top 10 se encuentran practicamente las mismas palabras. Por último, se observa una tendencia a la baja de la participación del tópico, en el año 2011 alrededor del 44\% de los \textit{tokens} provienen de este tópico y en el año 2016 se tiene un 32\%.
+En la Figura \ref{img:noviolence_topic} se muestra la evolución de uno de los tópicos más predominantes del grafo temporal. A diferencia de otros tópicos este tópico no presenta en el tiempo división, fusión ni desaparición. En base a las top 10 palabras más probables el tópico se puede caracterizar como un robo bajo las siguientes circunstancias: vehículo estacionado en la calle, sin la presencia del conductor, el conductor al regresar al lugar se percata de la ausencia del vehículo. Un nombre adecuado para este tópico podría ser \quotes{robo no presencial}, ya que se caracteriza por no contar con la presencia del conductor cuando ocurre el robo. Este tópico se caracteriza por su gran estabilidad en el tiempo, ya que en el top 10 se encuentran practicamente las mismas palabras. Por último, se observa una tendencia a la baja de la participación del tópico, en el año 2011 alrededor del 44\% de los \textit{tokens} provienen de este tópico y en el año 2016 se tiene un 32\%.
 
 
 \def\topic[#1,#2,#3,#4,#5,#6]#7{
@@ -289,14 +288,14 @@ En la Figura \ref{img:noviolence_topic} se puede muestra la evolución de uno de
   \tedge[t4,t5,,,0.632];
   \tedge[t5,t6,,,0.609];
 \end{tikzpicture}
-\caption{Evolución del tópico de robo de vehículo no presecial. El eje horizontal denota el tiempo en años, partiendo en el 2011 hasta el 2016. Mientras más claro sea el color del tópico más popularidad posee en su correspondiente época y mientras mayor es el grosor del arco entre dos tópicos mayor es su similitud.}
+\caption{Evolución del tópico de robo de vehículo no presecial. El eje horizontal denota el tiempo en años, partiendo en el 2011 hasta el 2016. Mientras más claro el color del tópico más popularidad posee en su correspondiente época y mientras mayor es el grosor del arco entre dos tópicos mayor es su similitud.}
 \label{img:noviolence_topic}
 \end{figure}
 
 \subsection{Evolución del robo con violenca}
 \label{sec:violence_topic}
 
-En la Figura \ref{img:violence_topic} se describe un tipo de robo de vehículo que se podria clasificar como robo con violencia. Este delito, se presentaría de la siguiente forma: un conjunto de personas se bajan de un vehículo, intimidan al conductor mediante una pistola u otra arma de fuego, le quitan las llaves del vehículo y finalmente se llevan el vehículo dándose a la fuga. La participación de este tipo de robo se ha visto al alza, en el 2011 su participación era del 12\% y en el 2016 del 36\%, por lo que se ha convertido en un delito más a la moda, quitandole terreno al robo no presencial. A diferencia del tópico robo no presencial este presenta una fusión y división en el 2015. En ese año emerge del robo con violencia un \quotes{subtópico} popularmente conocido como \quotes{portonazo}, un robo con violencia que se caracteriza por la sustracción del vehículo en el portón de la casa de la víctima. Ese año coincide con la popularización de aquel \texit{modus operandi}. Al siguiente año esste subtópico se vuelve a fusionar para formar el tópico robo con violencia de períodos anteriores.
+En la Figura \ref{img:violence_topic} se describe un tipo de robo de vehículo que se puede clasificar como robo con violencia. Este delito, se presenta de la siguiente forma: un conjunto de personas se bajan de un vehículo, intimidan al conductor mediante una pistola u otra arma de fuego, le quitan las llaves del vehículo y finalmente se llevan el vehículo dándose a la fuga. La participación de este tipo de robo se ha visto al alza, en el 2011 su participación era del 12\% y en el 2016 del 36\%, por lo que se ha convertido en un delito más a la moda, quitandole terreno al robo no presencial. A diferencia del tópico robo no presencial este presenta una fusión y división en el 2015. En ese año emerge del robo con violencia un subtópico popularmente conocido como \quotes{portonazo}, un robo con violencia que se caracteriza por la sustracción del vehículo en el portón de la casa de la víctima. Ese año coincide con la popularización de aquel \textit{modus operandi}. Al siguiente año el subtópico se vuelve a fusionar para formar parte del tópico robo con violencia de períodos anteriores.
 
 \definecolor{color1}{RGB}{50,100,142}
 \definecolor{color2}{RGB}{48,105,142}
@@ -386,8 +385,6 @@ En la Figura \ref{img:violence_topic} se describe un tipo de robo de vehículo q
   \tedge[t51,t6,,,0.395];
   \tedge[t52,t6,,,0.483];
 \end{tikzpicture}
-\caption{Evolución del tópico de robo con violencia de vehículo. El eje horizontal denota el tiempo en años, partiendo en el 2011 hasta el 2016. Mientras más claro sea el color del tópico más popularidad posee en su correspondiente época y mientras mayor es el grosor del arco entre dos tópicos mayor es su similitud.}
+\caption{Evolución del tópico de robo con violencia de vehículo. El eje horizontal denota el tiempo en años, partiendo en el 2011 hasta el 2016. Mientras más claro el color del tópico más popularidad posee en su correspondiente época y mientras mayor es el grosor del arco entre dos tópicos mayor es su similitud.}
 \label{img:violence_topic}
 \end{figure}
-
-

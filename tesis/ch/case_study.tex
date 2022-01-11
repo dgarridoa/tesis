@@ -123,7 +123,6 @@ En la tabla \ref{table:innovation_rate} se muestra el detalle del vocabulario pa
     \label{table:innovation_rate}.
 \end{table}
 
-
 \section{Análisis cuantitativo de resultados}
 \label{sec:quantative}
 
@@ -156,10 +155,9 @@ En la Figura \ref{img:temporal_similarity_graphs} se muestran los grafos resulta
 \subfloat[$\zeta$ = 0.99]{
   \includegraphics[width=0.4\textwidth]{ch4/graph_q100_e99.png}
 }\\
-\caption{Grafo de similitud temporal. Los tres grafos corresponden al mismo corpus y fueron construidos usando el mismo conjunto de tópicos con WMD como medida de similitud, pero bajo diferentes puntos operantes $\zeta$ de la CDF. El eje horizontal denota el tiempo en años, partiendo en el 2011 hasta el 2016, donde cada columna de tópicos corresponde a una época específica. Mientras más claro sea el color del nodo que representa un tópico más popularidad posee en su correspondiente época y mientras mayor es el grosor del arco entre dos tópicos mayor es su similitud.}
+\caption{Grafo de similitud temporal. Los grafos corresponden al mismo corpus y fueron construidos usando el mismo conjunto de tópicos con WMD como medida de similitud, pero bajo diferentes puntos operantes $\zeta$ de la CDF. El eje horizontal denota el tiempo en años, partiendo en el 2011 hasta el 2016, donde cada columna de tópicos corresponde a una época específica. Mientras más claro sea el color del nodo que representa un tópico más popularidad posee en su correspondiente época y mientras mayor es el grosor del arco entre dos tópicos mayor es su similitud.}
 \label{img:temporal_similarity_graphs}
 \end{figure}
-
 
 En el grafo podado se pueden identificar diferentes dinamismos en cada época, como nacimiente, muerte, evolución, fusión y división. Un tópico nace en una época si en la época anterior no posee antecesores. La época de muerte de un tópico se identifica como aquella en que no tiene ningún descendiente. Un tópico evoluciona si posee un único antecesor. La fusión ocurre en una época cuando un tópico tiene más de un antecesor. En cambio, la división ocurre cuando hay dos o más tópicos de una época que comparten un antecesor.\\
 
@@ -171,8 +169,6 @@ En la Figura \ref{img:topics_evolution} se muestra la proporción de tópicos qu
     \caption{Proporción de tópicos que nacen, mueren, fusionan y dividen por época, normalizando por el número total de tópicos inferido en esa época, bajo diferentes puntos operantes $\zeta$.}
     \label{img:topics_evolution}
 \end{figure}
-
-
 
 \subsection{Heurística de mejora del tiempo de construcción del grafo de similitud}
 
@@ -191,7 +187,6 @@ En la Figura \ref{img:speedup} se muestra la mejora en \textit{speedup} y el inc
     \label{img:speedup}
 \end{figure}
 
-
 \section{Análisis cualitativo de resultados}
 \label{sec:qualitative}
 
@@ -201,7 +196,6 @@ En esta sección se realiza un análisis cualitativo de los tópicos descubierto
 \label{sec:noviolence_topic}
 
 En la Figura \ref{img:noviolence_topic} se muestra la evolución de uno de los tópicos más predominantes del grafo temporal. A diferencia de otros tópicos este tópico no presenta en el tiempo división, fusión ni desaparición. En base a las top 10 palabras más probables el tópico se puede caracterizar como un robo bajo las siguientes circunstancias: vehículo estacionado en la calle, sin la presencia del conductor, el conductor al regresar al lugar se percata de la ausencia del vehículo. Un nombre adecuado para este tópico podría ser \quotes{robo no presencial}, ya que se caracteriza por no contar con la presencia del conductor cuando ocurre el robo. Este tópico se caracteriza por su gran estabilidad en el tiempo, ya que en el top 10 se encuentran practicamente las mismas palabras. Por último, se observa una tendencia a la baja de la participación del tópico, en el año 2011 alrededor del 44\% de los \textit{tokens} provienen de este tópico y en el año 2016 se tiene un 32\%.
-
 
 \def\topic[#1,#2,#3,#4,#5,#6]#7{
         \node[fill=#1, rounded corners, minimum height=#2, minimum width=#3, text width=4em] (#5) at #6 {}; 
@@ -360,7 +354,7 @@ En la Figura \ref{img:violence_topic} se describe un tipo de robo de vehículo q
   \topic[color52,60,80,north,t52,(12,-1.2)] {
      \scriptsize
      \begin{tabular}{l}
-       llavas tipos\\
+       llaves tipos\\
        pitola personas\\
        casa llevaron\\
        bajaron arma\\
@@ -370,11 +364,11 @@ En la Figura \ref{img:violence_topic} se describe un tipo de robo de vehículo q
   \topic[color6,60,80,north,t6,(15,0)] {
      \scriptsize
      \begin{tabular}{l}
-       estacionado deje\\
-       calle lugar\\
-       econtraba percato\\
-       salir camioneta\\
-       dejo domicilio
+       personas bajan\\
+       calle arma\\
+       tipos llaves\\
+       fuego individuos\\
+       armas pistola
      \end{tabular}
   };
   \tedge[t1,t2,,,0.499];

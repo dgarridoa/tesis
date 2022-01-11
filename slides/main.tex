@@ -39,7 +39,7 @@
 \author[\documentauthor]{
 	\documentauthor \newline\newline
 Profesor guía: Richard Weber \newline
-Miembros de la comisión: Giorgiogiulio Parra, Ángel Jiménez
+Miembros de la comisión: Ángel Jiménez, Giorgiogiulio Parra
 }
 \institute[UChile]{
 	\includegraphics[height=1.1cm]{\universitydepartmentimage} \\
@@ -75,13 +75,17 @@ Miembros de la comisión: Giorgiogiulio Parra, Ángel Jiménez
 	\titlepage
 \end{frame}
 
+
 \begin{frame}
 	\frametitle{Contenidos}
 	\tableofcontents
 \end{frame}
+
+
 \section{Motivación}
+
 \begin{frame}[t]
-\frametitle{Motivación} 
+\frametitle{Motivación: Metodología} 
 % agregar dos imagenes que representen el punto 1 y 3. ejemplo de accidentes de trayecto causado por mascarillas.
 \begin{columns}[t]
   \column{0.5\textwidth}
@@ -111,16 +115,47 @@ Miembros de la comisión: Giorgiogiulio Parra, Ángel Jiménez
 \end{columns}
 \end{frame}
 
+\begin{frame}[t]
+\frametitle{Motivación: Caso de estudio} 
+
+\begin{columns}
+
+\column{0.5\textwidth}
+El problema del robo de vehículos o accesorios de vehículos afecta a toda la sociedad en Chile y en el mundo. Algunos de sus efectos son:
+
+  \begin{itemize}
+    \item Incremento en la percepción de seguridad.
+    \item Aumento en la prima de los seguros de los asegurados.
+    \item Aumento en los costos de las aseguradoras.
+    \item Incremento en otro tipos de delitos.
+    \item problema que se ha vuelto más relevante el último tiempo debido al crecimiento en el robo de vehículo motorizado y accesorios. 
+  \end{itemize}
+ 
+\column{0.5\textwidth}
+\begin{figure}
+    \includegraphics[width=1.0\textwidth]{robberies.eps} 
+    \caption{Cantidad de robos de vehículos y accesorios anuales en Chile entre los años 2006-2016. Fuente: Informe anual de Carabineros, 2006-2016, INE.} 
+    \label{fig:antecedente}
+\end{figure}
+
+\end{columns}
+\end{frame}
+
+
+
+
 \section{Revisión del estado del arte}
 
 \begin{frame}[t]
 \frametitle{Revisión del estado del arte: ¿Qué es el modelamiento de tópicos?}
   El modelamiento de tópicos es uno de los enfoques más prometores de \textit{clustering} aplicado a texto, siendo su objetivo descubrir los temas (\textit{clusters}) ocultos presentes en el corpus, permitiendo \textbf{resumir}, \textbf{organizar} y \textbf{explorar} grandes colecciones de datos.
 
-\insertimage{topic_modelling.png}{scale=0.3}{}
+\begin{figure}
+\insertimage{topic_modelling.png}{scale=0.3}{Intuición detrás de Latent Dirichlet Allocation. Fuente: Figura 1 de \cite{blei2012probabilistic}.}
+\end{figure}
 
-%El problema enunciado consiste en una tarea \textit{clustering}, debido a que no se cuenta con una etiqueta del tema al que corresponde cada documento, siendo el propósito del trabajo descubrirla. El modelamiento de tópicos es uno de los enfoques más prometores de \texit{clustering} aplicado a texto, siendo su objetivo descubrir los temas (\textit{clusters}) ocultos presentes en el corpus, permitiendo resumir, organizar y explorar grandes colecciones de datos.\\
 \end{frame}
+
 
 \begin{frame}[t]
 \frametitle{Revisión del estado del arte: Tipos de modelos de tópicos}
@@ -128,7 +163,6 @@ Las técnicas de modelamiento de tópicos suelen estar basadas en \textbf{factor
 \newline\newline
 A continuación algunos ejemplos de ambos enfoques:
 
-%reemplazar por monos
 \begin{itemize}
   \item \textbf{LSI} (Latent Semantic Indexing) \cite{dumais2004latent} o \textbf{NMF} (Non-negative Matrix Factorization)\cite{xu2003document}. 
   \item \textbf{LDA} (Latent Dirichlet Allocation)\cite{blei2003latent} o \textbf{HDP} (Hierarchical Dirichlet Process)\cite{teh2005sharing}. 
@@ -136,11 +170,12 @@ A continuación algunos ejemplos de ambos enfoques:
 
 Este trabajo aborda el enfoque probabilístico: 
 \begin{itemize}
-  \item \textbf{Expresa incertidumbre} en la asignación de un tópico a un documento y en la asignación de palabras a los tópicos.% Por que es mejor?
-  \item Suele aprender \textbf{tópicos más descriptivos} \cite{stevens2012exploring}.% Por que es mas descriptivo?
+  \item \textbf{Expresa incertidumbre} en la asignación de un tópico a un documento y en la asignación de palabras a los tópicos.
+  \item Suele aprender \textbf{tópicos más descriptivos} \cite{stevens2012exploring}.
 \end{itemize}
 
 \end{frame}
+
 
 \begin{frame}[t]
 \frametitle{Revisión del estado del arte: Modelamiento dinámico}
@@ -152,7 +187,7 @@ En el modelamiento de tópicos se pueden presentar los siguientes dinámismos:
   \item \textbf{Nacimiento, muerte, fusión y división de tópicos.}
 \end{enumerate}
 
-Dentro de los modelos de tópicos dinamicos se tiene:
+Dentro de los modelos de tópicos dinámicos se tiene:
 \begin{itemize}
   \item \textbf{DTM} (Dynamic Topic Modelling)\cite{blei2006dynamic} y \textbf{TOC} (Topic Over Time)\cite{wang2006topics} \textbf{permiten el punto 1 y 2} manteniendo fijo el número de topicos en el tiempo.
   \item \textbf{DHDP} (Dynamic Hierarchical Dirichlet Process)\cite{ahmed2012timeline} \textbf{captura el punto 1, 2 y 3 parcialmente}, con excepción de fusión y división. \textbf{No cuenta con una implementación}.\\
@@ -162,6 +197,7 @@ Dentro de los modelos de tópicos dinamicos se tiene:
 
 
 \section{Metodología propuesta}
+
 \begin{frame}[t]
 \frametitle{Metodología propuesta}
 \begin{enumerate}
@@ -171,15 +207,21 @@ Dentro de los modelos de tópicos dinamicos se tiene:
 \end{enumerate}
 
 \vspace*{-0.1in}
+\begin{figure}
 \insertimage{methodology.png}{scale=0.18}{}
+\caption{Esquema de la metodología de descubrimiento y evolución de tópicos.}
+\label{img:scheme}
+\end{figure}
 
 \end{frame}
 
 
 \begin{frame}[t]
 \frametitle{Metodología propuesta: Hierarchical Dirichlet Process}
-\textbf{HDP} (Hierarchical Dirichlet Process) es un \textit{prior} jerárquico no paramétrico, el cual está formado por un DP cuya medida base $G_{0}$ es dibujada a partir de un DP. 
-\newline\newline
+\textbf{HDP} (Hierarchical Dirichlet Process) es un \textit{prior} jerárquico no paramétrico formado por un DP cuya medida base $G_{0}$ es dibujada a partir de otro DP.
+
+\vspace*{-0.1in}
+\begin{figure}
 \begin{columns}
   \begin{column}{0.5\textwith}
   \hspace*{-3cm}\vbox{\begin{aligned}
@@ -208,9 +250,10 @@ Dentro de los modelos de tópicos dinamicos se tiene:
       \edge {phi} {w} ; %
       }
     }}
-%  \caption{Representación gráfica de HDP: círculos denotan variables aleatorias, círculos abiertos denotan parámetros, círculos sombreados denotan variables observadas y los platos indican replicación.}
+\caption{Representación gráfica de HDP: círculos denotan variables aleatorias, círculos abiertos denotan parámetros, círculos sombreados denotan variables observadas y los platos indican replicación.}
 \end{column}
 \end{columns}
+\end{figure}
 
 La discretitud de $G_{0}$ asegura:
   \begin{itemize}
@@ -218,34 +261,52 @@ La discretitud de $G_{0}$ asegura:
     \item \textbf{A nivel del documento} $G_{d}$ hereda los tópicos de $G_{0}$, pero los \textbf{pesos de cada tópico} (\textit{mixture proportions}) es específica del documento.
   \end{itemize}
 \end{frame}
- 
-\begin{frame}[t]
-\frametitle{Metodología propuesta: Grafo de similitud temporal}
-\begin{columns}[t]
-\column{0.5\textwidth}
-  \begin{itemize}
-    \item Construcción del grafo \textit{fully connected} de las similitudes entre tópicos de épocas adyacentes ($\phi_{t,i}$ y $\phi_{t+1,j}$) usando una medida de similitud $\rho \in [0,1]$.
-    \item Eliminación de las conexiones débiles en base a un umbral $\alpha \in [0,1]$, reteniendo solo aquellas conexiones que cumplen $\rho(\phi_{t,i}, \phi_{t+1,j})\leq \alpha$.
-  \end{itemize}
-\insertimage{similarity_graph.png}{scale=0.12}{}
-		
-\column{.5\textwidth} 
-  \begin{itemize}
-    \item El umbral de corte es el cuantil $\zeta \in [0,1]$ de la cdf de las similitudes ($F_{p}$), es decir, $F_{p}^{-1}(\zeta)$.
-    \item El úmbral de corte no es arbitrario según la médida de similitud escógida.
-  \end{itemize}
-  \insertimage{cdf_sim.png}{scale=0.12}{}
-\end{columns}
-\end{frame}
+
 
 \begin{frame}[t]
-\frametitle{Metodología propuesta: Word Mover's Distance}
+\frametitle{Metodología propuesta: Construcción del grafo de similitud temporal}
 \begin{itemize}
-  \item Se escoge \textbf{WMD} (Word Mover's Distance) \cite{kusner2015word}: distancia que permite comparar vectores sin vocabulario común ya que trabaja sobre el espacio de los \textit{word embeddings}. 
-  \item Sea  $V_{i}$ y $V_{j}$ los vocabularios del tópico $i$ y $j$ respectivamente, luego su WMD viene dado por $WMD(\phi_{i}, \phi_{j})$:
+  \item Construcción del grafo \textit{fully connected} de las similitudes entre tópicos de épocas adyacentes ($\phi_{t,i}$ y $\phi_{t+1,j}$) usando una medida de similitud $\rho \in [0,1]$.
+  \item Eliminación de las conexiones débiles en base a un umbral $\alpha \in [0,1]$, reteniendo solo aquellas conexiones que cumplen $\rho(\phi_{t,i}, \phi_{t+1,j})\leq \alpha$.
 \end{itemize}
 
 \vspace*{-0.3in}
+\begin{figure}
+\insertimage{similarity_graph.png}{scale=0.12}{}
+\caption{Ilustración conceptual del grafo de similitud que modela la dinámica de los tópicos en el tiempo. Un nodo corresponde a un tópico en una época específica; el ancho de los arcos es proporcional a la similitud entre los tópicos, arcos ausentes fueron eliminados por presentar una similitud menor a un umbral. Fuente:  Figura 3 de \cite{beykikhoshk2018discovering}.}
+\label{img:graph}
+\end{figure}		
+
+\end{frame}
+
+
+\begin{frame}[t]
+\frametitle{Metodología propuesta: Prunning}
+
+\begin{itemize}
+  \item El umbral de corte es el cuantil $\zeta \in [0,1]$ de la cdf de las similitudes ($F_{p}$), es decir, $F_{p}^{-1}(\zeta)$.
+  \item El úmbral de corte no es arbitrario según la médida de similitud escógida.
+\end{itemize}
+
+\vspace*{-0.3in}
+\begin{figure}
+  \insertimage{cdf_sim.png}{scale=0.15}{}
+  \caption{Estimación empírica de la función de densidad acumulada (cdf) de la similitud entre tópicos de épocas adyacentes en un grafo \textit{fully-connected} para tres medidas de similitud. Fuente: Figura 4 \cite{beykikhoshk2018discovering}.}
+  \label{img:cdf_sim}
+\end{figure}
+
+\end{frame}
+
+
+\begin{frame}[t]
+\frametitle{Metodología propuesta: Word Mover's Distance}
+
+\begin{itemize}
+  \item \textbf{WMD} (Word Mover's Distance) \cite{kusner2015word}: distancia que permite comparar vectores sin vocabulario común ya que trabaja sobre el espacio de los \textit{word embeddings}. 
+  \item Sea  $V_{i}$ y $V_{j}$ los vocabularios del tópico $i$ y $j$ respectivamente, luego se tiene $WMD(\phi_{i}, \phi_{j})$:
+\end{itemize}
+
+\vspace*{-0.4in}
 \begin{columns}
 \begin{column}{0.4\textwidth}
 
@@ -259,13 +320,18 @@ La discretitud de $G_{0}$ asegura:
 \end{column}
 
 \begin{column}{0.6\textwidth}
+\begin{figure}
 \insertimage{wmd-obama.png}{scale=0.15}{}
+\caption{Espacio vectorial de los \textit{word embeddings} de las palabras de dos documentos con un vocabulario de tamaño 4. Fuente: Figura de \cite{WMDPy}.}
+\label{img:wmd_obama}
+\end{figure}
 \end{column}
 
 \end{columns}
-WMD se puede transformar en médida de similitud considerando: $\rho(\phi_{i}, \phi_{j}) = \frac{1}{1+WMD(\phi_{i}, \phi_{j})}$ Nota: WMD es 0 si la similitud es 1 e $\infty$ si la similitud es 0.
+  WMD se puede transformar en médida de similitud\footnote{Notar que WMD es 0 si la similitud es 1 e $\infty$ si la similitud es 0.} considerando $\rho(\phi_{i}, \phi_{j}) = \frac{1}{1+WMD(\phi_{i}, \phi_{j})}$.
 
 \end{frame}
+
 
 \begin{frame}[t]
 \frametitle{Metodología propuesta: WMD complejidad}
@@ -284,41 +350,64 @@ Se requiere de \textbf{heurísticas} para acelerar el tiempo de computo.
 \end{itemize}
 \end{frame}
 
-\begin{frame}[t]
-\frametitle{Metodología propuesta: Configuracion de hiperparametros}
 
-\begin{columns}[t]
-\begin{column}{0.5\textwidth}
+\begin{frame}[t]
+\frametitle{Metodología propuesta: Configuración de hiperparámetros}
+
 HDP cuenta con tres hiperparámertos:
 \begin{itemize} 
   \item El \textbf{parámetro de concentración a nivel corpus $\gamma$} y el \textbf{parámetro de concentración a nivel documento $\alpha_{0}$}. En \cite{teh2005sharing} los parámetros de concentración se integran afuera usando un prior \textit{vague gamma} \cite{escobar1995bayesian}. En este caso se utilizó un prior $\Gamma(\alpha=1, \beta=1)$.
   \item El \textbf{parámetro de la medida base Dirichlet $\eta$}. Se prefiere usar $\eta\in (0,1)$ ya que genera distribuciones \textit{sparse} sobre el vocabulario. En este caso se utilizó un punto intermedio, fijando $\eta=0.5$.
 \end{itemize}
-\end{column}
 
-\begin{column}{0.5\textwidth}
 El grafo temporal cuenta con dos hiperparámetros:
 \begin{itemize}
   \item \textbf{$q \in [0,1]$ cuantil de corte de la cdf del tópico}. Se prefieren valores en $[0.8, 0.95]$ ya que conservan el \textit{core} de palabras del tópico y disminuye significativamente el tiempo de cómputo.
   \item \textbf{$\zeta\in[0,1]$ cuantil de corte de la cdf de las similitudes del grafo \texix{fully connected}}. Se prefieren valores en $[0.9, 0.99]$ ya que se conservan aquellas relaciones con alta similitud relativa.
 \end{itemize}
+
+\end{frame}
+
+
+\section{Caso de estudio}
+
+\begin{frame}[t]
+\frametitle{Caso de estudio: Corpus}
+
+El corpus provisto por la Asociación de Aseguradores de Chile (AACH) consta de 49,015 relatos de víctimas del robo de vehículos provistos entre los años 2011-2016.
+
+
+\def\grayboxtext[#1,#2]#3{
+        \node[fill=gray!80, text width=18em, draw=black!80, rounded corners, align=justify, below=#1] (#2) {#3}; 
+}
+
+\begin{columns}[t]
+\begin{column}{0.5\textwidth}
+\begin{figure}
+\begin{tikzpicture}
+    \grayboxtext[0.2cm of t3,t4]{\small Descripción Siniestro: el dia 24 de abril se le arrendo el vh a XX el cual estuvo sin problemas pagando el arriendo  hasta el mes pasado que no pago mas y se le ha llamado en reiteradas veces y dice que va a venir a dejar el auto y no aparecel. por eso se realizo una denuncia por apropiacion indevida};
+    \grayboxtext[0.2cm of t4,t5]{\small ammg  53966748    vh asegurado transitaba en calle copiapo alt. 750  en este punto sufro portonazo sujetos armados roban mi vh hoy a las 04.30am vh fue encontrado en sector de la pintana mi vh ahora esta siendo periciado.    daños por evaluar};
+\end{tikzpicture}
+\caption{Muestra de relatos de la base de datos AACH.}
+\label{img:documents}
+\end{figure}
+\end{column}
+
+\begin{column}{0.5\textwidth}
+\begin{figure}
+\includegraphics[width=1.0\textwidth]{robberies_aach.eps}
+\caption{Cantidad de robos registrados por año en base de datos AACH.} 
+\label{fig:antecedente}
+\end{figure}
 \end{column}
 \end{columns}
+
 \end{frame}
 
-\section{Descubrimiento de tópicos en robo de vehículos}
 
 \begin{frame}[t]
-\frametitle{Caso de estudio}
-% Describir problema y por que es importante
-% Describir la base de datos
-\begin{figure}
-\includegraphics[width=0.4\textwidth]{robberies_aach.eps}
-\end{figure}
-\end{frame}
+\frametitle{Caso de estudio: Preprocesamiento}
 
-\begin{frame}[t]
-\frametitle{Preprocesamiento}
 \begin{columns}[t]
 \begin{column}{0.5\textwidth}
 \begin{table}[H]
@@ -349,77 +438,307 @@ El grafo temporal cuenta con dos hiperparámetros:
 
 \begin{column}{0.5\textwidth}
 \begin{figure}
-    \includegraphics[trim={1.155cm 1.3cm 0 0},clip,width=0.3\textwidth]{cum_dist_1.eps}
+\includegraphics[trim={1.155cm 1.3cm 0 0},clip,width=0.8\textwidth]{cum_dist_1.eps}
 \end{figure}
 
 \begin{figure}
-\includegraphics[trim={1.155cm 1.3cm 0 0},clip,width=0.3\textwidth]{cum_dist_6.eps}
+\includegraphics[trim={1.155cm 1.3cm 0 0},clip,width=0.8\textwidth]{cum_dist_6.eps}
 \end{figure}
 \end{column}
 \end{columns}
+
 \end{frame}
 
-\begin{frame}
-\frametitle{Grafo de similitud temporal}
+
+\begin{frame}[t]
+\frametitle{Caso de estudio: CDF del grafo fully-connected}
+
 \begin{figure}
-\includegraphics[width=\textwidth]{cdf.eps}
+\includegraphics[width=0.8\textwidth]{cdf.eps}
+\caption{Estimación empírica de la cdf de la similitud WMD entre tópicos del grafo \textit{fully-conected}.}
+\label{img:cdf_wmd}
 \end{figure}
 
+\end{frame}
+
+
+\begin{frame}[t]
+\frametitle{Caso de estudio: Grafo de similitud temporal}
+
+\vspace*{-0.2in}
 \begin{figure}
 \subfloat[$\zeta$ = 0]{
-  \includegraphics[width=0.4\textwidth]{graph_q100.png}
+  \includegraphics[width=0.35\textwidth]{graph_q100.png}
 }
 \subfloat[$\zeta$ = 0.9]{
-  \includegraphics[width=0.4\textwidth]{graph_q100_e90.png}
+  \includegraphics[width=0.35\textwidth]{graph_q100_e90.png}
 }\\
 \subfloat[$\zeta$ = 0.95]{
-  \includegraphics[width=0.4\textwidth]{graph_q100_e95.png}
+  \includegraphics[width=0.35\textwidth]{graph_q100_e95.png}
 }
 \subfloat[$\zeta$ = 0.99]{
-  \includegraphics[width=0.4\textwidth]{graph_q100_e99.png}
+  \includegraphics[width=0.35\textwidth]{graph_q100_e99.png}
 }
+\caption{Grafos temporales con WMD como medida de similitud bajo diferentes puntos operantes $\zeta$ de la CDF. El eje horizontal denota el tiempo en años, partiendo en el 2011 hasta el 2016, donde cada columna de tópicos corresponde a una época específica. Mientras más claro sea el color del nodo que representa un tópico más popularidad posee en su correspondiente época y mientras mayor es el grosor del arco entre dos tópicos mayor es su similitud.}
+\label{img:temporal_similarity_graphs}
 \end{figure}
+
+\end{frame}
+
+
+\begin{frame}[t]
+\frametitle{Caso de estudio: Efecto del punto operante en el dinámismo}
 
 \begin{figure}
-\includegraphics[width=\textwidth]{topics_evolution.eps}
+
+\vspace*{-0.2in}
+\includegraphics[width=0.8\textwidth]{topics_evolution.eps}
+\caption{Proporción de tópicos que nacen, mueren, fusionan y dividen por época, normalizando por el número total de tópicos inferido en esa época, bajo diferentes puntos operantes $\zeta$.}
+\label{img:topics_evolution}
 \end{figure}
 
 \end{frame}
 
+
+\begin{frame}[t]
+\frametitle{Caso de estudio: Trade off entre precisión y speedup}
+ 
+\vspace*{-0.2in}
+\begin{figure}
+\includegraphics[width=0.8\textwidth]{speedup.eps}
+\caption{\textit{Speedup} y porcentaje de arcos correctos al utilizar un menor porcentaje de la cdf de los tópicos en la construcción del grafo de similitud. El error de la heurística es mostrado para diferentes puntos operantes $\zeta$ utilizados para podar el grafo completo.} 
+\label{img:speedup}
+\end{figure}
+
+\end{frame}
+
+
 \begin{frame}
-\frametitle{Speedup reduciendo el tamaño del tópico}
+\frametitle{Caso de estudio: Evolución del robo no presencial}
+
+El tópico presenta una tendencia a la baja en su participación, en el año 2011 alrededor del 44\% \textit{tokens }provienen de este tópico y en el año 2016 se tiene un 32\%.
+
+\def\topic[#1,#2,#3]#4{
+        \node[fill=#1, rounded corners, minimum height=40, minimum width=50, text width=1em] (#2) at #3 {}; 
+        \node[anchor=north,inner sep=2pt,] at (#2.north)  {\fontsize{0.18cm}{0.2cm}\selectfont #4};
+}
+\def\tedge[#1,#2,#3,#4,#5];{ 
+  \definecolor{color0}{RGB}{153,153,153}
+  \draw[color=color0,#4,fill=white, line width=4*#5pt] (#1) -- #3
+  (#2);  
+}
+
+\definecolor{color1}{RGB}{184,222,41}
+\definecolor{color2}{RGB}{253,231,37}
+\definecolor{color3}{RGB}{134,213,73}
+\definecolor{color4}{RGB}{127,211,78}
+\definecolor{color5}{RGB}{52,182,121}
+\definecolor{color6}{RGB}{40,174,128}
 
 \begin{figure}
-\includegraphics[width=\textwidth]{speedup.eps}
+\begin{tikzpicture}
+  \topic[color1,t1,(0,0)] {
+     \begin{tabular}{l}
+       estacionado deje\\
+       calle encontraba\\
+       lugar regresar\\
+       domicilio volver\\
+       percato salir
+     \end{tabular}
+  }
+  \topic[color2,t2,(2,0)] {
+     \begin{tabular}{l}
+       estacionado deje\\
+       calle lugar\\
+       encontraba domicilio\\
+       percato salir\\
+       volver regresar
+     \end{tabular}
+  };
+  \topic[color3,t3,(4,0)] {
+     \begin{tabular}{l}
+       estacionado deje\\
+       calle encontraba\\
+       lugar percato\\
+       domicilio frente\\
+       regresar salir
+     \end{tabular}
+  };
+  \topic[color4,t4,(6,0)] {
+     \begin{tabular}{l}
+       estacionado deje\\
+       calle lugar\\
+       encontraba domicilio\\
+       percato volver\\
+       dejo salir
+     \end{tabular}
+  };
+  \topic[color5,t5,(8,0)] {
+     \begin{tabular}{l}
+       estacionado deje\\
+       calle lugar\\
+       encontraba percato\\
+       domicilio volver\\
+       salir dejo
+     \end{tabular}
+  };
+  \topic[color6,t6,(10,0)] {
+     \begin{tabular}{l}
+       estacionado deje\\
+       calle lugar\\
+       econtraba percato\\
+       salir camioneta\\
+       dejo domicilio
+     \end{tabular}
+  };
+  \tedge[t1,t2,,,0.625];
+  \tedge[t2,t3,,,0.586];
+  \tedge[t3,t4,,,0.581];
+  \tedge[t4,t5,,,0.632];
+  \tedge[t5,t6,,,0.609];
+\end{tikzpicture}
+\caption{Evolución del tópico de robo de vehículo no presecial. El eje horizontal denota el tiempo en años, partiendo en el 2011 hasta el 2016. Mientras más claro el color del tópico más popularidad posee en su correspondiente época y mientras mayor es el grosor del arco entre dos tópicos mayor es su similitud.}
+\label{img:noviolence_topic}
 \end{figure}
+
 \end{frame}
 
-\begin{frame}
-\frametitle{Evolución del robo no presencial}
-\end{frame}
 
 \begin{frame}
-\frametitle{Evolución del robo con violencia}
+\frametitle{Caso de estudio: Evolución del robo con violencia}
+
+La participación de este tipo de robo se ha visto al alza, en el 2011 su participación era del 12\% y en el 2016 del 36\%.
+
+\def\topic[#1,#2,#3]#4{
+        \node[fill=#1, rounded corners, minimum height=40, minimum width=50, text width=1em] (#2) at #3 {}; 
+        \node[anchor=north,inner sep=2pt,] at (#2.north)  {\fontsize{0.18cm}{0.2cm}\selectfont #4};
+}
+\def\tedge[#1,#2,#3,#4,#5];{ 
+  \definecolor{color0}{RGB}{153,153,153}
+  \draw[color=color0,#4,fill=white, line width=4*#5pt] (#1) -- #3
+  (#2);  
+}
+\definecolor{color1}{RGB}{50,100,142}
+\definecolor{color2}{RGB}{48,105,142}
+\definecolor{color3}{RGB}{43,116,142}
+\definecolor{color4}{RGB}{44,115,142}
+\definecolor{color51}{RGB}{37,133,142}
+\definecolor{color52}{RGB}{48,106,142}
+\definecolor{color6}{RGB}{78,195,107}
+
+\begin{figure}
+\begin{tikzpicture}
+  \topic[color1,t1,(0,0)] {
+     \begin{tabular}{l}
+       arma personas\\
+       tipos individuos\\
+       llaves fuego\\
+       calle pistola\\
+       llevaron bajar
+     \end{tabular}
+  }
+  \topic[color2,t2,(2,0)] {
+     \begin{tabular}{l}
+       llaves personas\\
+       individuos tipos\\
+       calle persona\\
+       arma pistola\\
+       bajar llevaron
+     \end{tabular}
+  };
+  \topic[color3,t3,(4,0)] {
+     \begin{tabular}{l}
+       personas calle\\
+       llaves individuos\\
+       arma pistola\\
+       fuego tipos\\
+       llevaron fuga
+     \end{tabular}
+  };
+  \topic[color4,t4,(6,0)] {
+     \begin{tabular}{l}
+       personas individuos\\
+       tipos calle\\
+       llaves arma\\
+       llevaron sujetos\\
+       fuego armas
+     \end{tabular}
+  };
+  \topic[color51,t51,(8,1.2)] {
+     \begin{tabular}{l}
+       bajan individuos\\
+       llaves armas\\
+       algun calle\\
+       fuego personas\\
+       sujetos todas
+     \end{tabular}
+  };
+  \topic[color52,t52,(8,-1.2)] {
+     \begin{tabular}{l}
+       llaves tipos\\
+       pitola personas\\
+       casa llevaron\\
+       bajaron arma\\
+       porton puerta
+     \end{tabular}
+  };
+  \topic[color6,t6,(10,0)] {
+     \begin{tabular}{l}
+       personas bajan\\
+       calle arma\\
+       tipos llaves\\
+       fuego individuos\\
+       armas pistola
+     \end{tabular}
+  };
+  \tedge[t1,t2,,,0.499];
+  \tedge[t2,t3,,,0.498];
+  \tedge[t3,t4,,,0.5];
+  \tedge[t4,t51,,,0.422];
+  \tedge[t4,t52,,,0.405];
+  \tedge[t51,t6,,,0.395];
+  \tedge[t52,t6,,,0.483];
+\end{tikzpicture}
+\caption{Evolución del tópico de robo con violencia de vehículo. El eje horizontal denota el tiempo en años, partiendo en el 2011 hasta el 2016. Mientras más claro el color del tópico más popularidad posee en su correspondiente época y mientras mayor es el grosor del arco entre dos tópicos mayor es su similitud.}
+\label{img:violence_topic}
+\end{figure}
+
 \end{frame}
 
-\begin{frame}
-\frametitle{}
-\end{frame}
 
 \section{Conclusiones y trabajos futuros}
 
 \begin{frame}
-\frametitle{}
+\frametitle{Conclusiones}
+
+\begin{itemize}
+  \item Se desarrolla una metodología para el descubrimiento de tópicos en el tiempo que permite capturar \textbf{dinamismos} tales como nacimiento, muerte, evolución, división y fusión.
+  \item En contraste a trabajos anteriores, la metodología utiliza WMD como medida de similitud permitiendo comparar tópicos que no poseen un vocabulario común.
+  \item Dada la complejidad del cálculo de WMD se presenta una análisis empírico del \textit{trade off} entre precisión y \textit{speedup} al no utilizar el vocabulario completo del tópico en la construcción del grafo de similitud.
+  \item Se muestra el efecto que tiene la elección del punto operante de la cdf en la construcción del grafo final en el fenómeno de robo de vehículos. 
+\end{itemize}
+
 \end{frame}
+
 
 \begin{frame}
-\frametitle{}
+\frametitle{Trabajo futuro}
+
+\begin{itemize}
+  \item En \cite{dieng2019dynamic} se propone una modelo de tópicos dinámico basado en redes neuronales, de esta forma la comparación entre tópicos de épocas adyacentes a través de sus \textit{word embeddings se vuelve más natural.} No obstante, mantiene fijo el número de tópicos en el tiempo.
+  \item Extender el algoritmo a inferencia \textit{online} sin alterar la estructura del grafo previo.
+\end{itemize}
+
 \end{frame}
 
-%analizar el grafo variacional estudiando los puntos de corte (backbone).
+
 \begin{frame}[allowframebreaks]\normalsize
-	\frametitle{\namereferences}
-	\bibliography{library}
+\frametitle{\namereferences}
+\bibliography{library}
 \end{frame}
 
+
+%todo
+%1. motivacion de metodologia
+%4. resultados del procesamiento
 \end{document}

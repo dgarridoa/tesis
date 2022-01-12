@@ -85,44 +85,37 @@ Miembros de la comisión: Ángel Jiménez, Giorgiogiulio Parra
 \section{Motivación}
 
 \begin{frame}[t]
-\frametitle{Motivación: Metodología} 
-% agregar dos imagenes que representen el punto 1 y 3. ejemplo de accidentes de trayecto causado por mascarillas.
-\begin{columns}[t]
-  \column{0.5\textwidth}
-  \begin{center}
-    \begin{minipage}{0.8\textwidth}
-    \begin{itemize}
-   % Poner esta cifra en contexoto. Un computador de un tera por persona en el mundo 
-    \item[] \textbf{\scalebox{1.5}{\textcolor{royalblue}{2 EB}} de data por día} %10^18
-    \item[] \textbf{\scalebox{1.5}{\textcolor{royalblue}{80\%}} no estructurado}
-    \item[] \textbf{\scalebox{1.5}{\textcolor{royalblue}{12\%}} es analizada}
-    \end{itemize}
-    \end{minipage}
-   \end{center}
-  \blfootnote{\url{https://www.sigmacomputing.com/blog/top-20-big-data-statistics/}}
+\frametitle{Motivación: Metodología}
   
-  \vspace*{-0.2in}
-  \begin{figure}
-  \includegraphics[width=0.8\textwidth]{similarity_graph.png} 
-  \end{figure}
+\begin{columns}
+\column{0.5\textwidth}
+\begin{itemize}
+  \item Incremento de volumenes de datos requiere métodos automáticos de análisis\footnote{\url{https://www.sigmacomputing.com/blog/top-20-big-data-statistics/}}.
+     \begin{enumerate}
+      \item Al día \textbf{2 EB} de datos son generados.
+      \item Un \textbf{80\%} es no estructurado.
+      \item Tan solo un \textbf{12\%} es analizado.
+    \end{enumerate}
+  \item 
+    El modelamiento de tópicos permite resumir y organizar grandes colecciones de texto. %Ejemplo: descubrimiento de nuevos tipos de accidentes de trayecto apartir de relatos de accidentes laborales. Como accidentes de trayecto causado por mascarillas.
+    \item Este trabajo es una propuesta de modelamiento de tópicos dinámico: nacimiento, muerte, evolución, división y fusión de tópicos.
+  \end{itemize}
 
 \column{0.5\textwidth}
-  \begin{itemize}
-    \item Aumento de volumenes de datos requiere métodos automáticos de análisis. 
-    \item El modelamiento de tópicos dinámico permite descubrir nuevos fenómenos de base.%Ejemplo: descubrimiento de nuevos tipos de accidentes de trayecto apartir de relatos de accidentes laborales.
-    \item Este trabajo es una propuesta de modelamiento dinámico: nacimiento, muerte, evolución, división y fusión de tópicos.
-  \end{itemize}
-\end{columns}
+\begin{figure}
+  \includegraphics[width=1.0\textwidth]{covid_research.jpg} 
+ \end{figure}
+ \end{columns}
 \end{frame}
 
 \begin{frame}[t]
 \frametitle{Motivación: Caso de estudio} 
 
+El problema del robo de vehículos o accesorios de vehículos afecta a toda la sociedad en Chile y en el mundo. 
 \begin{columns}
 
 \column{0.5\textwidth}
-El problema del robo de vehículos o accesorios de vehículos afecta a toda la sociedad en Chile y en el mundo. Algunos de sus efectos son:
-
+Algunos de sus efectos son:
   \begin{itemize}
     \item Incremento en la percepción de seguridad.
     \item Aumento en la prima de los seguros de los asegurados.

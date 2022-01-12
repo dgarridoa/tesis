@@ -399,48 +399,61 @@ El corpus provisto por la Asociación de Aseguradores de Chile (AACH) consta de 
 
 
 \begin{frame}[t]
-\frametitle{Caso de estudio: Preprocesamiento}
-
-\begin{columns}[t]
-\begin{column}{0.5\textwidth}
-\begin{table}[H]
-    \begin{tabular}{|c|c|c|c|}
-    \hline
-    procesamiento & documentos & vocabulario & tokens  \\ \hline
-    t             & 49,015      & 93,203       & 2,030,980 \\ \hline
-    t+ch          & 49,003      & 42,921       & 1,028,412 \\ \hline
-    t+ch+f        & 48,988      & 3,148        & 925,693  \\ \hline
-    t+ch+f+v      & 48,988      & 2,902        & 901,745  \\ \hline
-    t+ch+f+v+s    & 48,566      & 1,960        & 495,182  \\ \hline
-    t+ch+f+v+s+d  & 38,850      & 1,960        & 453,206  \\ \hline
-    \end{tabular}
-\end{table}
+\frametitle{Caso de estudio: Procesamiento I}
 
 \begin{table}[H]
-    \begin{tabular}{|c|r|r|r|r|}
-    \hline
-    \textbf{época} & \multicolumn{1}{c|}{\textbf{t-1}} & \multicolumn{1}{c|}{\textbf{t}} & \multicolumn{1}{c|}{\textbf{t-1 {[}\%{]}}} & \multicolumn{1}{l|}{\textbf{t {[}\%{]}}} \\ \hline
-    2              & 1,145                              & 1,187                            & 14.41                                      & 18.08                                    \\ \hline
-    3              & 1,187                              & 1,281                            & 13.56                                      & 21.48                                    \\ \hline
-    4              & 1,281                              & 1,329                            & 13.35                                      & 17.10                                    \\ \hline
-    5              & 1,329                              & 1,405                            & 12.57                                      & 18.28                                    \\ \hline
-    6              & 1,405                              & 1,537                            & 10.25                                      & 19.64                                    \\ \hline
-    \end{tabular}
+  \begin{tabular}{|c|c|c|c|}
+  \hline
+  procesamiento & documentos & vocabulario & tokens  \\ \hline
+  t             & 49,015      & 93,203       & 2,030,980 \\ \hline
+  t+ch          & 49,003      & 42,921       & 1,028,412 \\ \hline
+  t+ch+f        & 48,988      & 3,148        & 925,693  \\ \hline
+  t+ch+f+v      & 48,988      & 2,902        & 901,745  \\ \hline
+  t+ch+f+v+s    & 48,566      & 1,960        & 495,182  \\ \hline
+  t+ch+f+v+s+d  & 38,850      & 1,960        & 453,206  \\ \hline
+  \end{tabular}
+  \caption{Estadísticas del corpus bajo distintos niveles de procesamientos, \textbf{t}: tokenización, \textbf{ch}: procesamiento de caracteres, \textbf{f}: filtro por frecuencia, \textbf{v}: filtro por vocabulario, \textbf{s}: eliminación de \textit{stopwords}, \textbf{d}: eliminación de documentos.}
 \end{table}
-\end{column}
 
-\begin{column}{0.5\textwidth}
-\begin{figure}
-\includegraphics[trim={1.155cm 1.3cm 0 0},clip,width=0.8\textwidth]{cum_dist_1.eps}
-\end{figure}
+El tamaño del vocabulario, el corpus y la cantidad de \textit{tokens} se redujo en alrededor de un 98\%, un 20\% y un 76\% respectivamente.
+\end{frame}
+
+
+\begin{frame}[t]
+\frametitle{Caso de estudio: Procesamiento II}
 
 \begin{figure}
-\includegraphics[trim={1.155cm 1.3cm 0 0},clip,width=0.8\textwidth]{cum_dist_6.eps}
+\subfloat[]{
+  \includegraphics[trim={1.155cm 1.3cm 0 0},clip,width=0.40\textwidth]{cum_dist_1.eps}
+}
+\subfloat[]{
+  \includegraphics[trim={1.155cm 1.3cm 0 0},clip,width=0.40\textwidth]{cum_dist_6.eps}
+}
+  \caption{Distribución acumulada del vocabulario (a) pre-procesamiento y (b) post-procesamiento.}
 \end{figure}
-\end{column}
-\end{columns}
 
 \end{frame}
+
+
+\begin{frame}[t]
+\frametitle{Caso de estudio: Procesamiento III}
+\begin{table}[H]
+  \begin{tabular}{|c|r|r|r|r|}
+  \hline
+  \textbf{época} & \multicolumn{1}{c|}{\textbf{t-1}} & \multicolumn{1}{c|}{\textbf{t}} & \multicolumn{1}{c|}{\textbf{t-1 {[}\%{]}}} & \multicolumn{1}{l|}{\textbf{t {[}\%{]}}} \\ \hline
+  2              & 1,145                              & 1,187                            & 14.41                                      & 18.08                                    \\ \hline
+  3              & 1,187                              & 1,281                            & 13.56                                      & 21.48                                    \\ \hline
+  4              & 1,281                              & 1,329                            & 13.35                                      & 17.10                                    \\ \hline
+  5              & 1,329                              & 1,405                            & 12.57                                      & 18.28                                    \\ \hline
+  6              & 1,405                              & 1,537                            & 10.25                                      & 19.64                                    \\ \hline
+  \end{tabular}
+  \caption{Evolución del vocabulario en el tiempo, \textbf{t-1}: corresponde al vocabulario del período anterior a la época respectiva, \textbf{t}: corresponde al vocabulario de la época actual, \textbf{t-1[\%]}: porcentaje de palabras del período $t-1$ que ya no están en el período $t$ y \textbf{t[\%]}: porcentaje de palabras del período $t$ que no están en el período $t-1$.}
+\end{table}
+
+En promedio un 12.83\% del vocabulario se olvida de una época a otra y un 18.92\% es nuevo, en otras palabras, en promedio alrededor de un 32\% del vocabulario no es común entre tópicos de épocas adyacentes. 
+
+\end{frame}
+
 
 
 \begin{frame}[t]

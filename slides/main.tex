@@ -254,7 +254,7 @@ La discretitud de $G_{0}$ asegura:
 \frametitle{Metodología propuesta: Construcción del grafo de similitud temporal}
 \begin{itemize}
   \item Construcción del grafo \textit{fully connected} de las similitudes entre tópicos de épocas adyacentes ($\phi_{t,i}$ y $\phi_{t+1,j}$) usando una medida de similitud $\rho \in [0,1]$.
-  \item Eliminación de las conexiones débiles en base a un umbral $\alpha \in [0,1]$, reteniendo solo aquellas conexiones que cumplen $\rho(\phi_{t,i}, \phi_{t+1,j})\leq \alpha$.
+  \item Eliminación de las conexiones débiles en base a un umbral $\alpha \in [0,1]$, reteniendo solo aquellas conexiones que cumplen $\rho(\phi_{t,i}, \phi_{t+1,j}) > \alpha$.
 \end{itemize}
 
 \vspace*{-0.3in}

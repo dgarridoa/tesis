@@ -90,16 +90,12 @@ Miembros de la comisión: Ángel Jiménez, Giorgiogiulio Parra
 \begin{columns}
 \column{0.5\textwidth}
 \begin{itemize}
-  \item Incremento de volumenes de datos requiere métodos automáticos de análisis\footnote{\url{https://www.sigmacomputing.com/blog/top-20-big-data-statistics/}}.
-     \begin{enumerate}
-      \item Al día \textbf{2 EB} de datos son generados.
-      \item Un \textbf{80\%} es no estructurado.
-      \item Tan solo un \textbf{12\%} es analizado.
-    \end{enumerate}
-  \item 
-    El modelamiento de tópicos permite resumir y organizar grandes colecciones de texto. %Ejemplo: descubrimiento de nuevos tipos de accidentes de trayecto apartir de relatos de accidentes laborales. Como accidentes de trayecto causado por mascarillas.
-    \item Este trabajo es una propuesta de modelamiento de tópicos dinámico: nacimiento, muerte, evolución, división y fusión de tópicos.
-  \end{itemize}
+  \item Incremento de volumenes de datos requiere métodos automáticos de análisis.
+  \item El modelamiento de tópicos permite resumir y organizar grandes colecciones de texto. %Ejemplo: descubrimiento de nuevos tipos de accidentes de trayecto apartir de relatos de accidentes laborales. Como accidentes de trayecto causado por mascarillas.
+  \item Este trabajo es una propuesta de modelamiento de tópicos dinámico: nacimiento, muerte, evolución, división y fusión de tópicos.
+  \item En contraste a trabajos anteriores, la metodología incorpora WMD como medida de similitud para comparar tópicos sin vocabulario común.
+\end{itemize}
+
 
 \column{0.5\textwidth}
 \begin{figure}
@@ -121,7 +117,6 @@ Algunos de sus efectos son:
     \item Aumento en la prima de los seguros de los asegurados.
     \item Aumento en los costos de las aseguradoras.
     \item Incremento en otro tipos de delitos.
-    \item problema que se ha vuelto más relevante el último tiempo debido al crecimiento en el robo de vehículo motorizado y accesorios. 
   \end{itemize}
  
 \column{0.5\textwidth}
@@ -135,13 +130,11 @@ Algunos de sus efectos son:
 \end{frame}
 
 
-
-
 \section{Revisión del estado del arte}
 
 \begin{frame}[t]
 \frametitle{Revisión del estado del arte: ¿Qué es el modelamiento de tópicos?}
-  El modelamiento de tópicos es uno de los enfoques más prometores de \textit{clustering} aplicado a texto, siendo su objetivo descubrir los temas (\textit{clusters}) ocultos presentes en el corpus, permitiendo \textbf{resumir}, \textbf{organizar} y \textbf{explorar} grandes colecciones de datos.
+El modelamiento de tópicos es uno de los enfoques más prometores de \textit{clustering} aplicado a texto, siendo su objetivo descubrir los temas (\textit{clusters}) ocultos presentes en el corpus, permitiendo \textbf{resumir}, \textbf{organizar} y \textbf{explorar} grandes colecciones de datos.
 
 \begin{figure}
 \insertimage{topic_modelling.png}{scale=0.3}{Intuición detrás de Latent Dirichlet Allocation. Fuente: Figura 1 de \cite{blei2012probabilistic}.}
@@ -185,6 +178,7 @@ Dentro de los modelos de tópicos dinámicos se tiene:
   \item \textbf{DTM} (Dynamic Topic Modelling)\cite{blei2006dynamic} y \textbf{TOC} (Topic Over Time)\cite{wang2006topics} \textbf{permiten el punto 1 y 2} manteniendo fijo el número de topicos en el tiempo.
   \item \textbf{DHDP} (Dynamic Hierarchical Dirichlet Process)\cite{ahmed2012timeline} \textbf{captura el punto 1, 2 y 3 parcialmente}, con excepción de fusión y división. \textbf{No cuenta con una implementación}.\\
   \item En \cite{wilson2011tracking} y \cite{beykikhoshk2018discovering} se capturan los dinámismos mencionados dividiendo el corpus en épocas, entrenando de forma independiente un modelo por época para finalmente unificar (LDA y HDP).
+    % se prefiere xx por yy debido a que...
 \end{itemize}
 \end{frame}
 
@@ -274,24 +268,6 @@ La discretitud de $G_{0}$ asegura:
 
 
 \begin{frame}[t]
-\frametitle{Metodología propuesta: Prunning}
-
-\begin{itemize}
-  \item El umbral de corte es el cuantil $\zeta \in [0,1]$ de la cdf de las similitudes ($F_{p}$), es decir, $F_{p}^{-1}(\zeta)$.
-  \item El úmbral de corte no es arbitrario según la médida de similitud escógida.
-\end{itemize}
-
-\vspace*{-0.3in}
-\begin{figure}
-  \insertimage{cdf_sim.png}{scale=0.15}{}
-  \caption{Estimación empírica de la función de densidad acumulada (cdf) de la similitud entre tópicos de épocas adyacentes en un grafo \textit{fully-connected} para tres medidas de similitud. Fuente: Figura 4 \cite{beykikhoshk2018discovering}.}
-  \label{img:cdf_sim}
-\end{figure}
-
-\end{frame}
-
-
-\begin{frame}[t]
 \frametitle{Metodología propuesta: Word Mover's Distance}
 
 \begin{itemize}
@@ -321,7 +297,8 @@ La discretitud de $G_{0}$ asegura:
 \end{column}
 
 \end{columns}
-  WMD se puede transformar en médida de similitud\footnote{Notar que WMD es 0 si la similitud es 1 e $\infty$ si la similitud es 0.} considerando $\rho(\phi_{i}, \phi_{j}) = \frac{1}{1+WMD(\phi_{i}, \phi_{j})}$.
+
+WMD se puede transformar en médida de similitud\footnote{Notar que la similitud es 1 si WMD es 0 y 0 si es $\infty$.} considerando $\rho(\phi_{i}, \phi_{j}) = \frac{1}{1+WMD(\phi_{i}, \phi_{j})}$.
 
 \end{frame}
 
@@ -329,9 +306,9 @@ La discretitud de $G_{0}$ asegura:
 \begin{frame}[t]
 \frametitle{Metodología propuesta: WMD complejidad}
 
-WMD es una medida de distancia \textbf{intensiva en recursos computacionales}.\newline
+WMD es una medida de distancia \textbf{intensiva en recursos computacionales}.\newline\newline
 
-Usando el algoritmo desarrollado por \cite{pele2009fast} se tiene que el mejor tiempo promedio escala $\mathcal{O}(N^{2}log N)$, donde $N$ es el tamaño del vocabulario entre dos épocas adyacentes.
+Usando el algoritmo desarrollado por \cite{pele2009fast} se tiene que el mejor tiempo promedio escala $\mathcal{O}(N^{2}log N)$, donde $N$ es el tamaño de la unión los vocabularios de dos épocas adyacentes.
   \begin{align*}
 \{x| Ax=b, x\geq 0\}, A\in \mathbb{R}^{2N\times N^{2}}, b\in \mathbb{R}^{2N}, x\in \mathbb{R}^{N}
   \end{align*}
@@ -339,15 +316,34 @@ Usando el algoritmo desarrollado por \cite{pele2009fast} se tiene que el mejor t
 Se requiere de \textbf{heurísticas} para acelerar el tiempo de computo.
 \begin{itemize}
   \item Los tópicos siguen una distribución con forma de \textbf{ley de potencia} sobre el vocabulario, donde una pequeña fracción de las palabras concentran la mayor parte de la masa de la distribución. 
-  \item En la práctica \textbf{la interpretación de los tópicos se basa en los top $N$ palabras más probables}, usualmente con $N \in [5, 30]$, entonces, se puede aprovechar esta estructura para efectos de computar la WMD de un forma más eficiente, por ejemplo, utilizando solo las palabras que capturan un determinado porcentaje de la distribución acumulada del tópico.
+  \item En la práctica \textbf{la interpretación de los tópicos se basa en los top $N$ palabras más probables}, usualmente con $N \in [5.30]$.
 \end{itemize}
+
+Se puede aprovechar esta estructura para efectos de computar la WMD de un forma más eficiente, por ejemplo, utilizando solo las palabras que capturan un determinado porcentaje de la distribución acumulada del tópico.
 \end{frame}
 
 
 \begin{frame}[t]
-\frametitle{Metodología propuesta: Configuración de hiperparámetros}
+\frametitle{Metodología propuesta: Prunning}
 
-HDP cuenta con tres hiperparámertos:
+\begin{itemize}
+  \item El umbral de corte es el cuantil $\zeta \in [0,1]$ de la cdf de las similitudes ($F_{p}$), es decir, $F_{p}^{-1}(\zeta)$.
+  \item El úmbral de corte no es arbitrario según la médida de similitud escógida.
+\end{itemize}
+
+\vspace*{-0.3in}
+\begin{figure}
+  \insertimage{cdf_sim.png}{scale=0.15}{}
+  \caption{Estimación empírica de la función de densidad acumulada (cdf) de la similitud entre tópicos de épocas adyacentes en un grafo \textit{fully-connected} para tres medidas de similitud. Fuente: Figura 4 \cite{beykikhoshk2018discovering}.}
+  \label{img:cdf_sim}
+\end{figure}
+\end{frame}
+
+
+\begin{frame}[t]
+\frametitle{Metodología propuesta: Hiperparámetros}
+
+HDP cuenta con tres hiperparámetros:
 \begin{itemize} 
   \item El \textbf{parámetro de concentración a nivel corpus $\gamma$} y el \textbf{parámetro de concentración a nivel documento $\alpha_{0}$}. En \cite{teh2005sharing} los parámetros de concentración se integran afuera usando un prior \textit{vague gamma} \cite{escobar1995bayesian}. En este caso se utilizó un prior $\Gamma(\alpha=1, \beta=1)$.
   \item El \textbf{parámetro de la medida base Dirichlet $\eta$}. Se prefiere usar $\eta\in (0,1)$ ya que genera distribuciones \textit{sparse} sobre el vocabulario. En este caso se utilizó un punto intermedio, fijando $\eta=0.5$.
@@ -400,22 +396,25 @@ El corpus provisto por la Asociación de Aseguradores de Chile (AACH) consta de 
 
 \begin{frame}[t]
 \frametitle{Caso de estudio: Procesamiento I}
-
+Al procesar el corpus se obtiene una reducción de:
+\begin{itemize}
+  \item 20\% del corpus.
+  \item 98\% del vocabulario. 
+  \item 76\% de tokens.
+\end{itemize}
 \begin{table}[H]
   \begin{tabular}{|c|c|c|c|}
   \hline
-  procesamiento & documentos & vocabulario & tokens  \\ \hline
-  t             & 49,015      & 93,203       & 2,030,980 \\ \hline
-  t+ch          & 49,003      & 42,921       & 1,028,412 \\ \hline
-  t+ch+f        & 48,988      & 3,148        & 925,693  \\ \hline
-  t+ch+f+v      & 48,988      & 2,902        & 901,745  \\ \hline
-  t+ch+f+v+s    & 48,566      & 1,960        & 495,182  \\ \hline
-  t+ch+f+v+s+d  & 38,850      & 1,960        & 453,206  \\ \hline
+  procesamiento & documentos & vocabulario & tokens    \\ \hline
+  t             & 49,015     & 93,203      & 2,030,980 \\ \hline
+  t+ch          & 49,003     & 42,921      & 1,028,412 \\ \hline
+  t+ch+f        & 48,988     & 3,148       & 925,693   \\ \hline
+  t+ch+f+v      & 48,988     & 2,902       & 901,745   \\ \hline
+  t+ch+f+v+s    & 48,566     & 1,960       & 495,182   \\ \hline
+  t+ch+f+v+s+d  & 38,850     & 1,960       & 453,206   \\ \hline
   \end{tabular}
   \caption{Estadísticas del corpus bajo distintos niveles de procesamientos, \textbf{t}: tokenización, \textbf{ch}: procesamiento de caracteres, \textbf{f}: filtro por frecuencia, \textbf{v}: filtro por vocabulario, \textbf{s}: eliminación de \textit{stopwords}, \textbf{d}: eliminación de documentos.}
 \end{table}
-
-El tamaño del vocabulario, el corpus y la cantidad de \textit{tokens} se redujo en alrededor de un 98\%, un 20\% y un 76\% respectivamente.
 \end{frame}
 
 
@@ -437,23 +436,25 @@ El tamaño del vocabulario, el corpus y la cantidad de \textit{tokens} se redujo
 
 \begin{frame}[t]
 \frametitle{Caso de estudio: Procesamiento III}
+\begin{itemize}
+  \item En promedio un 18.92\% del vocabulario de una época es nuevo y un 12.83\% se olvida.
+  \item En promedio alrededor de un 32\% del vocabulario no es común entre tópicos de épocas adyacentes. 
+\end{itemize}
 \begin{table}[H]
-  \begin{tabular}{|c|r|r|r|r|}
-  \hline
-  \textbf{época} & \multicolumn{1}{c|}{\textbf{t-1}} & \multicolumn{1}{c|}{\textbf{t}} & \multicolumn{1}{c|}{\textbf{t-1 {[}\%{]}}} & \multicolumn{1}{l|}{\textbf{t {[}\%{]}}} \\ \hline
-  2              & 1,145                              & 1,187                            & 14.41                                      & 18.08                                    \\ \hline
-  3              & 1,187                              & 1,281                            & 13.56                                      & 21.48                                    \\ \hline
-  4              & 1,281                              & 1,329                            & 13.35                                      & 17.10                                    \\ \hline
-  5              & 1,329                              & 1,405                            & 12.57                                      & 18.28                                    \\ \hline
-  6              & 1,405                              & 1,537                            & 10.25                                      & 19.64                                    \\ \hline
-  \end{tabular}
-  \caption{Evolución del vocabulario en el tiempo, \textbf{t-1}: corresponde al vocabulario del período anterior a la época respectiva, \textbf{t}: corresponde al vocabulario de la época actual, \textbf{t-1[\%]}: porcentaje de palabras del período $t-1$ que ya no están en el período $t$ y \textbf{t[\%]}: porcentaje de palabras del período $t$ que no están en el período $t-1$.}
+\begin{tabular}{|c|r|r|r|r|}
+\hline
+\textbf{época} & \multicolumn{1}{c|}{\textbf{t}} & \multicolumn{1}{c|}{\textbf{t-1}} & \multicolumn{1}{c|}{\textbf{t {[}\%{]}}} & \multicolumn{1}{l|}{\textbf{t-1 {[}\%{]}}} \\ \hline
+2     & 1,187                  & 1,145                    & 18.08                            & 14.41                              \\ \hline
+3     & 1,281                  & 1,187                    & 21.48                            & 13.56                              \\ \hline
+4     & 1,329                  & 1,281                    & 17.10                            & 13.35                              \\ \hline
+5     & 1,405                  & 1,329                    & 18.28                            & 12.57                              \\ \hline
+6     & 1,537                  & 1,405                    & 19.64                            & 10.25                              \\ \hline
+\end{tabular}
+\caption{Evolución del vocabulario en el tiempo. \textbf{t}: vocabulario de la época actual, \textbf{t-1}: vocabulario del período anterior, \textbf{t[\%]}: porcentaje del vocabulario de $t $ que es nuevo y\textbf{ t-1[\%]}: porcentaje del vocabulario de $t-1$ que se olvido.}
 \end{table}
 
-En promedio un 12.83\% del vocabulario se olvida de una época a otra y un 18.92\% es nuevo, en otras palabras, en promedio alrededor de un 32\% del vocabulario no es común entre tópicos de épocas adyacentes. 
 
 \end{frame}
-
 
 
 \begin{frame}[t]
@@ -493,8 +494,7 @@ En promedio un 12.83\% del vocabulario se olvida de una época a otra y un 18.92
 
 
 \begin{frame}[t]
-\frametitle{Caso de estudio: Efecto del punto operante en el dinámismo}
-
+\frametitle{Caso de estudio: Análisis de sensibilidad del punto operante}
 \begin{figure}
 
 \vspace*{-0.2in}
@@ -508,11 +508,10 @@ En promedio un 12.83\% del vocabulario se olvida de una época a otra y un 18.92
 
 \begin{frame}[t]
 \frametitle{Caso de estudio: Trade off entre precisión y speedup}
- 
 \vspace*{-0.2in}
 \begin{figure}
 \includegraphics[width=0.8\textwidth]{speedup.eps}
-\caption{\textit{Speedup} y porcentaje de arcos correctos al utilizar un menor porcentaje de la cdf de los tópicos en la construcción del grafo de similitud. El error de la heurística es mostrado para diferentes puntos operantes $\zeta$ utilizados para podar el grafo completo.} 
+\caption{\textit{Speedup} y porcentaje de arcos correctos al utilizar un menor porcentaje de la cdf de los tópicos en la construcción del grafo de similitud. El error de aproximación de la heurística es mostrado para diferentes puntos operantes $\zeta$ utilizados para podar el grafo completo.} 
 \label{img:speedup}
 \end{figure}
 
@@ -603,7 +602,7 @@ El tópico presenta una tendencia a la baja en su participación, en el año 201
   \tedge[t4,t5,,,0.632];
   \tedge[t5,t6,,,0.609];
 \end{tikzpicture}
-\caption{Evolución del tópico de robo de vehículo no presecial. El eje horizontal denota el tiempo en años, partiendo en el 2011 hasta el 2016. Mientras más claro el color del tópico más popularidad posee en su correspondiente época y mientras mayor es el grosor del arco entre dos tópicos mayor es su similitud.}
+\caption{Evolución del tópico de robo de vehículo no presencial. El eje horizontal denota el tiempo en años, partiendo en el 2011 hasta el 2016. Mientras más claro el color del tópico más popularidad posee en su correspondiente época y mientras mayor es el grosor del arco entre dos tópicos mayor es su similitud.}
 \label{img:noviolence_topic}
 \end{figure}
 
@@ -682,7 +681,7 @@ La participación de este tipo de robo se ha visto al alza, en el 2011 su partic
   \topic[color52,t52,(8,-1.2)] {
      \begin{tabular}{l}
        llaves tipos\\
-       pitola personas\\
+       pistola personas\\
        casa llevaron\\
        bajaron arma\\
        porton puerta
@@ -716,12 +715,12 @@ La participación de este tipo de robo se ha visto al alza, en el 2011 su partic
 
 \begin{frame}
 \frametitle{Conclusiones}
-
 \begin{itemize}
-  \item Se desarrolla una metodología para el descubrimiento de tópicos en el tiempo que permite capturar \textbf{dinamismos} tales como nacimiento, muerte, evolución, división y fusión.
-  \item En contraste a trabajos anteriores, la metodología utiliza WMD como medida de similitud permitiendo comparar tópicos que no poseen un vocabulario común.
-  \item Dada la complejidad del cálculo de WMD se presenta una análisis empírico del \textit{trade off} entre precisión y \textit{speedup} al no utilizar el vocabulario completo del tópico en la construcción del grafo de similitud.
-  \item Se muestra el efecto que tiene la elección del punto operante de la cdf en la construcción del grafo final en el fenómeno de robo de vehículos. 
+  \item Se logra desarrollar una metodología exitosa para el descubrimiento de tópicos en el tiempo que permite capturar \textbf{dinamismos} tales como nacimiento, muerte, evolución, división y fusión.
+  \item En contraste a trabajos anteriores, se incorpora WMD como medida de similitud permitiendo comparar tópicos que no poseen un vocabulario común.
+  \item El análisis empírico del \textit{trade off} entre precisión y \textit{speedup} muestra que valores iguales o superiores $q=0.6 $ parecen bastante razonables.
+  \item El análisis de sensibilidad del punto operante de la cdf muestra a que mayor valor mayor es el ratio de nacimiento/muerte, sin embargo, menor es el ratio división/fusión. 
+  \item Se identifica claramente la evolución del tópico robo no presencial, robo con violencia y el fenómeno del portonazo.
 \end{itemize}
 
 \end{frame}
@@ -731,8 +730,8 @@ La participación de este tipo de robo se ha visto al alza, en el 2011 su partic
 \frametitle{Trabajo futuro}
 
 \begin{itemize}
-  \item En \cite{dieng2019dynamic} se propone una modelo de tópicos dinámico basado en redes neuronales, de esta forma la comparación entre tópicos de épocas adyacentes a través de sus \textit{word embeddings se vuelve más natural.} No obstante, mantiene fijo el número de tópicos en el tiempo.
-  \item Extender el algoritmo a inferencia \textit{online} sin alterar la estructura del grafo previo.
+  \item Una futura línea de investigación es el desarrollo de un modelo de tópicos dinámico basado completamente en redes neuronales de esta forma la comparación entre tópicos de épocas adyacentes a través de sus \textit{word embeddings se vuelve más natural.} En \cite{dieng2019dynamic} se propone una modelo de tópicos dinámico basado en redes neuronales, no obstante, mantiene fijo el número de tópicos en el tiempo.
+  \item Extender la metodología inferencia \textit{online} sin alterar la estructura del grafo previo, debido a que cada vez que se incorpora una nueva época se vuelve necesario actualizar el úmbral de corte empírico.
 \end{itemize}
 
 \end{frame}
@@ -743,8 +742,4 @@ La participación de este tipo de robo se ha visto al alza, en el 2011 su partic
 \bibliography{library}
 \end{frame}
 
-
-%todo
-%1. motivacion de metodologia
-%4. resultados del procesamiento
 \end{document}

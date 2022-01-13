@@ -21,7 +21,7 @@
 % INFORMACIÓN DEL DOCUMENTO
 \def\documenttitle {Modelamiento y seguimiento de tópicos para detección de modus operandi en robo de vehículos}
 \def\documentsubtitle {Modelamiento dinámico de tópicos}
-\def\documentsubject {Tesis para optar al grado de Magíster en Gestión de Operaciones \newline Memoria para optar al título de Ingenierio Civil Industrial}
+\def\documentsubject {Tesis para optar al grado de Magíster en Gestión de Operaciones \newline Memoria para optar al título de Ingeniería Civil Industrial}
 
 \def\documentauthor {Diego Garrido}
 \def\coursename {}
@@ -41,7 +41,7 @@
 Profesor guía: Richard Weber \newline
 Miembros de la comisión: Ángel Jiménez, Giorgiogiulio Parra
 }
-\institute[UChile]{
+\institute[Universidad de Chile]{
 	\includegraphics[height=1.1cm]{\universitydepartmentimage} \\
 	\medskip
 	\universityname \\
@@ -134,7 +134,7 @@ Algunos de sus efectos son:
 
 \begin{frame}[t]
 \frametitle{Revisión del estado del arte: ¿Qué es el modelamiento de tópicos?}
-El modelamiento de tópicos es uno de los enfoques más prometores de \textit{clustering} aplicado a texto, siendo su objetivo descubrir los temas (\textit{clusters}) ocultos presentes en el corpus, permitiendo \textbf{resumir}, \textbf{organizar} y \textbf{explorar} grandes colecciones de datos.
+El modelamiento de tópicos es uno de los enfoques más prometedores de \textit{clustering} aplicado a texto, siendo su objetivo descubrir los temas (\textit{clusters}) ocultos presentes en el corpus, permitiendo \textbf{resumir}, \textbf{organizar} y \textbf{explorar} grandes colecciones de datos.
 
 \begin{figure}
 \insertimage{topic_modelling.png}{scale=0.3}{Intuición detrás de Latent Dirichlet Allocation. Fuente: Figura 1 de \cite{blei2012probabilistic}.}
@@ -150,8 +150,8 @@ Las técnicas de modelamiento de tópicos suelen estar basadas en \textbf{factor
 A continuación algunos ejemplos de ambos enfoques:
 
 \begin{itemize}
-  \item \textbf{LSI} (Latent Semantic Indexing) \cite{dumais2004latent} o \textbf{NMF} (Non-negative Matrix Factorization)\cite{xu2003document}. 
-  \item \textbf{LDA} (Latent Dirichlet Allocation)\cite{blei2003latent} o \textbf{HDP} (Hierarchical Dirichlet Process)\cite{teh2005sharing}. 
+  \item \textbf{LSI} (Latent Semantic Indexing) \cite{dumais2004latent} o \textbf{NMF} (Non-negative Matrix Factorization) \cite{xu2003document}. 
+  \item \textbf{LDA} (Latent Dirichlet Allocation) \cite{blei2003latent} o \textbf{HDP} (Hierarchical Dirichlet Process) \cite{teh2005sharing}. 
 \end{itemize} 
 
 Este trabajo aborda el enfoque probabilístico: 
@@ -165,7 +165,7 @@ Este trabajo aborda el enfoque probabilístico:
 
 \begin{frame}[t]
 \frametitle{Revisión del estado del arte: Modelamiento dinámico}
-En el modelamiento de tópicos se pueden presentar los siguientes dinámismos:
+En el modelamiento de tópicos se pueden presentar los siguientes dinamismos:
 
 \begin{enumerate}
   \item \textbf{Evolución de tópicos.}
@@ -175,8 +175,8 @@ En el modelamiento de tópicos se pueden presentar los siguientes dinámismos:
 
 Dentro de los modelos de tópicos dinámicos se tiene:
 \begin{itemize}
-  \item \textbf{DTM} (Dynamic Topic Modelling)\cite{blei2006dynamic} y \textbf{TOC} (Topic Over Time)\cite{wang2006topics} \textbf{permiten el punto 1 y 2} manteniendo fijo el número de topicos en el tiempo.
-  \item \textbf{DHDP} (Dynamic Hierarchical Dirichlet Process)\cite{ahmed2012timeline} \textbf{captura el punto 1, 2 y 3 parcialmente}, con excepción de fusión y división. \textbf{No cuenta con una implementación}.\\
+  \item \textbf{DTM} (Dynamic Topic Modelling) \cite{blei2006dynamic} y \textbf{TOC} (Topic Over Time) \cite{wang2006topics} \textbf{permiten el punto 1 y 2} manteniendo fijo el número de topicos en el tiempo.
+  \item \textbf{DHDP} (Dynamic Hierarchical Dirichlet Process) \cite{ahmed2012timeline} \textbf{captura el punto 1, 2 y 3 parcialmente}, con excepción de fusión y división. \textbf{No cuenta con una implementación}.\\
   \item En \cite{wilson2011tracking} y \cite{beykikhoshk2018discovering} se capturan los dinámismos mencionados dividiendo el corpus en épocas, entrenando de forma independiente un modelo por época para finalmente unificar (LDA y HDP).
     % se prefiere xx por yy debido a que...
 \end{itemize}
@@ -214,7 +214,7 @@ Dentro de los modelos de tópicos dinámicos se tiene:
   \hspace*{-3cm}\vbox{\begin{aligned}
          H \quad &= \quad \text{Dir}(\frac{\eta}{|V|}1_{|V|})\\
          G_{0}|\gamma, H \quad &\sim \quad \text{DP}(\gamma, H)\\
-         G_{d}|\alpha, G_{0} \quad &\sim \quad \text{DP}(\alpha_{0}, G_{0})\\
+         G_{d}|\alpha_{0}, G_{0} \quad &\sim \quad \text{DP}(\alpha_{0}, G_{0})\\
          \phi_{d,n}|G_{d} \quad &\sim \quad G_{d}\\
          w_{d,n}|\phi_{d,n} \quad &\sim \quad \text{Cat}(\phi_{d,n})
   \end{aligned}}
@@ -450,7 +450,7 @@ Al procesar el corpus se obtiene una reducción de:
 5     & 1,405                  & 1,329                    & 18.28                            & 12.57                              \\ \hline
 6     & 1,537                  & 1,405                    & 19.64                            & 10.25                              \\ \hline
 \end{tabular}
-\caption{Evolución del vocabulario en el tiempo. \textbf{t}: vocabulario de la época actual, \textbf{t-1}: vocabulario del período anterior, \textbf{t[\%]}: porcentaje del vocabulario de $t $ que es nuevo y\textbf{ t-1[\%]}: porcentaje del vocabulario de $t-1$ que se olvido.}
+\caption{Evolución del vocabulario en el tiempo. \textbf{t}: vocabulario de la época actual, \textbf{t-1}: vocabulario del período anterior, \textbf{t[\%]}: porcentaje del vocabulario de $t $ que es nuevo y\textbf{ t-1[\%]}: porcentaje del vocabulario de $t-1$ que se olvida.}
 \end{table}
 
 
@@ -499,7 +499,7 @@ Al procesar el corpus se obtiene una reducción de:
 
 \vspace*{-0.2in}
 \includegraphics[width=0.8\textwidth]{topics_evolution.eps}
-\caption{Proporción de tópicos que nacen, mueren, fusionan y dividen por época, normalizando por el número total de tópicos inferido en esa época, bajo diferentes puntos operantes $\zeta$.}
+\caption{Proporción de tópicos que nacen, mueren, fusionan y dividen por época, normalizado por el número total de tópicos inferido en esa época, bajo diferentes puntos operantes $\zeta$.}
 \label{img:topics_evolution}
 \end{figure}
 
@@ -730,8 +730,8 @@ La participación de este tipo de robo se ha visto al alza, en el 2011 su partic
 \frametitle{Trabajo futuro}
 
 \begin{itemize}
-  \item Una futura línea de investigación es el desarrollo de un modelo de tópicos dinámico basado completamente en redes neuronales de esta forma la comparación entre tópicos de épocas adyacentes a través de sus \textit{word embeddings se vuelve más natural.} En \cite{dieng2019dynamic} se propone una modelo de tópicos dinámico basado en redes neuronales, no obstante, mantiene fijo el número de tópicos en el tiempo.
-  \item Extender la metodología inferencia \textit{online} sin alterar la estructura del grafo previo, debido a que cada vez que se incorpora una nueva época se vuelve necesario actualizar el úmbral de corte empírico.
+  \item Una futura línea de investigación es el desarrollo de un modelo de tópicos dinámico basado completamente en redes neuronales, de esta forma la comparación entre tópicos de épocas adyacentes a través de sus \textit{word embeddings se vuelve más natural.} En \cite{dieng2019dynamic} se propone una modelo de tópicos dinámico basado en redes neuronales, no obstante, mantiene fijo el número de tópicos en el tiempo.
+  \item Extender la metodología a inferencia \textit{online} sin alterar la estructura del grafo previo, debido a que cada vez que se incorpora una nueva época se vuelve necesario actualizar el úmbral de corte empírico.
 \end{itemize}
 
 \end{frame}

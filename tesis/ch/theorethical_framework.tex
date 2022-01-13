@@ -257,7 +257,7 @@ Hierarchical Dirichlet Process (HDP)\citep{teh2005sharing} es un \textit{prior} 
 \begin{align}
    H \quad &= \quad \text{Dir}(\frac{\eta}{|V|}1_{|V|})\\
    G_{0}|\gamma, H \quad &\sim \quad \text{DP}(\gamma, H)\\
-   G_{d}|\alpha, G_{0} \quad &\sim \quad \text{DP}(\alpha_{0}, G_{0})\\
+   G_{d}|\alpha_{0}, G_{0} \quad &\sim \quad \text{DP}(\alpha_{0}, G_{0})\\
    \phi_{d,n}|G_{d} \quad &\sim \quad G_{d}\\
    w_{d,n}|\phi_{d,n} \quad &\sim \quad \text{Cat}(\phi_{d,n})
 \end{align}

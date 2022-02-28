@@ -63,16 +63,16 @@ epochs = df["epoch"].unique()
 for epoch in epochs:
     logger.info(f"Epochs Completed: {epoch}/{epochs[-1]}")
     logger.info(f"Processing docs in epoch: {epoch}")
-    
+
     # docs from actual epoch
     raw_corpus = list(df[df["epoch"] == epoch]["text"])
     logger.info(f"Corpus size: {len(raw_corpus)}")
 
     # processing docs from actual epoch
-    tokenizer_args = {"stopwords": stopwords, "vocabulary": vocabulary, 
+    tokenizer_args = {"stopwords": stopwords, "vocabulary": vocabulary,
     "homol_dict": homol_dict, "stemming": stemming, "lemmatization":lemmatization}
     corpus = [tokenizer(doc, **tokenizer_args) for doc in raw_corpus]
-    
+
     logger.info("Extracting Vocabulary")
     # map each word to an id {id->word}
     dictionary = Dictionary(corpus)
@@ -83,10 +83,11 @@ for epoch in epochs:
     ub = int(float(os.getenv("NO_ABOVE"))*len(corpus))
     dictionary.filter_extremes(no_below=lb, no_above=ub)
     logger.info(f"Vocabulary size after elimination: {len(dictionary)}")
-    
+
     # new vocabulary and corpus
     vocab = list(dictionary.token2id.keys())
     corpus = [[word for word in doc if word in vocab] for doc in corpus]
+
     # remove documents with less than DOC_LEN words
     raw_corpus = [raw_corpus[i] for i in range(len(raw_corpus)) if len(corpus[i])>=float(os.getenv("DOC_LEN"))]
     corpus = [doc for doc in corpus if len(doc)>=float(os.getenv("DOC_LEN"))]
@@ -94,10 +95,11 @@ for epoch in epochs:
     logger.info(f"Corpus size after elimination of docs with less than {os.getenv('DOC_LEN')} words: {len(corpus)}")
 
     logger.info("Getting corpus in Blei’s LDA-C format")
+
     # a document is a list of tuples, each tuples has two element, the first is the id of the word and the second is its frequency
     dictionary = Dictionary(corpus)
     corpus = [dictionary.doc2bow(doc) for doc in corpus]
-    
+
     # save dictionary and corpus in LDA-C format
     logger.info("Saving Corpus")
     zeros = "0"*(len(str(epochs[-1]))-len(str(epoch)))
@@ -105,7 +107,9 @@ for epoch in epochs:
     dictionary.save(f"{os.getenv('CORPUS')}dictionary_{epoch_string}.dict")
     BleiCorpus.serialize(f"{os.getenv('CORPUS')}corpus_{epoch_string}.mm", corpus)
     df_corpus.to_pickle(f"{os.getenv('CORPUS')}corpus_{epoch_string}.pkl")
-tf = time()
+
 logger.info("Data Processing Completed")
+
+tf = time()
 total_time = round(tf-ti)
 logger.info(f"Processing time: {total_time} [s]")

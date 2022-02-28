@@ -5,7 +5,7 @@ import spacy
 # https://github.com/pablodms/spacy-spanish-lemmatizer/
 from spacy_spanish_lemmatizer import SpacyCustomLemmatizer
 # python -m spacy_spanish_lemmatizer download wiki
-from nltk.stem import SnowballStemmer 
+from nltk.stem import SnowballStemmer
 
 lemmatizer = spacy.load("es")
 lemmatizer.add_pipe(SpacyCustomLemmatizer(), name="lemmatizer", after="tagger")
@@ -50,8 +50,8 @@ def tokenizer(doc, sep=None, stopwords=None, vocabulary=None, homol_dict=None, l
     doc = re.sub(r'[0-9]', '', doc) # remove numbers
     tokens = doc.split(sep) # tokenization
     # to lowercase and delete word with less than 4 chars
-    tokens = [word.lower() for word in tokens if len(word)>3] 
-    
+    tokens = [word.lower() for word in tokens if len(word)>3]
+
     # map word to another of similar meaning
     if homol_dict:
         tokens = [homol_dict[word] if word in homol_dict else word for word in tokens]
@@ -71,10 +71,12 @@ def tokenizer(doc, sep=None, stopwords=None, vocabulary=None, homol_dict=None, l
              tokens = [unidecode.unidecode(word.lemma_) if unidecode.unidecode(word.lemma_) in vocabulary else word.text for word in lemmatizer(doc)]
         else:
             tokens = [unidecode.unidecode(word.lemma_) for word in lemmatizer(doc)]
+
     # take the words to their stem
     if stemming:
         if vocabulary:
             tokens = [stemmer.stem(word) if stemmer.stem(word) in vocabulary else word for word in tokens ]
         else:
             tokens = [stemmer.stem(word) for word in tokens]
+
     return tokens

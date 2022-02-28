@@ -1,29 +1,29 @@
-En este capítulo se describen los conceptos fundamentales para comprender la metodología propuesta en el capitulo \ref{ch:methodology}. El capítulo es estructurado como sigue. En la sección \ref{sec:mixture_models} se introduce a nivel general los modelos de \textit{clustering} probabiĺísticos conocidos como \textit{mixture models}. En la sección \ref{sec:topic_models} se describen los modelos de tópicos estáticos LDA y HDP. Finalmente, en la sección \ref{sec:topic_evolution} se explica una metodología que modela la evolución de los tópicos en el timepo. 
+En este capítulo se describen los conceptos fundamentales para comprender la metodología propuesta en el capitulo \ref{ch:methodology}. El capítulo es estructurado como sigue. En la sección \ref{sec:mixture_models} se introduce a nivel general los modelos de \textit{clustering} probabilísticos conocidos como \textit{mixture models}. En la sección \ref{sec:topic_models} se describen los modelos de tópicos estáticos LDA y HDP. Finalmente, en la sección \ref{sec:topic_evolution} se explica una metodología que modela la evolución de los tópicos en el tiempo. 
 
 \section{Mixture Models}
 \label{sec:mixture_models}
 
-Uno de los supuestos básicos en \textit{clustering} es asumir que cada observación $x_{i}$ pertenece a un solo \textit{cluster} $k$. Podemos expresar la asignación a un \textit{cluster} como una variable aleatoria $z_{i}$, donde $z_{i}=k$ significa que $x_{i}$ pertenece al \textit{cluster} $k$. La variable $z_{i}$ no es observada en los datos y se considera una variable oculta. Cada \textit{cluster} posee un parámetro $\phi_{k}$ que codifica su información. Podemos obtener la distribución que caracteriza a un solo \textit{cluster} $k$ condicionando en $z_{i}$
+Uno de los supuestos básicos en \textit{clustering} es asumir que cada observación $x_{i}$ pertenece a un solo \textit{cluster} $k$. La asignación a un \textit{cluster} se puede expresar como una variable aleatoria $z_{i}$, donde $z_{i}=k$ significa que $x_{i}$ pertenece al \textit{cluster} $k$. La variable $z_{i}$ no es observada en los datos y se considera una variable oculta. Cada \textit{cluster} posee un parámetro $\phi_{k}$ que codifica su información. La distribución que caracteriza a un solo \textit{cluster} $k$ condicionando en $z_{i}$ es
 
 \begin{align}
     p(x_{i}|z_{i}=k, \phi) = p(x_{i}|\phi_{k})\\
 \end{align}
 
-Además, podemos definir la probabilidad de que una nueva observación pertenezca al \textit{cluster} $k$ 
+Además, la probabilidad de que una nueva observación pertenezca al \textit{cluster} $k$ se define como 
 
 \begin{align}
     p(z_{i}=k|\pi) = \pi_{k}
 \end{align}
 
-Con $\sum_{k}\pi_{k} = 1$, ya que $\pi_{k}$ son probabilidades de eventos mutuamente excluyentes. La distribución de $x_{i}$ es entonces de la forma
+Con $\sum_{k}\pi_{k} = 1$, ya que $\pi_{k}$ son probabilidades de eventos mutuamente excluyentes. La distribución de $x_{i}$ es de la forma
 
 \begin{align}
   p(x_{i}) = \sum_{k}p(z_{i}=k|\pi)p(x_{i}|z_{i}=k, \phi) = \sum_{k}\pi_{k}p(x_{i}|\phi_{k})
 \end{align}
 
-Podemos escribir $p(x_{i}|\phi_{k})$ como $x_{i} \sim F(\phi_{z_{i}})$, donde $F$ es la distribución asociada a las observaciones. \\
+La distribución $p(x_{i}|\phi_{k})$ se denota $x_{i} \sim F(\phi_{z_{i}})$, donde $F$ es la distribución asociada a las observaciones. \\
 
-Se obtiene una representación equivalente del modelo al considerar el parámetro $\phi_{z_{i}}$ usado para generar la observación $x_{i}$ proviene de una distribucion discreta $G$, la cual tiene la forma
+Una representación equivalente se obtiene al considerar el parámetro $\phi_{z_{i}}$ usado para generar la observación $x_{i}$ proviene de una distribucion discreta $G$, la cual tiene la forma
 
 \begin{align}
     G(\phi) & = \sum_{k} \pi_{k}\delta_{\phi_{k}}(\phi)
@@ -36,7 +36,7 @@ En otras palabras, $G$ es una mezcla de funciones delta, donde la probabilidad d
 x_{i} & \sim  F(\phi_{z_{i}})
 \end{align}
 
-Un \textbf{Bayesian mixture model} es un \textit{mixture model} con una medida aleatoria para las mezclas. En la sección \ref{sec:dirichlet}. y \ref{sec:dp} nos referimos a dos \textit{priors} ampliamente usados para construir \textit{bayesian mixture model}: la distribución Dirichlet que nos permite construir un \textbf{finite mixture model}, donde el número de átomos o \textit{clusters} a descubrir es finito, denotado por $K$ y un \textit{prior} no paramétrico denominado Dirichlet Process (DP), el cual permite construir un \textbf{infinite mixture model}, donde el número de \textit{clusters} no está acotado. 
+Un \textbf{Bayesian mixture model} es un \textit{mixture model} con una medida aleatoria para las mezclas. En las secciones \ref{sec:dirichlet}. y \ref{sec:dp} se describen dos \textit{priors} ampliamente usados para construir \textit{bayesian mixture model}: la distribución Dirichlet que permite construir un \textbf{finite mixture model}, donde el número de átomos o \textit{clusters} a descubrir es finito, denotado por $K$ y un \textit{prior} no paramétrico denominado Dirichlet Process (DP), el cual permite construir un \textbf{infinite mixture model}, donde el número de \textit{clusters} no está acotado. 
 
 \subsection{Distribución Dirichlet}
 \label{sec:dirichlet}
@@ -64,13 +64,13 @@ En la Figura \ref{img:dirichlet_distribution} se observa el efecto de los parám
 \begin{figure}
     \centering
     \includegraphics[width=\textwidth]{ch2/dirichlet_simplex.eps}
-    \caption{Densidad de la distribución Dirichlet con $K=3$. Define una distribución sobre el \textit{simplex}, el cual puede ser representado por una superficie trinagular.}
+    \caption{Densidad de la distribución Dirichlet con $K=3$. Define una distribución sobre un \textit{simplex}, el cual puede ser representado por una superficie triangular.}
     \label{img:dirichlet_distribution}
 \end{figure}
 
 En general se asume simetría en los parámetros de la distribución Dirichlet de la forma $\alpha_{k}=\frac{\alpha}{K}$, de esta manera $\alpha$ funciona como parámetro de concentración. En la Figura \ref{img:dirichlet_samples} se oberva una realización de una distribución Dirichlet con $\alpha \in \{0.1, 1, 10\}$ y $K\in\{2, 10, 100\}$. En esta figura podemos observar que a mayor $\alpha$ los compenentes del vector $x$ más similares se vuelven, esto es más notorio a mayor dimencionalidad debido a que existen más dimensiones a las que distribuir la masa.\\
 
-La distribución Dirichlet es comúnmente usada en estadística Bayesiana, debido a que que es \textit{prior} conjugado de la distribución categórica (multinoulli) y la distribución multinomial. Así, la distribución Dirichlet puede ser utilizado como \textit{prior} en un \textit{finite mixture model} considerando $\pi\sim \text{Dir}(\frac{\alpha}{K}1_{K})$ y $\phi_{k} \sim H$.
+La distribución Dirichlet es comúnmente usada en estadística Bayesiana, debido a que es \textit{prior} conjugado de la distribución categórica (multinoulli) y la distribución multinomial. Así, la distribución Dirichlet puede ser utilizado como \textit{prior} en un \textit{finite mixture model} considerando $\pi\sim \text{Dir}(\frac{\alpha}{K}1_{K})$ y $\phi_{k} \sim H$.
 
 \begin{figure}
     \centering
@@ -82,7 +82,7 @@ La distribución Dirichlet es comúnmente usada en estadística Bayesiana, debid
 \subsection{Dirichlet Process}
 \label{sec:dp}
 
-En un \textit{finite mixture model} se tiene $G(\phi) = \sum_{k=1}^{K} \pi_{k}\delta_{\phi_{k}}(\phi)$, luego al muestrear de $G$, con probabilidad uno se obtendrá exactamente $K$ \textit{clusters}. Nos gustaría tener un modelo más flexible, que pueda generar un número variable de \textit{clusters}. Una forma de hacer esto es remplazar la distribución discreta $G$ por una medida aleatoria de probabilidad, como el Dirichlet Process \citep{ferguson1973bayesian}, denotado $G\sim \text{DP}(\alpha, H)$.\\
+En un \textit{finite mixture model} se tiene $G(\phi) = \sum_{k=1}^{K} \pi_{k}\delta_{\phi_{k}}(\phi)$, luego al muestrear de $G$, con probabilidad uno se obtendrá exactamente $K$ \textit{clusters}. Sin embargo, es necesario tener un modelo más flexible, que pueda generar un número variable de \textit{clusters}. Una forma de hacer esto es remplazar la distribución discreta $G$ por una medida aleatoria de probabilidad, como el Dirichlet Process \citep{ferguson1973bayesian}, denotado $G\sim \text{DP}(\alpha, H)$.\\
 
 Un \textbf{Dirichlet Process} (DP) es una distribución sobre medidas de probabilidad $G: \Phi \rightarrow \mathbb{R}^{+}$, donde $G(\phi)\geq 0$ y $\int_{\Phi}G(\phi)d\phi=1$. Un DP se define implícitamente por cumplir 
 
@@ -92,9 +92,9 @@ Un \textbf{Dirichlet Process} (DP) es una distribución sobre medidas de probabi
 
 para cualquier partición finita $(A_{1}, \ldots, A_{k})$ de $\Phi$. En este caso, decimos que $G\sim \text{DP}(\alpha, H)$, donde $\alpha$ es llamado el \textbf{parámetro de concentración} y $H: \Phi \rightarrow \mathbb{R}^{+}$ es llamado la \textbf{medida base}.\\
 
-Como $p(G(A_{1}), \ldots, G(A_{K}))$ es Dirichlet, la distribución marginal en cada partición distribuye beta $\text{Beta}(\alpha H(A_{i}), \alpha \sum_{j\neq i}H(A_{j}))$. El DP es considerado consistentemente definido, en el sentido de que si particionamos $\bar{A}_{1}$ en $A_{1}$ y $A_{2}$, entonces $G(\bar{A}_{1})$ y $G(A_{1})+G(A_{2})$ siguen la misma distribución beta. \\
+Como $p(G(A_{1}), \ldots, G(A_{K}))$ es Dirichlet, la distribución marginal en cada partición distribuye beta $\text{Beta}(\alpha H(A_{i}), \alpha \sum_{j\neq i}H(A_{j}))$. El DP es considerado consistentemente definido, ya que si se particiona $\bar{A}_{1}$ en $A_{1}$ y $A_{2}$, entonces $G(\bar{A}_{1})$ y $G(A_{1})+G(A_{2})$ siguen la misma distribución beta. \\
 
-Sea $\phi \sim \text{Dir}(\alpha)$, y $z|\phi  \sim \text{Cat}(\pi)$, si se integra $\pi$ afuera se obtiene la distribución predictiva del modelo Dirichlet-multinoulli:
+Sea $\pi \sim \text{Dir}(\alpha)$, y $z|\pi  \sim \text{Cat}(\pi)$, si se integra $\pi$ afuera se obtiene la distribución predictiva del modelo Dirichlet-multinoulli:
 \begin{align}
     z\sim \text{Cat}(\alpha_{1}/\alpha_{0}, \ldots, \alpha_{K}/\alpha_{0})
 \end{align}
@@ -112,7 +112,7 @@ El DP generaliza el resultado anterior a particiones arbitrarias. Si $G\sim \tex
 Esto se mantiene para cualquier conjunto de particiones. Por lo tanto, si observamos multiples muestras $\bar{\phi}_{1:N}\sim G$, la nueva posterior está dada por 
 
 \begin{align}
-G|\bar{\phi}_{1:N}, \alpha, H \sim \text{DP}\bigg(\alpha+N, \frac{1}{\alpha+N}\bigg(\alpha H+\sum_{i=1}^{N}\delta_{\phi_{i}}\bigg)\bigg)
+G|\bar{\phi}_{1:N}, \alpha, H \sim \text{DP}\bigg(\alpha+N, \frac{1}{\alpha+N}\bigg(\alpha H+\sum_{i=1}^{N}\delta_{\bar{\phi}_{i}}\bigg)\bigg)
 \end{align}
 
 Por ende el DP define un \textit{prior} conjugado para cualquier espacio medible, donde el parámetro de concentración $\alpha$ es el tamaño de muestro efectivo de la medida base $H$.\\
@@ -137,7 +137,7 @@ Esto se suele denotar como $\pi \sim \text{GEM}(\alpha)$, donde GEM representa G
     \label{img:stick_breaking}
 \end{figure}
 
-Algunos ejemplos de este proceso son mostrados en la Figura \ref{img:dp_samples} (a). A mayor $\alpha$, menos varianza y mayor número de átomos, por el contrario, pequeños valores de $\alpha$ muestran una alta varianza y menor número de átomos. Se puede demostrar que este proceso terminará con probabilidad uno, a pesar que el número de elementos que genera incrementa con $\alpha$. Además, el tamaño del componente $\pi_{k}$ decrece en promedio. La distribución $G$ se puede definir como sigue:
+Algunos ejemplos de este proceso son mostrados en la Figura \ref{img:dp_samples} (a). A mayor $\alpha$, menos varianza y mayor número de átomos, por el contrario, pequeños valores de $\alpha$ muestran una alta varianza y menor número de átomos. Se puede demostrar que este proceso termina con probabilidad uno, a pesar que el número de elementos que genera incrementa con $\alpha$. Además, el tamaño del componente $\pi_{k}$ decrece en promedio. La distribución $G$ se puede definir como sigue:
 
 \begin{align}
     G(\phi) = \sum_{k=1}^{\infty}\pi_{k}\delta_{\phi_{k}}(\phi)
@@ -171,7 +171,7 @@ p(z_{N+1}=z|z_{1:N}, \alpha) = \frac{1}{\alpha+N}\bigg(\alpha\mathbb{I}(z=k^{*})
 
 , donde $k^{*}$ representa un nuevo \textit{cluster} que no ha sido usado aún. Este proceso es denominado Chinese Restaurant Process (CRP) \citep{aldous1985exchangeability}, basado en la oferta aparentemente infinita de mesas en ciertos restaurantes Chinos. La analogía es la siguiente: Las tablas del restaurante son los \textit{clusters}  y los clientes son las observaciones. Cuando una persona entra al restaurante, esta puede escoger sentarse en una tabla existente con probabilidad proporcional al número de personas ya sentadas en esa tabla ($N_{k}$), en otro caso, con una probabilidad decreciente a medida que más personas entran al restaurante (debido a $1/(\alpha +N))$ escogerá sentarse en una nueva tabla $k^{*}$. El resultado de este proceso es una distribución sobre particiones de los naturales, la cual es como una distribución de clientes a tablas.\\
 
-El hecho de que las tablas actualmente ocupadas son más probables de obtener nuevos clientes se suele llamar el fenómeno del \textit{rich get richer}. En efecto, se puede demostrar que la dsitribución del número de \textit{clusters} que induce este \textit{prior} es básicamente una ley de potencia, donde el número de tablas $K$ con probabilidad 1 se aproxima a $\alpha log(N)$ cuando $N\rightarrow \infty$, mostrando que la complejidad del modelo crece logarítmicamente con el tamaño de los datos.
+El hecho de que las tablas actualmente ocupadas son más probables de obtener nuevos clientes se suele llamar el fenómeno del \textit{rich get richer}. En efecto, se puede demostrar que la distribución del número de \textit{clusters} que induce este \textit{prior} es básicamente una ley de potencia, donde el número de tablas $K$ con probabilidad 1 se aproxima a $\alpha log(N)$ cuando $N\rightarrow \infty$, mostrando que la complejidad del modelo crece logarítmicamente con el tamaño de los datos.
 
 \section{Modelos de tópicos}
 \label{sec:topic_models}
@@ -229,7 +229,7 @@ Esto es ilustrado en la Figura \ref{img:lda}.
 
 La probabilidad conjunta del modelo:
 \begin{equation}
-    p(\phi, \pi, z, w|\alpha, \eta)= \prod_{k=1}^{K}p(\phi_{k}|\eta)\prod_{d=1}^{D}p(\pi_{d}|\alpha)\prod_{n=1}^{N_{d}}p(z_{n,d}|\pi_{d})p(w_{d,n}|\phi_{1:K}, z_{d,n})
+    p(\phi, \pi, z, w|\alpha, \eta)= \prod_{k=1}^{K}p(\phi_{k}|\eta)\prod_{d=1}^{D}p(\pi_{d}|\alpha)\prod_{n=1}^{N_{d}}p(z_{d,n}|\pi_{d})p(w_{d,n}|\phi_{1:K}, z_{d,n})
 \end{equation}
 
 La distribución a posterior:
@@ -252,12 +252,12 @@ Una representación equivalente en LDA sería generar cada palabra de un documen
 \subsection{Hierarchical Dirichlet Process}
 \label{sec:hdp}
 
-Hierarchical Dirichlet Process (HDP)\citep{teh2005sharing} es un \textit{prior} jerárquico no paramétrico, el cual está formado por un DP cuya medida base $G_{0}$ es dibujada a partir de un DP. En el caso de modelamiento de tópicos, se tiene un medida global $G_{0}$ a nivel corpus que es dibujada a partir de un DP con medida base Dirichlet y una medida para cada documento que es dibujada a partir de un DP cuya medida base es $G_{0}$. El modelo completo es como sigue
+Hierarchical Dirichlet Process (HDP)\citep{teh2005sharing} es un \textit{prior} jerárquico no paramétrico, el cual está formado por un DP cuya medida base $G_{0}$ es dibujada a partir de un DP. En el caso de modelamiento de tópicos, se tiene un medida global $G_{0}$ a nivel corpus que es dibujada a partir de un DP con medida base Dirichlet y una medida $G_{d}$ para cada documento que es dibujada a partir de un DP con medida base $G_{0}$. El modelo completo es como sigue
 
 \begin{align}
    H \quad &= \quad \text{Dir}(\frac{\eta}{|V|}1_{|V|})\\
    G_{0}|\gamma, H \quad &\sim \quad \text{DP}(\gamma, H)\\
-   G_{d}|\alpha, G_{0} \quad &\sim \quad \text{DP}(\alpha_{0}, G_{0})\\
+   G_{d}|\alpha_{0}, G_{0} \quad &\sim \quad \text{DP}(\alpha_{0}, G_{0})\\
    \phi_{d,n}|G_{d} \quad &\sim \quad G_{d}\\
    w_{d,n}|\phi_{d,n} \quad &\sim \quad \text{Cat}(\phi_{d,n})
 \end{align}
@@ -363,7 +363,7 @@ En las secciones \ref{sec:similarity_graph}-\ref{sec:automatic_construction} se 
 
 \subsection{Gráfo de similitud temporal}
 \label{sec:similarity_graph}
-Para relacionar los tópicos de una época es necesario contar una medida de similitud $\rho \in [0,1]$, con esta médida de similitud se puede construir un gráfo, donde los nodos son los tópicos de una época y los arcos relacionan tópicos de una época con la siguiente, siendo el peso del arco la similitud entre los tópicos. Una vez construido el grafo se eliminan las conexiones débiles en base a un umbral $\zeta \in [0,1]$ a definir, reteniendo solo aquellas conexiones entre tópicos suficientemente similares entre épocas adyacentes, matemáticamente se poda el arco entre los tópicos $\phi_{t,i}$ y $\phi_{t+1,j}$ si $\rho(\phi_{t,i}, \phi_{t+1,j})\leq \zeta$.\\
+Para relacionar los tópicos de una época es necesario contar una medida de similitud $\rho \in [0,1]$, con esta médida de similitud se puede construir un gráfo, donde los nodos son los tópicos de una época y los arcos relacionan tópicos de una época con la siguiente, siendo el peso del arco la similitud entre los tópicos. Una vez construido el grafo se eliminan las conexiones débiles en base a un umbral $\zeta \in [0,1]$ a definir, reteniendo solo aquellas conexiones entre tópicos suficientemente similares entre épocas adyacentes, matemáticamente se poda el arco entre los tópicos $\phi_{t,i}$ y $\phi_{t+1,j}$ si $\rho(\phi_{t,i}, \phi_{t+1,j})\leq \tau.\\
 
 Está metodología permite detectar desaparición de un tópico, nacimiento de un nuevo tópico, como también división o fusión entre diferentes tópicos. A continuación se define en detalle cada uno de estos dinamismos:
 
@@ -375,8 +375,6 @@ Está metodología permite detectar desaparición de un tópico, nacimiento de u
     \item \textbf{Fusión de un tópico:} Cuando un tópico tiene más de un arco entrante, este tipo de tópicos también pueden ser entendidos como un nuevo tópico, por ejemplo, en la Figura \ref{img:graph} los tópicos $\phi_{i}$ y $\phi_{i+1}$ de $t-1$ forman al tópico $\phi_{j+1}$ en $t$.
 \end{itemize}
 
-Una ilustración conceptual del grafo de similitud es mostrado en la Figura \ref{img:graph}, este muestra tres épocas consecutivas.
-
 \begin{figure}
     \centering
     \includegraphics[width=0.8\textwidth]{ch2/similarity_graph.png}
@@ -387,13 +385,13 @@ Una ilustración conceptual del grafo de similitud es mostrado en la Figura \ref
 \subsection{Construcción automática del grafo de similitud}
 \label{sec:automatic_construction}
 
-Un aspecto relevante de esta metodología es definir el úmbral de corte, el cual no es fácilmente interpretable, además el úmbral depende de la médida de similitud escogida, dificultando así la comparación entre médidas de similitud. En \citep{beykikhoshk2018discovering} proponen una alternativa más interpretable para definir el úmbral, para esto estiman la función de densidad acumulada (cdf) del grafo inicial, donde todos los nodos de una época están conectados con todos los nodos de la época adyacente, al que llamaremos grafo \textit{fully connected}. \\
+Un aspecto relevante de esta metodología es definir el úmbral de corte, el cual no es fácilmente interpretable, además el úmbral depende de la médida de similitud escogida, dificultando así la comparación entre médidas de similitud. En \citep{beykikhoshk2018discovering} proponen una alternativa más interpretable para definir el úmbral, para esto estiman la función de densidad acumulada (cdf) del grafo inicial, donde todos los nodos de una época están conectados con todos los nodos de la época adyacente, al que de ahora en adelante se denota grafo \textit{fully-connected}. \\
 
-Sea $F_{p}$ la cdf sobre las similitudes del grafo inicial, luego sea $\zeta \in [0,1]$ el punto operante de la cdf, luego eliminamos el arco entre los tópicos $\phi_{t,i}$ y $\phi_{t+1,j}$ si $\rho(\phi_{t,i}, \phi_{t+1,j})\leq F_{p}^{-1}(\zeta)$, donde  $F_{p}^{-1}(\zeta)$ es el cuantil $\zeta$ de $F_{p}$. En \ref{img:cdf_sim} se tiene una ilustración para tres médidas de similitud, en esta se observa que la elección de un úmbral de corte arbitrario depende fuertemente de la médida de similitud escógida, por lo que la elección en base a la cdf puede ser más apropiada.
+Sea $F_{p}$ la cdf sobre las similitudes del grafo inicial, luego sea $\zeta \in [0,1]$ el punto operante de la cdf, luego se elimina el arco entre los tópicos $\phi_{t,i}$ y $\phi_{t+1,j}$ si $\rho(\phi_{t,i}, \phi_{t+1,j})\leq F_{p}^{-1}(\zeta)$, donde  $F_{p}^{-1}(\zeta)$ es el cuantil $\zeta$ de $F_{p}$. En \ref{img:cdf_sim} se tiene una ilustración para tres médidas de similitud, en esta se observa que la elección arbitraria del úmbral de corte depende fuertemente de la médida de similitud escógida, por lo que la elección en base a la cdf puede ser más apropiada.
 
 \begin{figure}
     \centering
     \includegraphics[width=0.8\textwidth]{ch2/cdf_sim.png}
-    \caption{Estimación empírica de la función de densidad acumulada (cdf) de la similitud entre tópicos de épocas adyacentes en un grafo \textit{fully connected} para tres medidas de similitud. Fuente: Figura 4 \citep{beykikhoshk2018discovering}.}
+    \caption{Estimación empírica de la función de densidad acumulada (cdf) de la similitud entre tópicos de épocas adyacentes en un grafo \textit{fully-connected} para tres medidas de similitud. Fuente: Figura 4 \citep{beykikhoshk2018discovering}.}
     \label{img:cdf_sim}
 \end{figure}

@@ -15,7 +15,7 @@ logger = logging.getLogger("similarity-graph")
 
 # load environment variables
 load_dotenv()
-corpus = os.getenv("CORPUS") 
+corpus = os.getenv("CORPUS")
 model_path = os.getenv("MODEL_PATH")
 similarity = os.getenv("SIMILARITY")
 embeddings_path = os.getenv("EMBEDDINGS")
@@ -46,11 +46,12 @@ for epoch in epochs:
     word_assignments = []
     with open(word_assignments_path, "r") as f:
         lines = f.readlines()[1:]
+
         # (doc_id, word_id, topic_id, x)
         for line in lines:
-            line = line.strip().split() 
+            line = line.strip().split()
             word_assignments.append(int(line[2]))
-    
+
     tokens = len(word_assignments)
     mixture_weights = np.unique(word_assignments, return_counts=True)[1]/tokens
 
@@ -67,57 +68,64 @@ logger.info("Computing Similarity Graph")
 ti = time()
 similarity_graph = {"nodes":[], "edges":[], "matrix":[]}
 for epoch in epochs[:-1]:
-    t1 = time()
     logger.info(f"Steps :{epoch}/{epochs[-1]}")
+    t1 = time()
+
     # get vocabularies and topics distributions by epoch
     token2id1 = data[epoch]["token2id"]
     token2id2 = data[epoch+1]["token2id"]
-    topics_dists1 = data[epoch]["topics_dists"] 
+    topics_dists1 = data[epoch]["topics_dists"]
     topics_dists2 = data[epoch+1]["topics_dists"]
     K1 = len(topics_dists1)
     K2 = len(topics_dists2)
+
     # save similarities in a matrix
     similarity_matrix = np.zeros((K1, K2))
     for i in range(K1):
         topic_i = topics_dists1[i]
         for j in range(K2):
             topic_j = topics_dists2[j]
+
             # get similarity
             similarity_matrix[i,j] = compute_similarity(
-                    similarity, 
-                    embeddings, 
-                    token2id1, 
-                    token2id2, 
-                    topic_i, 
-                    topic_j, 
+                    similarity,
+                    embeddings,
+                    token2id1,
+                    token2id2,
+                    topic_i,
+                    topic_j,
                     q = q
             )
+
             # update similarity graph with edge data
             similarity_graph["edges"].append({
-                "s": f"{epoch+1}-{i+1}", 
-                "t": f"{epoch+2}-{j+1}", 
+                "s": f"{epoch+1}-{i+1}",
+                "t": f"{epoch+2}-{j+1}",
                 "w": similarity_matrix[i,j]
             })
+
         # update similarity graph with node data
         topn_words = get_topic_topn(token2id1, topic_i, topn)
         similarity_graph["nodes"].append({
-            "epoch":epoch+1, 
-            "id": i+1, 
-            "size": data[epoch]["mixture_weights"][i], 
+            "epoch":epoch+1,
+            "id": i+1,
+            "size": data[epoch]["mixture_weights"][i],
             "topn": topn_words
         })
+
     # update similarity graph with matrix data
     similarity_graph["matrix"].append(similarity_matrix.tolist())
     t2 = time()
     logger.info(f"Steps Completed: {epoch}/{epochs[-1]-1}, Time: {round(t2-t1)}")
+
 # update similarity graph with last node
 for j in range(K2):
     topic_j = topics_dists2[j]
     topn_words = get_topic_topn(token2id2, topic_j, topn)
     similarity_graph["nodes"].append({
-        "epoch": epoch+2, 
-        "id": j+1, 
-        "size": data[epoch+1]["mixture_weights"][j], 
+        "epoch": epoch+2,
+        "id": j+1,
+        "size": data[epoch+1]["mixture_weights"][j],
         "topn": topn_words
     })
 tf = time()
